@@ -17,11 +17,11 @@ export class MunicipiosService {
 
     const where: any = {};
     if (nome) where.nome = { contains: nome };
-    if (regiao) where.regiao = { equals: regiao, mode: 'insensitive' };
-    if (bloco) where.bloco = { equals: bloco, mode: 'insensitive' };
-    if (rm_ra) where.rm_ra = { equals: rm_ra, mode: 'insensitive' };
-    if (mesorregiao) where.mesorregiao = { equals: mesorregiao, mode: 'insensitive' };
-    if (microrregiao) where.microrregiao = { equals: microrregiao, mode: 'insensitive' };
+    if (regiao) where.regiao = regiao;
+    if (bloco) where.bloco = bloco;
+    if (rm_ra) where.rm_ra = rm_ra;
+    if (mesorregiao) where.mesorregiao = mesorregiao;
+    if (microrregiao) where.microrregiao = microrregiao;
     if (coordenacao) {
       where.OR = [
         { coordenacao: { contains: coordenacao } },

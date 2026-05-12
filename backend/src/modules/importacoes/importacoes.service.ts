@@ -2,13 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import * as XLSX from 'xlsx';
 
-const normalizeNome = (text: string): string => {
-  if (!text || typeof text !== 'string') return text;
-  return text
-    .trim()
-    .replace(/\s+/g, ' ')
-    .toLowerCase()
-    .replace(/\b\w/g, (c) => c.toUpperCase());
+const normalizeStr = (text: any): string | null => {
+  if (!text || typeof text !== 'string') return null;
+  return text.trim().replace(/\s+/g, ' ').toUpperCase() || null;
 };
 
 const toInt = (v: any): number | null => {
@@ -52,22 +48,23 @@ export class ImportacoesService {
       if (!municipioNome) continue;
 
       try {
+        const col = (name: string) => normalizeStr(row[headers.indexOf(name)]);
         const data = {
-          nome: normalizeNome(String(municipioNome)),
+          nome: normalizeStr(String(municipioNome))!,
           uf: 'SP',
-          bloco: row[headers.indexOf('BLOCO')] ? String(row[headers.indexOf('BLOCO')]).trim() : null,
-          regiao: row[headers.indexOf('REGIÃO')] ? String(row[headers.indexOf('REGIÃO')]).trim() : null,
-          rm_ra: row[headers.indexOf('REGIÕES RM/RA')] ? String(row[headers.indexOf('REGIÕES RM/RA')]).trim() : null,
-          mesorregiao: row[headers.indexOf('MESORREGIÃO')] ? String(row[headers.indexOf('MESORREGIÃO')]).trim() : null,
-          microrregiao: row[headers.indexOf('MICRORREGIÕES GEOGRÁFICA')] ? String(row[headers.indexOf('MICRORREGIÕES GEOGRÁFICA')]).trim() : null,
-          divisao_regional: row[headers.indexOf('DIVISÃO REGIONAL')] ? String(row[headers.indexOf('DIVISÃO REGIONAL')]).trim() : null,
+          bloco: col('BLOCO'),
+          regiao: col('REGIÃO'),
+          rm_ra: col('REGIÕES RM/RA'),
+          mesorregiao: col('MESORREGIÃO'),
+          microrregiao: col('MICRORREGIÕES GEOGRÁFICA'),
+          divisao_regional: col('DIVISÃO REGIONAL'),
           projecao_votos: toInt(row[headers.indexOf('PROJEÇÃO')]) ?? 0,
-          coordenacao: row[headers.indexOf('COORDENAÇÃO')] ? String(row[headers.indexOf('COORDENAÇÃO')]).trim() : null,
-          lideranca: row[headers.indexOf('LIDERANÇA')] ? String(row[headers.indexOf('LIDERANÇA')]).trim() : null,
-          funcao_cargo: row[headers.indexOf('FUNÇÃO CARGO')] ? String(row[headers.indexOf('FUNÇÃO CARGO')]).trim() : null,
+          coordenacao: col('COORDENAÇÃO'),
+          lideranca: col('LIDERANÇA'),
+          funcao_cargo: col('FUNÇÃO CARGO'),
           projecao_2: toInt(row[headers.indexOf('PROJEÇÃO 2')]),
-          coord_lideranca_2: row[headers.indexOf('COORD/LIDERNÇA')] ? String(row[headers.indexOf('COORD/LIDERNÇA')]).trim() : null,
-          funcao_cargo_2: row[headers.indexOf('FUNÇÃO CARGO2')] ? String(row[headers.indexOf('FUNÇÃO CARGO2')]).trim() : null,
+          coord_lideranca_2: col('COORD/LIDERNÇA'),
+          funcao_cargo_2: col('FUNÇÃO CARGO2'),
           projecao_apoio_iurd: toInt(row[headers.indexOf('PROJEÇÃO APOIO IURD')]),
           projecao_base: toInt(row[headers.indexOf('PROJEÇÃO BASE')]) ?? 0,
           eleitores_22: toInt(row[headers.indexOf('ELEITORES 22')]),
