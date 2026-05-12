@@ -1,8 +1,8 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
-COPY package*.json ./
+COPY backend/package*.json ./
 RUN npm ci
-COPY . .
+COPY backend/ .
 RUN npx prisma generate
 RUN npm run build
 
@@ -14,5 +14,4 @@ COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/prisma ./prisma
 RUN mkdir -p /app/uploads
 EXPOSE 8000
-# Roda migrate antes de subir (seguro em produção com migrate deploy)
 CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main"]
