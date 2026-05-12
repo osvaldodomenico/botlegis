@@ -236,6 +236,7 @@ export default function MunicipiosPage() {
                   <th className="table-th hidden lg:table-cell">RM/RA</th>
                   <th className="table-th hidden xl:table-cell">Coordenação</th>
                   <th className="table-th hidden xl:table-cell">Liderança</th>
+                  <th className="table-th hidden xl:table-cell">Cargo</th>
                   <SortHeader field="projecao_votos" label="Projeção" />
                   <th className="table-th hidden lg:table-cell">Eleitores 22</th>
                   <th className="table-th w-20"></th>
@@ -243,9 +244,9 @@ export default function MunicipiosPage() {
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan={9} className="table-td text-center text-ink-muted py-16">Carregando...</td></tr>
+                  <tr><td colSpan={10} className="table-td text-center text-ink-muted py-16">Carregando...</td></tr>
                 ) : municipios.length === 0 ? (
-                  <tr><td colSpan={9} className="table-td text-center text-ink-muted py-16">Nenhum município encontrado</td></tr>
+                  <tr><td colSpan={10} className="table-td text-center text-ink-muted py-16">Nenhum município encontrado</td></tr>
                 ) : municipios.map((m) => (
                   <tr key={m.id} className="border-t border-hairline hover:bg-parchment/40 transition-colors">
                     <td className="table-td font-semibold">{m.nome}</td>
@@ -253,9 +254,8 @@ export default function MunicipiosPage() {
                     <td className="table-td hidden md:table-cell text-[13px] text-ink-muted truncate max-w-[120px]">{m.bloco}</td>
                     <td className="table-td hidden lg:table-cell text-[13px] text-ink-muted">{m.rm_ra}</td>
                     <td className="table-td hidden xl:table-cell text-[13px] text-ink-muted truncate max-w-[150px]">{m.coordenacao}</td>
-                    <td className="table-td hidden xl:table-cell text-[13px]">
-                      {m.lideranca && <span>{m.lideranca}{m.funcao_cargo ? <span className="text-ink-muted ml-1">({m.funcao_cargo})</span> : null}</span>}
-                    </td>
+                    <td className="table-td hidden xl:table-cell text-[13px]">{m.lideranca}</td>
+                    <td className="table-td hidden xl:table-cell text-[13px] text-ink-muted">{m.funcao_cargo}</td>
                     <td className="table-td font-semibold text-primary text-right">{m.projecao_votos?.toLocaleString('pt-BR')}</td>
                     <td className="table-td hidden lg:table-cell text-[13px] text-ink-muted text-right">{m.eleitores_22?.toLocaleString('pt-BR')}</td>
                     <td className="table-td">
