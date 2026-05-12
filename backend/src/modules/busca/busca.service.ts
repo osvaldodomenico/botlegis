@@ -187,20 +187,31 @@ export class BuscaService {
 
   // Lista de valores únicos para filtros (dropdown helpers)
   async opcoesFiltros() {
-    const [regioes, blocos, rm_ras, mesorregioesRaw, microrregioesRaw] = await Promise.all([
-      this.prisma.municipio.findMany({ select: { regiao: true }, distinct: ['regiao'], orderBy: { regiao: 'asc' } }),
-      this.prisma.municipio.findMany({ select: { bloco: true }, distinct: ['bloco'], orderBy: { bloco: 'asc' } }),
-      this.prisma.municipio.findMany({ select: { rm_ra: true }, distinct: ['rm_ra'], orderBy: { rm_ra: 'asc' } }),
-      this.prisma.municipio.findMany({ select: { mesorregiao: true }, distinct: ['mesorregiao'], orderBy: { mesorregiao: 'asc' } }),
-      this.prisma.municipio.findMany({ select: { microrregiao: true }, distinct: ['microrregiao'], orderBy: { microrregiao: 'asc' } }),
-    ]);
+    const todos = await this.prisma.municipio.findMany({
+      select: { regiao: true, bloco: true, rm_ra: true, mesorregiao: true, microrregiao: true },
+    });
+
+    // Normaliza removendo acentos só para comparação; prefere a forma mais acentuada no output
+    const norm = (s: string) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toUpperCase();
+    const distinct = (vals: (string | null | undefined)[]) => {
+      const map = new Map<string, string>();
+      for (const v of vals) {
+        if (!v?.trim()) continue;
+        const t = v.trim();
+        const key = norm(t);
+        const prev = map.get(key);
+        // Prefere a versão mais acentuada (NFD mais longa = mais diacríticos)
+        if (!prev || t.normalize('NFD').length > prev.normalize('NFD').length) map.set(key, t);
+      }
+      return [...map.values()].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+    };
 
     return {
-      regioes: regioes.map(r => r.regiao).filter(Boolean),
-      blocos: blocos.map(b => b.bloco).filter(Boolean),
-      rm_ras: rm_ras.map(r => r.rm_ra).filter(Boolean),
-      mesorregioes: mesorregioesRaw.map(m => m.mesorregiao).filter(Boolean),
-      microrregioes: microrregioesRaw.map(m => m.microrregiao).filter(Boolean),
+      regioes: distinct(todos.map(m => m.regiao)),
+      blocos: distinct(todos.map(m => m.bloco)),
+      rm_ras: distinct(todos.map(m => m.rm_ra)),
+      mesorregioes: distinct(todos.map(m => m.mesorregiao)),
+      microrregioes: distinct(todos.map(m => m.microrregiao)),
     };
   }
 }
