@@ -5,6 +5,7 @@ import { MunicipiosModule } from './modules/municipios/municipios.module';
 import { ProjecoesModule } from './modules/projecoes/projecoes.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { ImportacoesModule } from './modules/importacoes/importacoes.module';
+import { BuscaModule } from './modules/busca/busca.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ImportacoesModule } from './modules/importacoes/importacoes.module';
     ProjecoesModule,
     DashboardModule,
     ImportacoesModule,
+    BuscaModule,
   ],
 })
 export class AppModule {}
