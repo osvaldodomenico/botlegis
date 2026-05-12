@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from 'react';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { useDropzone } from 'react-dropzone';
-import { Upload, FileText, CheckCircle, AlertCircle, Clock } from 'lucide-react';
+import { Upload, FileText, CheckCircle, AlertCircle, Clock, ChevronRight, X } from 'lucide-react';
 
 interface LogImportacao {
   id: string; arquivo: string; linhas_processadas: number;
@@ -30,8 +30,15 @@ const StatusBadge = ({ status }: { status: string }) => {
 export default function ImportacoesPage() {
   const [logs, setLogs] = useState<LogImportacao[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [processing, setProcessing] = useState(false);
   const [result, setResult] = useState<UploadResult | null>(null);
   const [error, setError] = useState('');
+
+  // Sheet selection state
+  const [abas, setAbas] = useState<string[]>([]);
+  const [filePath, setFilePath] = useState('');
+  const [fileName, setFileName] = useState('');
+  const [selectedAba, setSelectedAba] = useState('');
 
   const loadLogs = async () => {
     const r = await api.get('/importacoes');
@@ -40,35 +47,62 @@ export default function ImportacoesPage() {
 
   useEffect(() => { loadLogs(); }, []);
 
+  const resetState = () => {
+    setAbas([]);
+    setFilePath('');
+    setFileName('');
+    setSelectedAba('');
+    setResult(null);
+    setError('');
+  };
+
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (!file) return;
 
     setUploading(true);
-    setResult(null);
-    setError('');
+    resetState();
 
     const formData = new FormData();
     formData.append('file', file);
 
     try {
-      const r = await api.post('/importacoes/upload', formData, {
+      const r = await api.post('/importacoes/abas', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-      setResult(r.data);
-      loadLogs();
+      setAbas(r.data.abas);
+      setFilePath(r.data.filePath);
+      setFileName(r.data.fileName);
+      setSelectedAba(r.data.abas[0] || '');
     } catch (e: any) {
-      setError(e.response?.data?.message || 'Erro ao processar arquivo');
+      setError(e.response?.data?.message || 'Erro ao ler o arquivo');
     } finally {
       setUploading(false);
     }
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive, acceptedFiles } = useDropzone({
+  const handleImportar = async () => {
+    if (!selectedAba || !filePath) return;
+    setProcessing(true);
+    setResult(null);
+    setError('');
+    try {
+      const r = await api.post('/importacoes/processar', { filePath, sheetName: selectedAba, fileName });
+      setResult(r.data);
+      setAbas([]);
+      loadLogs();
+    } catch (e: any) {
+      setError(e.response?.data?.message || 'Erro ao processar arquivo');
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: { 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'], 'application/vnd.ms-excel': ['.xls'] },
     maxFiles: 1,
-    disabled: uploading,
+    disabled: uploading || processing,
   });
 
   return (
@@ -77,7 +111,7 @@ export default function ImportacoesPage() {
         {/* Header */}
         <div>
           <h1 className="text-[34px] font-semibold text-ink" style={{ letterSpacing: '-0.374px' }}>Importador XLSX</h1>
-          <p className="text-[17px] text-ink-muted mt-1">Importe a planilha "GERAL ATUALIZADO MV" para atualizar os dados</p>
+          <p className="text-[17px] text-ink-muted mt-1">Faça upload da planilha e escolha a aba para importar</p>
         </div>
 
         {/* Upload Zone */}
@@ -87,7 +121,7 @@ export default function ImportacoesPage() {
             className={`
               border-2 border-dashed rounded-[11px] p-12 text-center cursor-pointer transition-colors
               ${isDragActive ? 'border-primary bg-blue-50' : 'border-hairline hover:border-primary hover:bg-parchment'}
-              ${uploading ? 'opacity-50 cursor-not-allowed' : ''}
+              ${(uploading || processing) ? 'opacity-50 cursor-not-allowed' : ''}
             `}
           >
             <input {...getInputProps()} />
@@ -97,8 +131,8 @@ export default function ImportacoesPage() {
               </div>
               {uploading ? (
                 <div>
-                  <p className="text-[17px] font-semibold text-ink">Processando planilha...</p>
-                  <p className="text-[14px] text-ink-muted mt-1">Importando municípios, aguarde</p>
+                  <p className="text-[17px] font-semibold text-ink">Lendo planilha...</p>
+                  <p className="text-[14px] text-ink-muted mt-1">Identificando abas disponíveis</p>
                 </div>
               ) : isDragActive ? (
                 <p className="text-[17px] font-semibold text-primary">Solte o arquivo aqui</p>
@@ -107,16 +141,59 @@ export default function ImportacoesPage() {
                   <p className="text-[17px] font-semibold text-ink">Arraste o arquivo XLSX aqui</p>
                   <p className="text-[14px] text-ink-muted mt-1">ou clique para selecionar</p>
                   <p className="text-[12px] text-ink-muted mt-3">Formatos aceitos: .xlsx, .xls · Máx. 50MB</p>
-                  {acceptedFiles[0] && (
-                    <div className="mt-4 flex items-center gap-2 justify-center text-[14px] text-ink">
-                      <FileText size={16} />
-                      {acceptedFiles[0].name}
-                    </div>
-                  )}
                 </div>
               )}
             </div>
           </div>
+
+          {/* Sheet selector */}
+          {abas.length > 0 && (
+            <div className="mt-4 border border-hairline rounded-[11px] p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <FileText size={16} className="text-ink-muted" />
+                  <span className="text-[14px] font-semibold text-ink">{fileName}</span>
+                  <span className="text-[13px] text-ink-muted">· {abas.length} {abas.length === 1 ? 'aba' : 'abas'} encontradas</span>
+                </div>
+                <button onClick={resetState} className="text-ink-muted hover:text-ink transition-colors">
+                  <X size={16} />
+                </button>
+              </div>
+
+              <p className="text-[13px] text-ink-muted mb-2">Escolha a aba para importar:</p>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {abas.map(aba => (
+                  <button
+                    key={aba}
+                    onClick={() => setSelectedAba(aba)}
+                    className={`px-3 py-1.5 rounded-[8px] text-[13px] font-medium transition-colors border ${
+                      selectedAba === aba
+                        ? 'bg-primary text-white border-primary'
+                        : 'bg-parchment text-ink border-hairline hover:border-primary hover:text-primary'
+                    }`}
+                  >
+                    {aba}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                onClick={handleImportar}
+                disabled={!selectedAba || processing}
+                className="btn-primary flex items-center gap-2"
+                style={{ opacity: (!selectedAba || processing) ? 0.6 : 1 }}
+              >
+                {processing ? (
+                  <>Importando...</>
+                ) : (
+                  <>
+                    Importar aba "{selectedAba}"
+                    <ChevronRight size={16} />
+                  </>
+                )}
+              </button>
+            </div>
+          )}
 
           {/* Result */}
           {result && (

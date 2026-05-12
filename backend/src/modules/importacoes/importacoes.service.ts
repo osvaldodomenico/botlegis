@@ -2,20 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import * as XLSX from 'xlsx';
 
-const normalizeText = (text: string): string => {
-  if (!text || typeof text !== 'string') return text;
-  return text
-    .trim()
-    .replace(/\s+/g, ' ')
-    .replace(/[àáâãä]/gi, (c) => c.toLowerCase() === c ? 'a' : 'A')
-    .replace(/[èéêë]/gi, (c) => c.toLowerCase() === c ? 'e' : 'E')
-    .replace(/[ìíîï]/gi, (c) => c.toLowerCase() === c ? 'i' : 'I')
-    .replace(/[òóôõö]/gi, (c) => c.toLowerCase() === c ? 'o' : 'O')
-    .replace(/[ùúûü]/gi, (c) => c.toLowerCase() === c ? 'u' : 'U')
-    .replace(/[ç]/gi, (c) => c.toLowerCase() === c ? 'c' : 'C');
-};
-
-// Better normalization: keep accents but fix case/spaces
 const normalizeNome = (text: string): string => {
   if (!text || typeof text !== 'string') return text;
   return text
@@ -41,13 +27,17 @@ const toFloat = (v: any): number | null => {
 export class ImportacoesService {
   constructor(private prisma: PrismaService) {}
 
-  async processUpload(filePath: string, fileName: string) {
+  async listarAbas(filePath: string, fileName: string) {
     const wb = XLSX.readFile(filePath);
-    const sheetName = wb.SheetNames.find(n => n.toUpperCase().includes('GERAL')) || wb.SheetNames[0];
-    const ws = wb.Sheets[sheetName];
+    return { abas: wb.SheetNames, filePath, fileName };
+  }
+
+  async processUpload(filePath: string, fileName: string, sheetName?: string) {
+    const wb = XLSX.readFile(filePath);
+    const sheet = sheetName || wb.SheetNames.find(n => n.toUpperCase().includes('GERAL')) || wb.SheetNames[0];
+    const ws = wb.Sheets[sheet];
     const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: null }) as any[][];
 
-    // Row 0 is percentage header, row 1 is column headers, data starts at row 2
     const headers: string[] = rows[1] as string[];
     const dataRows = rows.slice(2);
 
