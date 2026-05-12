@@ -147,10 +147,6 @@ export default function MunicipiosPage() {
                 onChange={e => setFilter('nome', e.target.value)}
               />
             </div>
-            <select className="input w-44 text-[15px]" value={filters.regiao} onChange={e => setFilter('regiao', e.target.value)}>
-              <option value="">Região</option>
-              {opcoes.regioes.map(r => <option key={r} value={r}>{r}</option>)}
-            </select>
             <select className="input w-48 text-[15px]" value={filters.bloco} onChange={e => setFilter('bloco', e.target.value)}>
               <option value="">Bloco</option>
               {opcoes.blocos.map(b => <option key={b} value={b}>{b}</option>)}
