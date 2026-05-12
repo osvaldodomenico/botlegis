@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Municipio {
+  id                  BigInt    @id @default(autoincrement())
+  nome                String    @unique @db.VarChar(150)
+  uf                  String    @default("SP") @db.Char(2)
+  bloco               String?   @db.VarChar(150)
+  regiao              String?   @db.VarChar(150)
+  rm_ra               String?   @db.VarChar(150)
+  mesorregiao         String?   @db.VarChar(150)
+  microrregiao        String?   @db.VarChar(150)
+  divisao_regional    String?   @db.VarChar(150)
+  projecao_votos      Int       @default(0)
+  coordenacao         String?   @db.VarChar(255)
+  lideranca           String?   @db.VarChar(255)
+  funcao_cargo        String?   @db.VarChar(150)
+  projecao_2          Int?
+  coord_lideranca_2   String?   @db.VarChar(255)
+  funcao_cargo_2      String?   @db.VarChar(150)
+  projecao_apoio_iurd Int?
+  projecao_base       Int?      @default(0)
+  eleitores_22        Int?
+  votos_validos_22    Int?
+  percentual_mv       Float?
+  votos_22            Int?
+  percentual_perda    Float?
+  observacoes         String?   @db.Text
+  created_at          DateTime  @default(now())
+  updated_at          DateTime  @updatedAt
+
+  auditorias          AuditoriaProjecao[]
+
+  @@index([nome])
+  @@index([regiao])
+  @@index([projecao_votos])
+  @@map("municipios")
+}
+
+model AuditoriaProjecao {
+  id            BigInt    @id @default(autoincrement())
+  municipio_id  BigInt
+  municipio     Municipio @relation(fields: [municipio_id], references: [id])
+  valor_antigo  Int?
+  valor_novo    Int?
+  alterado_por  String    @db.VarChar(150)
+  created_at    DateTime  @default(now())
+
+  @@map("auditoria_projecoes")
+}
+
+model LogImportacao {
+  id                  BigInt    @id @default(autoincrement())
+  arquivo             String    @db.VarChar(255)
+  linhas_processadas  Int       @default(0)
+  linhas_com_erro     Int       @default(0)
+  status              String    @db.VarChar(50)
+  erros               Json?
+  created_at          DateTime  @default(now())
+
+  @@map("logs_importacao")
+}
+
+model Usuario {
+  id         BigInt   @id @default(autoincrement())
+  email      String   @unique @db.VarChar(150)
+  senha      String   @db.VarChar(255)
+  nome       String   @db.VarChar(150)
+  ativo      Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("usuarios")
+}
