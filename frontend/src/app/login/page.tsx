@@ -33,12 +33,12 @@ export default function LoginPage() {
         {/* Header */}
         <div className="text-center mb-10">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-tile rounded-[18px] mb-6">
-            <span className="text-white text-[28px] font-semibold">MV</span>
+            <span className="text-white text-[28px] font-semibold">LB</span>
           </div>
           <h1 className="text-[34px] font-semibold text-ink" style={{ letterSpacing: '-0.374px' }}>
-            MV 2026
+            Legis BOT
           </h1>
-          <p className="text-[17px] text-ink-muted mt-2">BI Político — Acesso ao Sistema</p>
+          <p className="text-[17px] text-ink-muted mt-2">Módulo Robô — Acesso ao Sistema</p>
         </div>
 
         {/* Form */}
@@ -86,7 +86,7 @@ export default function LoginPage() {
         </div>
 
         <p className="text-center text-[12px] text-ink-muted mt-6">
-          MV 2026 · Sistema de Gestão Territorial
+          Legis BOT · Módulo Robô
         </p>
       </div>
     </div>

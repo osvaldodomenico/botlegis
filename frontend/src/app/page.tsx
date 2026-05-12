@@ -34,7 +34,7 @@ export default function DashboardPage() {
         {/* Header */}
         <div>
           <h1 className="text-[34px] font-semibold text-ink" style={{ letterSpacing: '-0.374px' }}>Dashboard</h1>
-          <p className="text-[17px] text-ink-muted mt-1">Visão geral do BI Político MV 2026</p>
+          <p className="text-[17px] text-ink-muted mt-1">Visão geral do Legis BOT</p>
         </div>
 
         {/* Stats */}

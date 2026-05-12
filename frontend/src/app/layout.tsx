@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'MV 2026 — BI Político',
-  description: 'Sistema de gestão territorial e projeções políticas',
+  title: 'Legis BOT — Módulo Robô',
+  description: 'Legis BOT — Acesso ao Sistema',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

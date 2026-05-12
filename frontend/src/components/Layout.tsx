@@ -40,8 +40,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         {/* Logo */}
         <div className="px-6 py-6 border-b border-white/10">
           <p className="text-[12px] text-white/50 uppercase tracking-widest mb-1">Sistema</p>
-          <h1 className="text-[21px] font-semibold tracking-tight leading-tight">MV 2026</h1>
-          <p className="text-[12px] text-white/50 mt-0.5">BI Político</p>
+          <h1 className="text-[21px] font-semibold tracking-tight leading-tight">Legis BOT</h1>
+          <p className="text-[12px] text-white/50 mt-0.5">Módulo Robô</p>
         </div>
 
         {/* Nav */}
@@ -100,7 +100,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <button onClick={() => setSidebarOpen(!sidebarOpen)}>
             {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
-          <span className="text-[17px] font-semibold">MV 2026</span>
+          <span className="text-[17px] font-semibold">Legis BOT</span>
         </header>
 
         {/* Page content */}
