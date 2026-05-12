@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { font-size: 17px; }
+
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+    color: #1d1d1f;
+    background: #f5f5f7;
+    line-height: 1.47;
+    letter-spacing: -0.022em;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.028em;
+    line-height: 1.1;
+    color: #1d1d1f;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-[22px] py-[11px] bg-primary text-white text-[17px] font-normal rounded-pill transition-transform active:scale-95 cursor-pointer select-none;
+    letter-spacing: -0.022em;
+  }
+  .btn-primary:hover { background-color: #0071e3; }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-[22px] py-[11px] text-primary text-[17px] font-normal rounded-pill border border-primary transition-transform active:scale-95 cursor-pointer select-none bg-transparent;
+  }
+
+  .btn-utility {
+    @apply inline-flex items-center justify-center gap-1 px-[15px] py-[8px] bg-ink text-white text-[14px] font-normal rounded-btn transition-transform active:scale-95 cursor-pointer select-none;
+    letter-spacing: -0.014em;
+  }
+
+  .card {
+    @apply bg-white rounded-card border border-hairline p-6;
+  }
+
+  .stat-card {
+    @apply bg-white rounded-card border border-hairline p-6 flex flex-col gap-1;
+  }
+
+  .table-th {
+    @apply text-[14px] font-semibold text-ink-strong text-left py-3 px-4;
+    letter-spacing: -0.014em;
+  }
+
+  .table-td {
+    @apply text-[17px] text-ink py-3 px-4;
+    letter-spacing: -0.022em;
+  }
+
+  .input {
+    @apply w-full bg-white border border-hairline rounded-card px-4 py-[11px] text-[17px] text-ink outline-none transition-colors;
+    letter-spacing: -0.022em;
+  }
+  .input:focus { border-color: #0066cc; box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.12); }
+
+  .label {
+    @apply block text-[14px] font-semibold text-ink-strong mb-1;
+    letter-spacing: -0.014em;
+  }
+}
