@@ -3,7 +3,8 @@ WORKDIR /app
 COPY frontend/package*.json ./
 RUN npm ci
 COPY frontend/ .
-ARG NEXT_PUBLIC_API_URL
+# URL do backend em produção (pode ser sobrescrita via build arg no EasyPanel)
+ARG NEXT_PUBLIC_API_URL=https://automacoes-legisbot.sqcx8c.easypanel.host
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 RUN npm run build
 
