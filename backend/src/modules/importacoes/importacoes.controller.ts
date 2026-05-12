@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body, UseGuards, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
+import { Controller, Post, Get, Delete, Body, UseGuards, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ImportacoesService } from './importacoes.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -25,6 +25,11 @@ export class ImportacoesController {
   async upload(@UploadedFile() file: Express.Multer.File) {
     if (!file) throw new BadRequestException('Arquivo não enviado');
     return this.service.processUpload(file.path, file.originalname);
+  }
+
+  @Delete('dados')
+  limparDados() {
+    return this.service.limparDados();
   }
 
   @Get()

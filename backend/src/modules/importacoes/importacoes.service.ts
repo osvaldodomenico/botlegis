@@ -110,6 +110,12 @@ export class ImportacoesService {
     };
   }
 
+  async limparDados() {
+    await this.prisma.municipio.deleteMany({});
+    await this.prisma.logImportacao.deleteMany({});
+    return { message: 'Todos os dados foram apagados com sucesso.' };
+  }
+
   async findAll() {
     const logs = await this.prisma.logImportacao.findMany({
       orderBy: { created_at: 'desc' },

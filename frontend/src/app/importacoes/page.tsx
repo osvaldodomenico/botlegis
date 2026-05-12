@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from 'react';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { useDropzone } from 'react-dropzone';
-import { Upload, FileText, CheckCircle, AlertCircle, Clock, ChevronRight, X } from 'lucide-react';
+import { Upload, FileText, CheckCircle, AlertCircle, Clock, ChevronRight, X, Trash2 } from 'lucide-react';
 
 interface LogImportacao {
   id: string; arquivo: string; linhas_processadas: number;
@@ -31,6 +31,8 @@ export default function ImportacoesPage() {
   const [logs, setLogs] = useState<LogImportacao[]>([]);
   const [uploading, setUploading] = useState(false);
   const [processing, setProcessing] = useState(false);
+  const [clearing, setClearing] = useState(false);
+  const [confirmClear, setConfirmClear] = useState(false);
   const [result, setResult] = useState<UploadResult | null>(null);
   const [error, setError] = useState('');
 
@@ -43,6 +45,20 @@ export default function ImportacoesPage() {
   const loadLogs = async () => {
     const r = await api.get('/importacoes');
     setLogs(r.data);
+  };
+
+  const handleLimpar = async () => {
+    setClearing(true);
+    setError('');
+    try {
+      await api.delete('/importacoes/dados');
+      setConfirmClear(false);
+      loadLogs();
+    } catch (e: any) {
+      setError(e.response?.data?.message || 'Erro ao limpar os dados');
+    } finally {
+      setClearing(false);
+    }
   };
 
   useEffect(() => { loadLogs(); }, []);
@@ -109,9 +125,39 @@ export default function ImportacoesPage() {
     <Layout>
       <div className="space-y-8">
         {/* Header */}
-        <div>
-          <h1 className="text-[34px] font-semibold text-ink" style={{ letterSpacing: '-0.374px' }}>Importador XLSX</h1>
-          <p className="text-[17px] text-ink-muted mt-1">Faça upload da planilha e escolha a aba para importar</p>
+        <div className="flex items-start justify-between">
+          <div>
+            <h1 className="text-[34px] font-semibold text-ink" style={{ letterSpacing: '-0.374px' }}>Importador XLSX</h1>
+            <p className="text-[17px] text-ink-muted mt-1">Faça upload da planilha e escolha a aba para importar</p>
+          </div>
+          <div className="flex items-center gap-3 mt-2">
+            {confirmClear ? (
+              <>
+                <span className="text-[14px] text-red-700 font-medium">Apagar todos os dados?</span>
+                <button
+                  onClick={handleLimpar}
+                  disabled={clearing}
+                  className="px-4 py-2 rounded-[9px] text-[14px] font-semibold bg-red-600 text-white hover:bg-red-700 transition-colors"
+                >
+                  {clearing ? 'Apagando...' : 'Confirmar'}
+                </button>
+                <button
+                  onClick={() => setConfirmClear(false)}
+                  className="px-4 py-2 rounded-[9px] text-[14px] font-semibold border border-hairline text-ink hover:bg-parchment transition-colors"
+                >
+                  Cancelar
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => setConfirmClear(true)}
+                className="flex items-center gap-2 px-4 py-2 rounded-[9px] text-[14px] font-semibold border border-red-200 text-red-600 hover:bg-red-50 transition-colors"
+              >
+                <Trash2 size={15} />
+                Limpar dados
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Upload Zone */}
