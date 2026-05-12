@@ -14,4 +14,5 @@ COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/prisma ./prisma
 RUN mkdir -p /app/uploads
 EXPOSE 8000
-CMD ["node", "dist/main"]
+# Roda migrate antes de subir (seguro em produção com migrate deploy)
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main"]
