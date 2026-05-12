@@ -8,6 +8,7 @@
     "allowSyntheticDefaultImports": true,
     "target": "ES2021",
     "sourceMap": true,
+    "rootDir": "./src",
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
@@ -17,5 +18,6 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
-  }
+  },
+  "exclude": ["node_modules", "dist", "prisma/seed.ts"]
 }
