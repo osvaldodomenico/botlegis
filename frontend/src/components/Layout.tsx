@@ -3,11 +3,12 @@ import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { isAuthenticated, getUser, clearAuth } from '@/lib/auth';
-import { BarChart2, MapPin, Upload, LogOut, Menu, X } from 'lucide-react';
+import { BarChart2, MapPin, Upload, LogOut, Menu, X, Search } from 'lucide-react';
 
 const navItems = [
   { href: '/', label: 'Dashboard', icon: BarChart2 },
   { href: '/municipios', label: 'Municípios', icon: MapPin },
+  { href: '/consultas', label: 'Consultas', icon: Search },
   { href: '/importacoes', label: 'Importador', icon: Upload },
 ];
 
