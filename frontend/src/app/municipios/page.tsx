@@ -4,6 +4,12 @@ import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { Search, Plus, Edit2, Trash2, X, ChevronLeft, ChevronRight, Filter, ChevronDown, ExternalLink } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { MUNICIPIOS_SP } from '@/lib/municipios-sp';
+
+const RM_RA_OPCOES = ['ARAÇATUBA','BAIXADA SANTISTA','BARRETOS','BAURU','CAMPINAS','CENTRAL','FRANCA','ITAPEVA','MARÍLIA','PRESIDENTE PRUDENTE','REGISTRO','RIBEIRÃO PRETO','SÃO JOSÉ DO RIO PRETO','SÃO PAULO','SOROCABA','VALE E LITORAL'];
+const MESORREGIAO_OPCOES = ['ARAÇATUBA','ARARAQUARA','ASSIS','BAURU','CAMPINAS','ITAPETININGA','LITORAL SUL','MACRO METROPOLITANA','MARILIA','METROPOLITANA SP','PIRACICABA','PRESIDENTE PRUDENTE','RIBEIRÃO PRETO','SÃO JOSÉ DO RIO PRETO','VALE DO PARAIBA'];
+const MICRORREGIAO_OPCOES = ['ADAMANTINA','AMPARO','ANDRADINA','ARAÇATUBA','ARARAQUARA','ASSIS','AURIFLAMA','AVARÉ','BANANAL','BARRETOS','BATATAIS','BAURU','BIRIGUI','BOTUCATU','BRAGANÇA PAULISTA','CAMPINAS','CAMPOS DO JORDÃO','CAPÃO BONITO','CARAGUATATUBA','CATANDUVA','DRACENA','FERNANDÓPOLIS','FRANCA','FRANCO DA ROCHA','GUARATINGUETA','GUARULHOS','ITANHAÉM','ITAPECERICA DA SERRA','ITAPETININGA','ITAPEVA','ITUVERAVA','JABOTICABAL','JALES','JAÚ','JUNDIAI','LIMEIRA','LINS','MARÍLIA','MOGI DAS CRUZES','MOGI MIRIM','NHANDEARA','NOVO HORIZONTE','OSASCO','OURINHOS','PARAIBUNA/PARAITINGA','PIEDADE','PIRACICABA','PIRASSUNUNGA','PRESIDENTE PRUDENTE','REGISTRO','RIBEIRÃO PRETO','RIO CLARO','SANTOS','SÃO CARLOS','SÃO JOÃO DA BOA VISTA','SÃO JOAQUIM DA BARRA','SÃO JOSÉ DO RIO PRETO','SÃO JOSÉ DOS CAMPOS','SÃO PAULO','SOROCABA','TATUÍ','TUPÃ','VOTUPORANGA'];
+const DIVISAO_REGIONAL_OPCOES = ['ALTO TIETE','BRAGANTINA','LITORAL NORTE','SAO JOSE DOS CAMPOS','SERRA DA MANTIQUEIRA','TAUBATE','VALE DA FÉ','VALE HISTORICO'];
 import Link from 'next/link';
 
 interface Municipio {
@@ -36,15 +42,9 @@ export default function MunicipiosPage() {
 
   const { register, handleSubmit, reset, setValue, watch } = useForm<Municipio>();
   const tipoCadastro = watch('tipo_cadastro');
-  const [todosMunicipios, setTodosMunicipios] = useState<{id: string; nome: string}[]>([]);
-
   // Load filter options
   useEffect(() => {
     api.get('/filtros/opcoes').then(r => setOpcoes(r.data)).catch(() => {});
-  }, []);
-  useEffect(() => {
-    api.get('/municipios', { params: { limit: 700, orderBy: 'nome', order: 'asc' } })
-      .then(r => setTodosMunicipios(r.data.data)).catch(() => {});
   }, []);
 
   const load = useCallback(async (f = filters, p = page, ob = orderBy, o = order) => {
@@ -368,25 +368,37 @@ export default function MunicipiosPage() {
                     <div className="sm:col-span-2">
                       <label className="label">Município *</label>
                       <select {...register('nome', { required: true })} className="input bg-white">
-                        <option value="">{todosMunicipios.length ? `Selecione (${todosMunicipios.length} municípios)` : 'Carregando...'}</option>
-                        {todosMunicipios.map(m => <option key={m.id} value={m.nome}>{m.nome}</option>)}
+                        <option value="">Selecione o município ({MUNICIPIOS_SP.length})</option>
+                        {MUNICIPIOS_SP.map(nome => <option key={nome} value={nome}>{nome}</option>)}
                       </select>
                     </div>
                     <div>
                       <label className="label">RM / RA</label>
-                      <input {...register('rm_ra')} className="input bg-white" />
+                      <select {...register('rm_ra')} className="input bg-white">
+                        <option value="">Selecione</option>
+                        {RM_RA_OPCOES.map(v => <option key={v} value={v}>{v}</option>)}
+                      </select>
                     </div>
                     <div>
                       <label className="label">Mesorregião</label>
-                      <input {...register('mesorregiao')} className="input bg-white" />
+                      <select {...register('mesorregiao')} className="input bg-white">
+                        <option value="">Selecione</option>
+                        {MESORREGIAO_OPCOES.map(v => <option key={v} value={v}>{v}</option>)}
+                      </select>
                     </div>
                     <div>
                       <label className="label">Microrregião</label>
-                      <input {...register('microrregiao')} className="input bg-white" />
+                      <select {...register('microrregiao')} className="input bg-white">
+                        <option value="">Selecione</option>
+                        {MICRORREGIAO_OPCOES.map(v => <option key={v} value={v}>{v}</option>)}
+                      </select>
                     </div>
                     <div>
                       <label className="label">Divisão Regional</label>
-                      <input {...register('divisao_regional')} className="input bg-white" />
+                      <select {...register('divisao_regional')} className="input bg-white">
+                        <option value="">Selecione</option>
+                        {DIVISAO_REGIONAL_OPCOES.map(v => <option key={v} value={v}>{v}</option>)}
+                      </select>
                     </div>
                   </div>
                 </div>
@@ -447,8 +459,8 @@ export default function MunicipiosPage() {
                     <div>
                       <label className="label">Cidade</label>
                       <select {...register('distrito')} className="input">
-                        <option value="">Selecione a cidade</option>
-                        {todosMunicipios.map(m => <option key={m.id} value={m.nome}>{m.nome}</option>)}
+                        <option value="">Selecione o município</option>
+                        {MUNICIPIOS_SP.map(nome => <option key={nome} value={nome}>{nome}</option>)}
                       </select>
                     </div>
                   </div>
