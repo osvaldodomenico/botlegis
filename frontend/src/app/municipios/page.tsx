@@ -333,34 +333,6 @@ export default function MunicipiosPage() {
                       {todosMunicipios.map(m => <option key={m.id} value={m.nome}>{m.nome}</option>)}
                     </select>
                   </div>
-                  <div className="sm:col-span-2">
-                    <label className="label">Função</label>
-                    <select {...register('funcao')} className="input">
-                      <option value="">Selecione</option>
-                      <option value="Ex-Prefeito">Ex-Prefeito</option>
-                      <option value="Liderança">Liderança</option>
-                      <option value="Pastor">Pastor</option>
-                      <option value="Prefeito">Prefeito</option>
-                      <option value="Secretário">Secretário</option>
-                      <option value="Vereador">Vereador</option>
-                      <option value="Vice">Vice</option>
-                    </select>
-                  </div>
-                  {(tipoCadastro === 'BASE - INSTITUIÇÃO' || tipoCadastro === 'BASE APOIADORES') && (
-                  <div>
-                    <label className="label">Bloco</label>
-                    <select {...register('bloco')} className="input">
-                      <option value="">Selecione</option>
-                      <option value="Jundiaí">Jundiaí</option>
-                      <option value="São José dos Campos">São José dos Campos</option>
-                      <option value="Zona Sul">Zona Sul</option>
-                    </select>
-                  </div>
-                  )}
-                  <div>
-                    <label className="label">Distrito</label>
-                    <input {...register('distrito')} className="input" placeholder="Ex: Centro" />
-                  </div>
                   <div>
                     <label className="label">RM / RA</label>
                     <input {...register('rm_ra')} className="input" />
@@ -380,82 +352,108 @@ export default function MunicipiosPage() {
                 </div>
               </div>
 
-              {/* Seção: Coordenação */}
+              {/* Seção: EXTERNO */}
+              {tipoCadastro === 'EXTERNO' && (
               <div className="mb-6">
-                <h3 className="text-[14px] font-semibold text-ink-muted uppercase tracking-wider mb-3">Coordenação e Liderança</h3>
+                <h3 className="text-[14px] font-semibold text-ink-muted uppercase tracking-wider mb-3">Externo</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="label">Coordenação</label>
+                  <div className="sm:col-span-2">
+                    <label className="label">Coordenadora</label>
+                    <input {...register('coordenacao')} className="input" placeholder="Nome da coordenadora" />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="label">Liderança (Nome)</label>
+                    <input {...register('lideranca')} className="input" placeholder="Nome da liderança" />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="label">Função</label>
+                    <select {...register('funcao')} className="input">
+                      <option value="">Selecione</option>
+                      <option value="Ex-Prefeito">Ex-Prefeito</option>
+                      <option value="Liderança">Liderança</option>
+                      <option value="Pastor">Pastor</option>
+                      <option value="Prefeito">Prefeito</option>
+                      <option value="Secretário">Secretário</option>
+                      <option value="Vereador">Vereador</option>
+                      <option value="Vice">Vice</option>
+                    </select>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="label">Projeção</label>
+                    <input {...register('projecao_votos')} type="number" className="input" placeholder="0" />
+                  </div>
+                </div>
+              </div>
+              )}
+
+              {/* Seção: BASE - INSTITUIÇÃO */}
+              {tipoCadastro === 'BASE - INSTITUIÇÃO' && (
+              <div className="mb-6">
+                <h3 className="text-[14px] font-semibold text-ink-muted uppercase tracking-wider mb-3">Base - Instituição</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="sm:col-span-2">
+                    <label className="label">Coordenador</label>
                     <input {...register('coordenacao')} className="input" placeholder="Nome do coordenador" />
                   </div>
                   <div>
-                    <label className="label">Liderança</label>
-                    <input {...register('lideranca')} className="input" placeholder="Nome da liderança" />
+                    <label className="label">Bloco</label>
+                    <select {...register('bloco')} className="input">
+                      <option value="">Selecione</option>
+                      <option value="Jundiaí">Jundiaí</option>
+                      <option value="São José dos Campos">São José dos Campos</option>
+                      <option value="Zona Sul">Zona Sul</option>
+                    </select>
                   </div>
                   <div>
-                    <label className="label">Função / Cargo</label>
-                    <input {...register('funcao_cargo')} className="input" placeholder="Ex: Ex-Prefeito" />
-                  </div>
-                  <div>
-                    <label className="label">Coordenação / Liderança 2</label>
-                    <input {...register('coord_lideranca_2')} className="input" />
-                  </div>
-                  <div>
-                    <label className="label">Função / Cargo 2</label>
-                    <input {...register('funcao_cargo_2')} className="input" />
+                    <label className="label">Cidade</label>
+                    <input {...register('distrito')} className="input" placeholder="Ex: Campinas" />
                   </div>
                 </div>
               </div>
+              )}
 
-              {/* Seção: Projeções */}
+              {/* Seção: BASE APOIADORES */}
+              {tipoCadastro === 'BASE APOIADORES' && (
               <div className="mb-6">
-                <h3 className="text-[14px] font-semibold text-ink-muted uppercase tracking-wider mb-3">Projeções de Votos</h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                <h3 className="text-[14px] font-semibold text-ink-muted uppercase tracking-wider mb-3">Base Apoiadores</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="label">Projeção Principal</label>
+                    <label className="label">Bloco</label>
+                    <select {...register('bloco')} className="input">
+                      <option value="">Selecione</option>
+                      <option value="Jundiaí">Jundiaí</option>
+                      <option value="São José dos Campos">São José dos Campos</option>
+                      <option value="Zona Sul">Zona Sul</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="label">Distrito</label>
+                    <input {...register('distrito')} className="input" placeholder="Ex: Centro" />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="label">Função</label>
+                    <select {...register('funcao')} className="input">
+                      <option value="">Selecione</option>
+                      <option value="Ex-Prefeito">Ex-Prefeito</option>
+                      <option value="Liderança">Liderança</option>
+                      <option value="Pastor">Pastor</option>
+                      <option value="Prefeito">Prefeito</option>
+                      <option value="Secretário">Secretário</option>
+                      <option value="Vereador">Vereador</option>
+                      <option value="Vice">Vice</option>
+                    </select>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="label">Nome</label>
+                    <input {...register('lideranca')} className="input" placeholder="Nome do apoiador" />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="label">Projeção</label>
                     <input {...register('projecao_votos')} type="number" className="input" placeholder="0" />
                   </div>
-                  <div>
-                    <label className="label">Projeção 2</label>
-                    <input {...register('projecao_2')} type="number" className="input" placeholder="0" />
-                  </div>
-                  <div>
-                    <label className="label">Projeção Base</label>
-                    <input {...register('projecao_base')} type="number" className="input" placeholder="0" />
-                  </div>
-                  <div>
-                    <label className="label">Projeção Apoio IURD</label>
-                    <input {...register('projecao_apoio_iurd')} type="number" className="input" placeholder="0" />
-                  </div>
                 </div>
               </div>
-
-              {/* Seção: Dados Eleitorais 2022 */}
-              <div className="mb-6">
-                <h3 className="text-[14px] font-semibold text-ink-muted uppercase tracking-wider mb-3">Dados Eleitorais 2022</h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                  <div>
-                    <label className="label">Eleitores 2022</label>
-                    <input {...register('eleitores_22')} type="number" className="input" />
-                  </div>
-                  <div>
-                    <label className="label">Votos Válidos 2022</label>
-                    <input {...register('votos_validos_22')} type="number" className="input" />
-                  </div>
-                  <div>
-                    <label className="label">Votos MV 2022</label>
-                    <input {...register('votos_22')} type="number" className="input" />
-                  </div>
-                  <div>
-                    <label className="label">% MV</label>
-                    <input {...register('percentual_mv')} type="number" step="0.01" className="input" />
-                  </div>
-                  <div>
-                    <label className="label">% Perda</label>
-                    <input {...register('percentual_perda')} type="number" step="0.01" className="input" />
-                  </div>
-                </div>
-              </div>
+              )}
 
               {/* Seção: Observações */}
               <div className="mb-6">
