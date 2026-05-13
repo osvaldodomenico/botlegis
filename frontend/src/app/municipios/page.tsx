@@ -240,7 +240,7 @@ export default function MunicipiosPage() {
                   <SortHeader field="nome" label="Município" />
                   <th className="table-th hidden md:table-cell">Bloco</th>
                   <th className="table-th hidden lg:table-cell">Função</th>
-                  <th className="table-th hidden lg:table-cell">Liderança / Nome</th>
+                  <th className="table-th hidden lg:table-cell">Coordenador / Liderança</th>
                   <SortHeader field="projecao_votos" label="Projeção" />
                   <th className="table-th w-20"></th>
                 </tr>
@@ -261,10 +261,12 @@ export default function MunicipiosPage() {
                         }`}>{m.tipo_cadastro}</span>
                       ) : <span className="text-ink-muted text-[12px]">—</span>}
                     </td>
-                    <td className="table-td font-semibold">{m.nome}</td>
-                    <td className="table-td hidden md:table-cell text-[13px] text-ink-muted">{m.bloco || '—'}</td>
-                    <td className="table-td hidden lg:table-cell text-[13px] text-ink-muted">{(m as any).funcao || '—'}</td>
-                    <td className="table-td hidden lg:table-cell text-[13px] text-ink-muted truncate max-w-[160px]">{m.lideranca || '—'}</td>
+                    <td className="table-td font-semibold uppercase">{m.nome}</td>
+                    <td className="table-td hidden md:table-cell text-[13px] text-ink-muted uppercase">{m.bloco || '—'}</td>
+                    <td className="table-td hidden lg:table-cell text-[13px] text-ink-muted uppercase">{(m as any).funcao || '—'}</td>
+                    <td className="table-td hidden lg:table-cell text-[13px] text-ink-muted truncate max-w-[160px] uppercase">
+                      {m.tipo_cadastro === 'BASE - INSTITUIÇÃO' ? (m.coordenacao || '—') : (m.lideranca || '—')}
+                    </td>
                     <td className="table-td font-semibold text-primary text-right">{m.projecao_votos?.toLocaleString('pt-BR') || '—'}</td>
                     <td className="table-td">
                       <div className="flex items-center gap-1 justify-end">
