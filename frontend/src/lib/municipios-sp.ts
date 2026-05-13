@@ -454,7 +454,6 @@ export const MUNICIPIOS_SP: string[] = [
   "Pradópolis",
   "Praia Grande",
   "Pratânia",
-  "Prefeitos",
   "Presidente Alves",
   "Presidente Bernardes",
   "Presidente Epitácio",
