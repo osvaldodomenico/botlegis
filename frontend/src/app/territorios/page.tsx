@@ -28,6 +28,7 @@ export default function TerritoriosPage() {
   const [editing, setEditing] = useState<Territorio | null>(null);
   const [search, setSearch] = useState('');
 
+  const [saving, setSaving] = useState(false);
   const { register, handleSubmit, reset } = useForm<Territorio>();
 
   const load = useCallback(async () => {
@@ -45,10 +46,17 @@ export default function TerritoriosPage() {
   const closeForm = () => { setShowForm(false); setEditing(null); };
 
   const onSubmit = async (data: Territorio) => {
-    if (editing) await api.put(`/territorios/${editing.id}`, data);
-    else await api.post('/territorios', data);
-    closeForm();
-    load();
+    setSaving(true);
+    try {
+      if (editing) await api.put(`/territorios/${editing.id}`, data);
+      else await api.post('/territorios', data);
+      closeForm();
+      load();
+    } catch (e: any) {
+      alert('Erro ao salvar: ' + (e?.response?.data?.message || e?.message || 'Tente novamente'));
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleDelete = async (id: string, nome: string) => {
@@ -167,7 +175,7 @@ export default function TerritoriosPage() {
               </div>
               <div className="flex justify-end gap-3 pt-2">
                 <button type="button" onClick={closeForm} className="btn-secondary">Cancelar</button>
-                <button type="submit" className="btn-primary">Salvar</button>
+                <button type="submit" disabled={saving} className="btn-primary disabled:opacity-60">{saving ? 'Salvando...' : 'Salvar'}</button>
               </div>
             </form>
           </div>
