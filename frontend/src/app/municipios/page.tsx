@@ -305,165 +305,225 @@ export default function MunicipiosPage() {
 
       {/* Modal cadastro/edição */}
       {showForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
-          <div className="bg-white rounded-card w-full max-w-3xl max-h-[92vh] overflow-y-auto shadow-xl">
-            <div className="sticky top-0 bg-white px-6 py-4 border-b border-hairline flex items-center justify-between z-10">
-              <h2 className="text-[21px] font-semibold text-ink">{editing ? `Editar: ${editing.nome}` : 'Novo Município'}</h2>
-              <button onClick={() => setShowForm(false)} className="p-2 text-ink-muted hover:text-ink rounded-[8px] hover:bg-parchment"><X size={20} /></button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-white rounded-[20px] w-full max-w-2xl max-h-[92vh] overflow-y-auto shadow-2xl">
+
+            {/* Header */}
+            <div className="sticky top-0 bg-white/95 backdrop-blur-sm px-6 py-5 border-b border-hairline flex items-center justify-between z-10 rounded-t-[20px]">
+              <div>
+                <h2 className="text-[21px] font-semibold text-ink tracking-tight">
+                  {editing ? 'Editar Cadastro' : 'Novo Cadastro'}
+                </h2>
+                {editing && <p className="text-[13px] text-ink-muted mt-0.5">{editing.nome}</p>}
+              </div>
+              <button onClick={() => setShowForm(false)} className="p-2 text-ink-muted hover:text-ink rounded-full hover:bg-parchment transition-colors">
+                <X size={20} />
+              </button>
             </div>
-            <form onSubmit={handleSubmit(onSubmit)} className="p-6">
 
-              {/* Seção: Identificação */}
-              <div className="mb-6">
-                <h3 className="text-[14px] font-semibold text-ink-muted uppercase tracking-wider mb-3">Identificação</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="sm:col-span-2">
-                    <label className="label">Tipo de Cadastro</label>
-                    <select {...register('tipo_cadastro')} className="input">
-                      <option value="">Selecione</option>
-                      <option value="EXTERNO">EXTERNO</option>
-                      <option value="BASE - INSTITUIÇÃO">BASE - INSTITUIÇÃO</option>
-                      <option value="BASE APOIADORES">BASE APOIADORES</option>
-                    </select>
-                  </div>
-                  <div className="sm:col-span-2">
-                    <label className="label">Nome do Município *</label>
-                    <select {...register('nome', { required: true })} className="input">
-                      <option value="">Selecione o município</option>
-                      {todosMunicipios.map(m => <option key={m.id} value={m.nome}>{m.nome}</option>)}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="label">RM / RA</label>
-                    <input {...register('rm_ra')} className="input" />
-                  </div>
-                  <div>
-                    <label className="label">Mesorregião</label>
-                    <input {...register('mesorregiao')} className="input" />
-                  </div>
-                  <div>
-                    <label className="label">Microrregião</label>
-                    <input {...register('microrregiao')} className="input" />
-                  </div>
-                  <div>
-                    <label className="label">Divisão Regional</label>
-                    <input {...register('divisao_regional')} className="input" />
-                  </div>
+            <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
+
+              {/* Tipo de Cadastro — segmented control */}
+              <div>
+                <p className="text-[11px] font-semibold text-ink-muted uppercase tracking-widest mb-3">Tipo de Cadastro</p>
+                <input type="hidden" {...register('tipo_cadastro')} />
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { value: 'EXTERNO', label: 'Externo' },
+                    { value: 'BASE - INSTITUIÇÃO', label: 'Base Instituição' },
+                    { value: 'BASE APOIADORES', label: 'Base Apoiadores' },
+                  ].map(({ value, label }) => (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => setValue('tipo_cadastro', value, { shouldDirty: true })}
+                      className={`px-3 py-3 rounded-[12px] text-[13px] font-semibold border-2 transition-all text-center leading-snug
+                        ${tipoCadastro === value
+                          ? value === 'EXTERNO'
+                            ? 'border-blue-500 bg-blue-50 text-blue-700'
+                            : value === 'BASE - INSTITUIÇÃO'
+                            ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
+                            : 'border-orange-500 bg-orange-50 text-orange-700'
+                          : 'border-[#e5e5ea] bg-white text-ink-muted hover:border-[#c7c7cc] hover:text-ink'
+                        }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
                 </div>
               </div>
 
-              {/* Seção: EXTERNO */}
+              {/* Prompt quando nenhum tipo selecionado */}
+              {!tipoCadastro && (
+                <div className="py-10 text-center text-ink-muted text-[15px] border-2 border-dashed border-[#e5e5ea] rounded-[14px]">
+                  Selecione o tipo de cadastro acima para continuar
+                </div>
+              )}
+
+              {/* Identificação — sempre visível após tipo escolhido */}
+              {tipoCadastro && (
+                <div className="bg-parchment rounded-[14px] p-5 space-y-4">
+                  <p className="text-[11px] font-semibold text-ink-muted uppercase tracking-widest">Identificação</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="sm:col-span-2">
+                      <label className="label">Município *</label>
+                      <input
+                        {...register('nome', { required: true })}
+                        list="municipios-datalist"
+                        className="input bg-white"
+                        placeholder={todosMunicipios.length ? `Buscar entre ${todosMunicipios.length} municípios...` : 'Carregando...'}
+                        autoComplete="off"
+                      />
+                      <datalist id="municipios-datalist">
+                        {todosMunicipios.map(m => <option key={m.id} value={m.nome} />)}
+                      </datalist>
+                    </div>
+                    <div>
+                      <label className="label">RM / RA</label>
+                      <input {...register('rm_ra')} className="input bg-white" />
+                    </div>
+                    <div>
+                      <label className="label">Mesorregião</label>
+                      <input {...register('mesorregiao')} className="input bg-white" />
+                    </div>
+                    <div>
+                      <label className="label">Microrregião</label>
+                      <input {...register('microrregiao')} className="input bg-white" />
+                    </div>
+                    <div>
+                      <label className="label">Divisão Regional</label>
+                      <input {...register('divisao_regional')} className="input bg-white" />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* EXTERNO */}
               {tipoCadastro === 'EXTERNO' && (
-              <div className="mb-6">
-                <h3 className="text-[14px] font-semibold text-ink-muted uppercase tracking-wider mb-3">Externo</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="sm:col-span-2">
-                    <label className="label">Coordenadora</label>
-                    <input {...register('coordenacao')} className="input" placeholder="Nome da coordenadora" />
-                  </div>
-                  <div className="sm:col-span-2">
-                    <label className="label">Liderança (Nome)</label>
-                    <input {...register('lideranca')} className="input" placeholder="Nome da liderança" />
-                  </div>
-                  <div className="sm:col-span-2">
-                    <label className="label">Função</label>
-                    <select {...register('funcao')} className="input">
-                      <option value="">Selecione</option>
-                      <option value="Ex-Prefeito">Ex-Prefeito</option>
-                      <option value="Liderança">Liderança</option>
-                      <option value="Pastor">Pastor</option>
-                      <option value="Prefeito">Prefeito</option>
-                      <option value="Secretário">Secretário</option>
-                      <option value="Vereador">Vereador</option>
-                      <option value="Vice">Vice</option>
-                    </select>
-                  </div>
-                  <div className="sm:col-span-2">
-                    <label className="label">Projeção</label>
-                    <input {...register('projecao_votos')} type="number" className="input" placeholder="0" />
+                <div className="border-l-4 border-blue-500 pl-5 space-y-4">
+                  <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest">Dados Externos</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="sm:col-span-2">
+                      <label className="label">Coordenador(a)</label>
+                      <input {...register('coordenacao')} className="input" placeholder="Nome do(a) coordenador(a)" />
+                    </div>
+                    <div className="sm:col-span-2">
+                      <label className="label">Nome da Liderança</label>
+                      <input {...register('lideranca')} className="input" placeholder="Nome da liderança" />
+                    </div>
+                    <div>
+                      <label className="label">Função</label>
+                      <select {...register('funcao')} className="input">
+                        <option value="">Selecione</option>
+                        <option value="Ex-Prefeito">Ex-Prefeito</option>
+                        <option value="Liderança">Liderança</option>
+                        <option value="Pastor">Pastor</option>
+                        <option value="Prefeito">Prefeito</option>
+                        <option value="Secretário">Secretário</option>
+                        <option value="Vereador">Vereador</option>
+                        <option value="Vice">Vice</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="label">Projeção de Votos</label>
+                      <input {...register('projecao_votos')} type="number" className="input" placeholder="0" />
+                    </div>
                   </div>
                 </div>
-              </div>
               )}
 
-              {/* Seção: BASE - INSTITUIÇÃO */}
+              {/* BASE - INSTITUIÇÃO */}
               {tipoCadastro === 'BASE - INSTITUIÇÃO' && (
-              <div className="mb-6">
-                <h3 className="text-[14px] font-semibold text-ink-muted uppercase tracking-wider mb-3">Base - Instituição</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="sm:col-span-2">
-                    <label className="label">Coordenador</label>
-                    <input {...register('coordenacao')} className="input" placeholder="Nome do coordenador" />
-                  </div>
-                  <div>
-                    <label className="label">Bloco</label>
-                    <select {...register('bloco')} className="input">
-                      <option value="">Selecione</option>
-                      <option value="Jundiaí">Jundiaí</option>
-                      <option value="São José dos Campos">São José dos Campos</option>
-                      <option value="Zona Sul">Zona Sul</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="label">Cidade</label>
-                    <input {...register('distrito')} className="input" placeholder="Ex: Campinas" />
+                <div className="border-l-4 border-emerald-500 pl-5 space-y-4">
+                  <p className="text-[11px] font-semibold text-emerald-600 uppercase tracking-widest">Dados Instituição</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="sm:col-span-2">
+                      <label className="label">Coordenador</label>
+                      <input {...register('coordenacao')} className="input" placeholder="Nome do coordenador" />
+                    </div>
+                    <div>
+                      <label className="label">Bloco</label>
+                      <select {...register('bloco')} className="input">
+                        <option value="">Selecione</option>
+                        <option value="Jundiaí">Jundiaí</option>
+                        <option value="São José dos Campos">São José dos Campos</option>
+                        <option value="Zona Sul">Zona Sul</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="label">Cidade</label>
+                      <input
+                        {...register('distrito')}
+                        list="cidades-datalist"
+                        className="input"
+                        placeholder="Buscar cidade..."
+                        autoComplete="off"
+                      />
+                      <datalist id="cidades-datalist">
+                        {todosMunicipios.map(m => <option key={m.id} value={m.nome} />)}
+                      </datalist>
+                    </div>
                   </div>
                 </div>
-              </div>
               )}
 
-              {/* Seção: BASE APOIADORES */}
+              {/* BASE APOIADORES */}
               {tipoCadastro === 'BASE APOIADORES' && (
-              <div className="mb-6">
-                <h3 className="text-[14px] font-semibold text-ink-muted uppercase tracking-wider mb-3">Base Apoiadores</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="label">Bloco</label>
-                    <select {...register('bloco')} className="input">
-                      <option value="">Selecione</option>
-                      <option value="Jundiaí">Jundiaí</option>
-                      <option value="São José dos Campos">São José dos Campos</option>
-                      <option value="Zona Sul">Zona Sul</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="label">Distrito</label>
-                    <input {...register('distrito')} className="input" placeholder="Ex: Centro" />
-                  </div>
-                  <div className="sm:col-span-2">
-                    <label className="label">Função</label>
-                    <select {...register('funcao')} className="input">
-                      <option value="">Selecione</option>
-                      <option value="Ex-Prefeito">Ex-Prefeito</option>
-                      <option value="Liderança">Liderança</option>
-                      <option value="Pastor">Pastor</option>
-                      <option value="Prefeito">Prefeito</option>
-                      <option value="Secretário">Secretário</option>
-                      <option value="Vereador">Vereador</option>
-                      <option value="Vice">Vice</option>
-                    </select>
-                  </div>
-                  <div className="sm:col-span-2">
-                    <label className="label">Nome</label>
-                    <input {...register('lideranca')} className="input" placeholder="Nome do apoiador" />
-                  </div>
-                  <div className="sm:col-span-2">
-                    <label className="label">Projeção</label>
-                    <input {...register('projecao_votos')} type="number" className="input" placeholder="0" />
+                <div className="border-l-4 border-orange-500 pl-5 space-y-4">
+                  <p className="text-[11px] font-semibold text-orange-600 uppercase tracking-widest">Dados Apoiadores</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="label">Bloco</label>
+                      <select {...register('bloco')} className="input">
+                        <option value="">Selecione</option>
+                        <option value="Jundiaí">Jundiaí</option>
+                        <option value="São José dos Campos">São José dos Campos</option>
+                        <option value="Zona Sul">Zona Sul</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="label">Distrito</label>
+                      <input {...register('distrito')} className="input" placeholder="Ex: Centro" />
+                    </div>
+                    <div>
+                      <label className="label">Função</label>
+                      <select {...register('funcao')} className="input">
+                        <option value="">Selecione</option>
+                        <option value="Ex-Prefeito">Ex-Prefeito</option>
+                        <option value="Liderança">Liderança</option>
+                        <option value="Pastor">Pastor</option>
+                        <option value="Prefeito">Prefeito</option>
+                        <option value="Secretário">Secretário</option>
+                        <option value="Vereador">Vereador</option>
+                        <option value="Vice">Vice</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="label">Nome</label>
+                      <input {...register('lideranca')} className="input" placeholder="Nome do apoiador" />
+                    </div>
+                    <div className="sm:col-span-2">
+                      <label className="label">Projeção de Votos</label>
+                      <input {...register('projecao_votos')} type="number" className="input" placeholder="0" />
+                    </div>
                   </div>
                 </div>
-              </div>
               )}
 
-              {/* Seção: Observações */}
-              <div className="mb-6">
-                <h3 className="text-[14px] font-semibold text-ink-muted uppercase tracking-wider mb-3">Observações</h3>
-                <textarea {...register('observacoes')} className="input resize-none" rows={3} placeholder="Notas internas..." />
-              </div>
+              {/* Observações */}
+              {tipoCadastro && (
+                <div>
+                  <label className="label">Observações</label>
+                  <textarea {...register('observacoes')} className="input resize-none" rows={3} placeholder="Notas internas..." />
+                </div>
+              )}
 
+              {/* Botões */}
               <div className="flex gap-3 justify-end pt-2 border-t border-hairline">
                 <button type="button" onClick={() => setShowForm(false)} className="btn-secondary">Cancelar</button>
-                <button type="submit" className="btn-primary">{editing ? 'Salvar Alterações' : 'Criar Município'}</button>
+                <button type="submit" className="btn-primary" disabled={!tipoCadastro}>
+                  {editing ? 'Salvar Alterações' : 'Criar Cadastro'}
+                </button>
               </div>
             </form>
           </div>
