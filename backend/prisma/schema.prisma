@@ -81,3 +81,16 @@ model Usuario {
 
   @@map("usuarios")
 }
+
+model Territorio {
+  id                BigInt   @id @default(autoincrement())
+  nome              String   @db.VarChar(150)
+  rm_ra             String?  @db.VarChar(100)
+  mesorregiao       String?  @db.VarChar(100)
+  microrregiao      String?  @db.VarChar(100)
+  divisao_regional  String?  @db.VarChar(100)
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+
+  @@map("territorios")
+}

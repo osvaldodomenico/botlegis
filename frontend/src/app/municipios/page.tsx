@@ -42,6 +42,20 @@ export default function MunicipiosPage() {
 
   const { register, handleSubmit, reset, setValue, watch } = useForm<Municipio>();
   const tipoCadastro = watch('tipo_cadastro');
+  const nomeWatch = watch('nome');
+  useEffect(() => {
+    if (!nomeWatch || !showForm) return;
+    api.get('/territorios/por-municipio', { params: { nome: nomeWatch } })
+      .then(r => {
+        if (r.data.length === 1) {
+          const t = r.data[0];
+          if (t.rm_ra) setValue('rm_ra', t.rm_ra);
+          if (t.mesorregiao) setValue('mesorregiao', t.mesorregiao);
+          if (t.microrregiao) setValue('microrregiao', t.microrregiao);
+          if (t.divisao_regional) setValue('divisao_regional', t.divisao_regional);
+        }
+      }).catch(() => {});
+  }, [nomeWatch, showForm]);
   // Load filter options
   useEffect(() => {
     api.get('/filtros/opcoes').then(r => setOpcoes(r.data)).catch(() => {});

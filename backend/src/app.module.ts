@@ -6,6 +6,7 @@ import { ProjecoesModule } from './modules/projecoes/projecoes.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { ImportacoesModule } from './modules/importacoes/importacoes.module';
 import { BuscaModule } from './modules/busca/busca.module';
+import { TerritoriosModule } from './modules/territorios/territorios.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { BuscaModule } from './modules/busca/busca.module';
     DashboardModule,
     ImportacoesModule,
     BuscaModule,
+    TerritoriosModule,
   ],
 })
 export class AppModule {}
