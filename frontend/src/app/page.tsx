@@ -34,7 +34,7 @@ export default function DashboardPage() {
         {/* Header */}
         <div>
           <h1 className="text-[34px] font-semibold text-ink" style={{ letterSpacing: '-0.374px' }}>Dashboard</h1>
-          <p className="text-[17px] text-ink-muted mt-1">Visão geral do Legis BOT</p>
+          <p className="text-[17px] text-ink-muted mt-1">Visão geral dos cadastros</p>
         </div>
 
         {/* Stats */}
@@ -47,7 +47,7 @@ export default function DashboardPage() {
             <p className="text-[40px] font-semibold text-ink leading-none" style={{ letterSpacing: '-0.5px' }}>
               {data?.total_municipios?.toLocaleString('pt-BR') ?? '—'}
             </p>
-            <p className="text-[13px] text-ink-muted mt-1">cadastrados</p>
+            <p className="text-[13px] text-ink-muted mt-1">registros ativos</p>
           </div>
 
           <div className="stat-card">
@@ -132,7 +132,7 @@ export default function DashboardPage() {
                 </div>
               ))}
               {(!data?.top10_projecao?.length) && (
-                <p className="text-[15px] text-ink-muted text-center py-8">Importe dados para ver o ranking</p>
+                <p className="text-[15px] text-ink-muted text-center py-8">Adicione cadastros para ver o ranking</p>
               )}
             </div>
           </div>

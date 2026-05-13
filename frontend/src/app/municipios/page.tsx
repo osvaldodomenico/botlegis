@@ -238,34 +238,34 @@ export default function MunicipiosPage() {
                 <tr>
                   <th className="table-th">Tipo</th>
                   <SortHeader field="nome" label="Município" />
-                  <SortHeader field="regiao" label="Região" />
                   <th className="table-th hidden md:table-cell">Bloco</th>
-                  <th className="table-th hidden lg:table-cell">RM/RA</th>
-                  <th className="table-th hidden xl:table-cell">Coordenação</th>
-                  <th className="table-th hidden xl:table-cell">Liderança</th>
-                  <th className="table-th hidden xl:table-cell">Cargo</th>
+                  <th className="table-th hidden lg:table-cell">Função</th>
+                  <th className="table-th hidden lg:table-cell">Liderança / Nome</th>
                   <SortHeader field="projecao_votos" label="Projeção" />
-                  <th className="table-th hidden lg:table-cell">Eleitores 22</th>
                   <th className="table-th w-20"></th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan={11} className="table-td text-center text-ink-muted py-16">Carregando...</td></tr>
+                  <tr><td colSpan={7} className="table-td text-center text-ink-muted py-16">Carregando...</td></tr>
                 ) : municipios.length === 0 ? (
-                  <tr><td colSpan={11} className="table-td text-center text-ink-muted py-16">Nenhum município encontrado</td></tr>
+                  <tr><td colSpan={7} className="table-td text-center text-ink-muted py-16">Nenhum município encontrado</td></tr>
                 ) : municipios.map((m) => (
                   <tr key={m.id} className="border-t border-hairline hover:bg-parchment/40 transition-colors">
-                    <td className="table-td text-[12px] font-medium text-ink-muted whitespace-nowrap">{m.tipo_cadastro || '—'}</td>
+                    <td className="table-td">
+                      {m.tipo_cadastro ? (
+                        <span className={`inline-flex px-2 py-0.5 rounded-full text-[11px] font-semibold whitespace-nowrap ${
+                          m.tipo_cadastro === 'EXTERNO' ? 'bg-blue-100 text-blue-700' :
+                          m.tipo_cadastro === 'BASE - INSTITUIÇÃO' ? 'bg-emerald-100 text-emerald-700' :
+                          'bg-orange-100 text-orange-700'
+                        }`}>{m.tipo_cadastro}</span>
+                      ) : <span className="text-ink-muted text-[12px]">—</span>}
+                    </td>
                     <td className="table-td font-semibold">{m.nome}</td>
-                    <td className="table-td text-[14px] text-ink-muted">{m.regiao}</td>
-                    <td className="table-td hidden md:table-cell text-[13px] text-ink-muted truncate max-w-[120px]">{m.bloco}</td>
-                    <td className="table-td hidden lg:table-cell text-[13px] text-ink-muted">{m.rm_ra}</td>
-                    <td className="table-td hidden xl:table-cell text-[13px] text-ink-muted truncate max-w-[150px]">{m.coordenacao}</td>
-                    <td className="table-td hidden xl:table-cell text-[13px]">{m.lideranca}</td>
-                    <td className="table-td hidden xl:table-cell text-[13px] text-ink-muted">{m.funcao_cargo}</td>
-                    <td className="table-td font-semibold text-primary text-right">{m.projecao_votos?.toLocaleString('pt-BR')}</td>
-                    <td className="table-td hidden lg:table-cell text-[13px] text-ink-muted text-right">{m.eleitores_22?.toLocaleString('pt-BR')}</td>
+                    <td className="table-td hidden md:table-cell text-[13px] text-ink-muted">{m.bloco || '—'}</td>
+                    <td className="table-td hidden lg:table-cell text-[13px] text-ink-muted">{(m as any).funcao || '—'}</td>
+                    <td className="table-td hidden lg:table-cell text-[13px] text-ink-muted truncate max-w-[160px]">{m.lideranca || '—'}</td>
+                    <td className="table-td font-semibold text-primary text-right">{m.projecao_votos?.toLocaleString('pt-BR') || '—'}</td>
                     <td className="table-td">
                       <div className="flex items-center gap-1 justify-end">
                         <button onClick={() => openEdit(m)} className="p-2 rounded-[8px] text-ink-muted hover:bg-parchment hover:text-ink transition-colors" title="Editar">
@@ -367,16 +367,10 @@ export default function MunicipiosPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="sm:col-span-2">
                       <label className="label">Município *</label>
-                      <input
-                        {...register('nome', { required: true })}
-                        list="municipios-datalist"
-                        className="input bg-white"
-                        placeholder={todosMunicipios.length ? `Buscar entre ${todosMunicipios.length} municípios...` : 'Carregando...'}
-                        autoComplete="off"
-                      />
-                      <datalist id="municipios-datalist">
-                        {todosMunicipios.map(m => <option key={m.id} value={m.nome} />)}
-                      </datalist>
+                      <select {...register('nome', { required: true })} className="input bg-white">
+                        <option value="">{todosMunicipios.length ? `Selecione (${todosMunicipios.length} municípios)` : 'Carregando...'}</option>
+                        {todosMunicipios.map(m => <option key={m.id} value={m.nome}>{m.nome}</option>)}
+                      </select>
                     </div>
                     <div>
                       <label className="label">RM / RA</label>
@@ -452,16 +446,10 @@ export default function MunicipiosPage() {
                     </div>
                     <div>
                       <label className="label">Cidade</label>
-                      <input
-                        {...register('distrito')}
-                        list="cidades-datalist"
-                        className="input"
-                        placeholder="Buscar cidade..."
-                        autoComplete="off"
-                      />
-                      <datalist id="cidades-datalist">
-                        {todosMunicipios.map(m => <option key={m.id} value={m.nome} />)}
-                      </datalist>
+                      <select {...register('distrito')} className="input">
+                        <option value="">Selecione a cidade</option>
+                        {todosMunicipios.map(m => <option key={m.id} value={m.nome}>{m.nome}</option>)}
+                      </select>
                     </div>
                   </div>
                 </div>
@@ -507,14 +495,6 @@ export default function MunicipiosPage() {
                       <input {...register('projecao_votos')} type="number" className="input" placeholder="0" />
                     </div>
                   </div>
-                </div>
-              )}
-
-              {/* Observações */}
-              {tipoCadastro && (
-                <div>
-                  <label className="label">Observações</label>
-                  <textarea {...register('observacoes')} className="input resize-none" rows={3} placeholder="Notas internas..." />
                 </div>
               )}
 
