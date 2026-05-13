@@ -12,6 +12,8 @@ model Municipio {
   nome                String    @unique @db.VarChar(150)
   uf                  String    @default("SP") @db.Char(2)
   tipo_cadastro       String?   @db.VarChar(50)
+  funcao              String?   @db.VarChar(100)
+  distrito            String?   @db.VarChar(150)
   bloco               String?   @db.VarChar(150)
   regiao              String?   @db.VarChar(150)
   rm_ra               String?   @db.VarChar(150)

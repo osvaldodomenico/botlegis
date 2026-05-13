@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 
 interface Municipio {
-  id: string; nome: string; uf: string; tipo_cadastro: string; bloco: string; regiao: string;
+  id: string; nome: string; uf: string; tipo_cadastro: string; funcao: string; distrito: string; bloco: string; regiao: string;
   rm_ra: string; mesorregiao: string; microrregiao: string; divisao_regional: string;
   projecao_votos: number; coordenacao: string; lideranca: string; funcao_cargo: string;
   projecao_2: number; coord_lideranca_2: string; funcao_cargo_2: string;
@@ -34,11 +34,17 @@ export default function MunicipiosPage() {
   const [order, setOrder] = useState<'asc'|'desc'>('asc');
   const debounceRef = useRef<any>(null);
 
-  const { register, handleSubmit, reset, setValue } = useForm<Municipio>();
+  const { register, handleSubmit, reset, setValue, watch } = useForm<Municipio>();
+  const tipoCadastro = watch('tipo_cadastro');
+  const [todosMunicipios, setTodosMunicipios] = useState<{id: string; nome: string}[]>([]);
 
   // Load filter options
   useEffect(() => {
     api.get('/filtros/opcoes').then(r => setOpcoes(r.data)).catch(() => {});
+  }, []);
+  useEffect(() => {
+    api.get('/municipios', { params: { limit: 700, orderBy: 'nome', order: 'asc' } })
+      .then(r => setTodosMunicipios(r.data.data)).catch(() => {});
   }, []);
 
   const load = useCallback(async (f = filters, p = page, ob = orderBy, o = order) => {
@@ -322,18 +328,38 @@ export default function MunicipiosPage() {
                   </div>
                   <div className="sm:col-span-2">
                     <label className="label">Nome do Município *</label>
-                    <input {...register('nome', { required: true })} className="input" placeholder="Ex: São Paulo" />
+                    <select {...register('nome', { required: true })} className="input">
+                      <option value="">Selecione o município</option>
+                      {todosMunicipios.map(m => <option key={m.id} value={m.nome}>{m.nome}</option>)}
+                    </select>
                   </div>
+                  <div className="sm:col-span-2">
+                    <label className="label">Função</label>
+                    <select {...register('funcao')} className="input">
+                      <option value="">Selecione</option>
+                      <option value="Ex-Prefeito">Ex-Prefeito</option>
+                      <option value="Liderança">Liderança</option>
+                      <option value="Pastor">Pastor</option>
+                      <option value="Prefeito">Prefeito</option>
+                      <option value="Secretário">Secretário</option>
+                      <option value="Vereador">Vereador</option>
+                      <option value="Vice">Vice</option>
+                    </select>
+                  </div>
+                  {(tipoCadastro === 'BASE - INSTITUIÇÃO' || tipoCadastro === 'BASE APOIADORES') && (
                   <div>
                     <label className="label">Bloco</label>
-                    <input {...register('bloco')} className="input" />
-                  </div>
-                  <div>
-                    <label className="label">Região</label>
-                    <select {...register('regiao')} className="input">
+                    <select {...register('bloco')} className="input">
                       <option value="">Selecione</option>
-                      {opcoes.regioes.map(r => <option key={r} value={r}>{r}</option>)}
+                      <option value="Jundiaí">Jundiaí</option>
+                      <option value="São José dos Campos">São José dos Campos</option>
+                      <option value="Zona Sul">Zona Sul</option>
                     </select>
+                  </div>
+                  )}
+                  <div>
+                    <label className="label">Distrito</label>
+                    <input {...register('distrito')} className="input" placeholder="Ex: Centro" />
                   </div>
                   <div>
                     <label className="label">RM / RA</label>

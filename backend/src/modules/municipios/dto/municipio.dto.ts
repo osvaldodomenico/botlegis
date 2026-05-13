@@ -7,6 +7,8 @@ export class CreateMunicipioDto {
 
   @IsOptional() @IsString() uf?: string;
   @IsOptional() @IsString() tipo_cadastro?: string;
+  @IsOptional() @IsString() funcao?: string;
+  @IsOptional() @IsString() distrito?: string;
   @IsOptional() @IsString() bloco?: string;
   @IsOptional() @IsString() regiao?: string;
   @IsOptional() @IsString() rm_ra?: string;
