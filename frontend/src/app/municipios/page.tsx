@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 
 interface Municipio {
-  id: string; nome: string; uf: string; bloco: string; regiao: string;
+  id: string; nome: string; uf: string; tipo_cadastro: string; bloco: string; regiao: string;
   rm_ra: string; mesorregiao: string; microrregiao: string; divisao_regional: string;
   projecao_votos: number; coordenacao: string; lideranca: string; funcao_cargo: string;
   projecao_2: number; coord_lideranca_2: string; funcao_cargo_2: string;
@@ -230,6 +230,7 @@ export default function MunicipiosPage() {
             <table className="w-full border-collapse">
               <thead className="bg-parchment border-b border-hairline">
                 <tr>
+                  <th className="table-th">Tipo</th>
                   <SortHeader field="nome" label="Município" />
                   <SortHeader field="regiao" label="Região" />
                   <th className="table-th hidden md:table-cell">Bloco</th>
@@ -244,11 +245,12 @@ export default function MunicipiosPage() {
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan={10} className="table-td text-center text-ink-muted py-16">Carregando...</td></tr>
+                  <tr><td colSpan={11} className="table-td text-center text-ink-muted py-16">Carregando...</td></tr>
                 ) : municipios.length === 0 ? (
-                  <tr><td colSpan={10} className="table-td text-center text-ink-muted py-16">Nenhum município encontrado</td></tr>
+                  <tr><td colSpan={11} className="table-td text-center text-ink-muted py-16">Nenhum município encontrado</td></tr>
                 ) : municipios.map((m) => (
                   <tr key={m.id} className="border-t border-hairline hover:bg-parchment/40 transition-colors">
+                    <td className="table-td text-[12px] font-medium text-ink-muted whitespace-nowrap">{m.tipo_cadastro || '—'}</td>
                     <td className="table-td font-semibold">{m.nome}</td>
                     <td className="table-td text-[14px] text-ink-muted">{m.regiao}</td>
                     <td className="table-td hidden md:table-cell text-[13px] text-ink-muted truncate max-w-[120px]">{m.bloco}</td>
@@ -309,6 +311,15 @@ export default function MunicipiosPage() {
               <div className="mb-6">
                 <h3 className="text-[14px] font-semibold text-ink-muted uppercase tracking-wider mb-3">Identificação</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="sm:col-span-2">
+                    <label className="label">Tipo de Cadastro</label>
+                    <select {...register('tipo_cadastro')} className="input">
+                      <option value="">Selecione</option>
+                      <option value="EXTERNO">EXTERNO</option>
+                      <option value="BASE - INSTITUIÇÃO">BASE - INSTITUIÇÃO</option>
+                      <option value="BASE APOIADORES">BASE APOIADORES</option>
+                    </select>
+                  </div>
                   <div className="sm:col-span-2">
                     <label className="label">Nome do Município *</label>
                     <input {...register('nome', { required: true })} className="input" placeholder="Ex: São Paulo" />
