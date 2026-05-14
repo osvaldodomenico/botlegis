@@ -29,6 +29,8 @@ export class CreateMunicipioDto {
   @IsOptional() @IsNumber() @Type(() => Number) percentual_mv?: number;
   @IsOptional() @IsInt() @Type(() => Number) votos_22?: number;
   @IsOptional() @IsNumber() @Type(() => Number) percentual_perda?: number;
+  @IsOptional() @IsString() candidato_nome?: string;
+  @IsOptional() @IsString() candidato_cargo?: string;
   @IsOptional() @IsString() observacoes?: string;
 }
 

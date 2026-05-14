@@ -79,12 +79,18 @@ function gerarNarrativa(m: any): string {
     partes.push(`com uma projeção de **${m.projecao_votos.toLocaleString('pt-BR')} votos**`);
   }
 
-  // Dados 2022
+  // Dados eleitorais 2022 (TSE)
   if (m.eleitores_22) {
     let dados22 = `Em 2022, o município tinha **${m.eleitores_22.toLocaleString('pt-BR')} eleitores**`;
-    if (m.votos_22) dados22 += ` e registrou **${m.votos_22.toLocaleString('pt-BR')} votos**`;
-    if (m.percentual_mv) dados22 += ` (${m.percentual_mv}% MV)`;
+    if (m.votos_validos_22) dados22 += `, com **${m.votos_validos_22.toLocaleString('pt-BR')} votos válidos**`;
     partes.push(dados22);
+  }
+  if (m.votos_22 != null && m.votos_22 > 0) {
+    const candidato = m.candidato_nome ? `**${m.candidato_nome}**` : 'o candidato';
+    const cargo = m.candidato_cargo ? ` para ${m.candidato_cargo}` : '';
+    let tse = `${candidato}${cargo} obteve **${m.votos_22.toLocaleString('pt-BR')} votos**`;
+    if (m.percentual_mv != null) tse += `, representando **${m.percentual_mv}%** dos votos válidos`;
+    partes.push(tse);
   }
 
   return partes.join('. ') + '.';

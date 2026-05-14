@@ -34,6 +34,8 @@ model Municipio {
   percentual_mv       Float?
   votos_22            Int?
   percentual_perda    Float?
+  candidato_nome      String?   @db.VarChar(150)
+  candidato_cargo     String?   @db.VarChar(100)
   observacoes         String?   @db.Text
   created_at          DateTime  @default(now())
   updated_at          DateTime  @updatedAt
