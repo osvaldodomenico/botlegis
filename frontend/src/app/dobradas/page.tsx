@@ -12,6 +12,8 @@ interface Dobrada {
   projecao_votos: number;
 }
 
+type SortDir = 'asc' | 'desc';
+
 export default function DobradaPage() {
   const [dobradas, setDobradas] = useState<Dobrada[]>([]);
   const [total, setTotal] = useState(0);
@@ -21,6 +23,8 @@ export default function DobradaPage() {
   const [nome, setNome] = useState('');
   const [cidade, setCidade] = useState('');
   const [projecao, setProjecao] = useState('');
+  const [sortField, setSortField] = useState<keyof Dobrada>('cidade');
+  const [sortDir, setSortDir] = useState<SortDir>('asc');
 
   const load = async (cidade = busca) => {
     setLoading(true);
@@ -47,6 +51,32 @@ export default function DobradaPage() {
     await api.delete(`/dobradas/${id}`);
     load();
   };
+
+  const toggleSort = (field: keyof Dobrada) => {
+    if (sortField === field) setSortDir(d => d === 'asc' ? 'desc' : 'asc');
+    else { setSortField(field); setSortDir('asc'); }
+  };
+
+  const sorted = [...dobradas].sort((a, b) => {
+    const av = a[sortField] ?? '';
+    const bv = b[sortField] ?? '';
+    if (typeof av === 'number' && typeof bv === 'number')
+      return sortDir === 'asc' ? av - bv : bv - av;
+    return sortDir === 'asc'
+      ? String(av).localeCompare(String(bv))
+      : String(bv).localeCompare(String(av));
+  });
+
+  const SortTh = ({ field, label, className = '' }: { field: keyof Dobrada; label: string; className?: string }) => (
+    <th className={`table-th cursor-pointer select-none ${className}`} onClick={() => toggleSort(field)}>
+      <span className="flex items-center gap-1">
+        {label}
+        {sortField === field
+          ? <span className="text-primary text-[11px]">{sortDir === 'asc' ? '↑' : '↓'}</span>
+          : <span className="text-[#c7c7cc] text-[11px]">↕</span>}
+      </span>
+    </th>
+  );
 
   return (
     <Layout>
@@ -82,9 +112,9 @@ export default function DobradaPage() {
           <table className="w-full">
             <thead className="bg-parchment">
               <tr>
-                <th className="table-th">Nome</th>
-                <th className="table-th">Cidade</th>
-                <th className="table-th text-right">Projeção</th>
+                <SortTh field="nome" label="Nome" />
+                <SortTh field="cidade" label="Cidade" />
+                <SortTh field="projecao_votos" label="Projeção" className="text-right" />
                 <th className="table-th w-12"></th>
               </tr>
             </thead>
@@ -92,10 +122,10 @@ export default function DobradaPage() {
               {loading && (
                 <tr><td colSpan={4} className="table-td text-center text-ink-muted py-10">Carregando...</td></tr>
               )}
-              {!loading && dobradas.length === 0 && (
+              {!loading && sorted.length === 0 && (
                 <tr><td colSpan={4} className="table-td text-center text-ink-muted py-10">Nenhuma dobrada cadastrada</td></tr>
               )}
-              {dobradas.map(d => (
+              {sorted.map(d => (
                 <tr key={d.id} className="hover:bg-parchment/50 transition-colors">
                   <td className="table-td font-semibold text-ink uppercase">{d.nome}</td>
                   <td className="table-td text-ink-muted">{d.cidade}</td>

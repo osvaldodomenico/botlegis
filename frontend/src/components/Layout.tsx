@@ -39,10 +39,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         lg:translate-x-0 lg:static lg:flex
       `}>
         {/* Logo */}
-        <div className="px-6 py-6 border-b border-white/10">
-          <p className="text-[12px] text-white/50 uppercase tracking-widest mb-1">Sistema</p>
-          <h1 className="text-[21px] font-semibold tracking-tight leading-tight">Legis BOT</h1>
-          <p className="text-[12px] text-white/50 mt-0.5">Módulo Robô</p>
+        <div className="px-5 py-5 border-b border-white/10 flex items-center gap-3">
+          <img
+            src="/legisbot-avatar.svg"
+            alt="Legis BOT"
+            className="w-12 h-12 rounded-[12px] flex-shrink-0"
+            style={{ imageRendering: 'crisp-edges' }}
+          />
+          <div>
+            <h1 className="text-[19px] font-bold tracking-tight leading-tight">Legis BOT</h1>
+            <p className="text-[11px] text-white/50 mt-0.5 uppercase tracking-widest">Módulo Robô</p>
+          </div>
         </div>
 
         {/* Nav */}

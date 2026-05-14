@@ -41,67 +41,93 @@ const BOT_EXEMPLOS = [
   'Projeção da região Leste', 'Ranking top 5', 'Municípios sem coordenador',
 ];
 
-// ─── Narrativa natural ────────────────────────────────────────────────────────
+// ─── Narrativa consolidada por cidade ────────────────────────────────────────
 
-function gerarNarrativa(m: any): string {
+function gerarNarrativaConsolidada(registros: any[]): string {
+  if (registros.length === 0) return '';
+  const m0 = registros[0];
+  const totalVotos = registros.reduce((s, m) => s + (m.projecao_votos || 0), 0);
   const partes: string[] = [];
 
-  // Abertura
-  let abertura = `Na cidade de **${m.nome}**`;
-  if (m.mesorregiao) abertura += `, localizada na mesorregião **${m.mesorregiao}**`;
-  else if (m.regiao) abertura += `, região **${m.regiao}**`;
+  // Abertura: contexto regional + contagem de lideranças
+  let abertura = `O município de **${m0.nome}**`;
+  if (m0.mesorregiao) abertura += `, na mesorregião de **${m0.mesorregiao}**`;
+  else if (m0.regiao) abertura += `, região **${m0.regiao}**`;
+
+  const blocos = [...new Set(registros.map((m: any) => m.bloco).filter(Boolean))];
+  const nLider = registros.length;
+  if (nLider === 1) {
+    abertura += blocos.length === 1
+      ? `, possui uma liderança vinculada ao bloco **${blocos[0]}**`
+      : `, possui um registro cadastrado`;
+  } else {
+    abertura += blocos.length === 1
+      ? `, conta com **${nLider} lideranças** vinculadas ao bloco **${blocos[0]}**`
+      : `, conta com **${nLider} lideranças** cadastradas`;
+  }
   partes.push(abertura);
 
-  // Tipo + liderança + função
-  if (m.lideranca || m.tipo_cadastro) {
+  // Descrição de cada liderança
+  registros.forEach((m: any, idx: number) => {
     let frase = '';
-    if (m.tipo_cadastro) {
-      const tipo = m.tipo_cadastro === 'EXTERNO' ? 'base externa'
-        : m.tipo_cadastro === 'BASE - INSTITUIÇÃO' ? 'base institucional'
-        : 'base apoiadores';
-      frase = `da **${tipo}**`;
+    const conectivos = ['', 'Além disso', 'Também há atuação de', 'Igualmente', 'Adicionalmente'];
+    const conectivo = conectivos[Math.min(idx, conectivos.length - 1)];
+
+    if (idx === 0) {
+      // Primeira: "A principal articulação..."
+      if (m.coordenacao && m.lideranca) {
+        frase = `A principal articulação é conduzida por **${m.coordenacao}**`;
+        if (m.funcao_cargo) frase += ` (${m.funcao_cargo})`;
+        frase += `, ao lado da liderança **${m.lideranca}**`;
+        if (m.funcao) frase += ` (${m.funcao})`;
+      } else if (m.coordenacao) {
+        frase = `A articulação local é conduzida por **${m.coordenacao}**`;
+        if (m.funcao_cargo) frase += `, ${m.funcao_cargo}`;
+      } else if (m.lideranca) {
+        frase = `Conta com a liderança de **${m.lideranca}**`;
+        if (m.funcao) frase += `, ${m.funcao}`;
+      }
+      if (m.coord_lideranca_2) {
+        frase += `. Há também **${m.coord_lideranca_2}** como segundo contato`;
+        if (m.funcao_cargo_2) frase += ` (${m.funcao_cargo_2})`;
+      }
+      if (m.projecao_votos && nLider > 1) {
+        frase += `, com projeção de **${m.projecao_votos.toLocaleString('pt-BR')} votos**`;
+      } else if (m.projecao_votos) {
+        frase += `, com projeção estimada de **${m.projecao_votos.toLocaleString('pt-BR')} votos**`;
+      }
+    } else {
+      // Demais: conectivo + nome
+      if (m.coordenacao && m.lideranca) {
+        frase = `${conectivo}, **${m.coordenacao}** atua junto a **${m.lideranca}**`;
+        if (m.funcao) frase += ` (${m.funcao})`;
+      } else if (m.coordenacao) {
+        frase = `${conectivo}, **${m.coordenacao}** também integra a base local`;
+      } else if (m.lideranca) {
+        frase = `${conectivo}, **${m.lideranca}** integra a base local`;
+        if (m.funcao) frase += ` como ${m.funcao}`;
+      } else {
+        frase = `${conectivo}, há mais um registro cadastrado neste município`;
+      }
+      if (m.projecao_votos) {
+        frase += `, somando mais **${m.projecao_votos.toLocaleString('pt-BR')} votos projetados**`;
+      }
     }
-    if (m.lideranca) {
-      frase += frase ? `, temos como liderança **${m.lideranca}**` : `temos como liderança **${m.lideranca}**`;
-      if (m.funcao) frase += `, exercendo a função de **${m.funcao}**`;
-    } else if (m.funcao) {
-      frase += frase ? `, função de **${m.funcao}**` : `função de **${m.funcao}**`;
-    }
+
     if (frase) partes.push(frase);
+  });
+
+  // Conclusão com total consolidado (apenas se múltiplos)
+  if (nLider > 1) {
+    partes.push(`Com isso, a cidade apresenta uma **projeção total consolidada de ${totalVotos.toLocaleString('pt-BR')} votos** dentro da base cadastrada`);
   }
 
-  // Coordenação
-  if (m.coordenacao) {
-    let coord = `O coordenador responsável é **${m.coordenacao}**`;
-    if (m.funcao_cargo) coord += `, função de **${m.funcao_cargo}**`;
-    partes.push(coord);
-  }
-  if (m.coord_lideranca_2) {
-    let coord2 = `Segundo coordenador: **${m.coord_lideranca_2}**`;
-    if (m.funcao_cargo_2) coord2 += `, função de **${m.funcao_cargo_2}**`;
-    partes.push(coord2);
-  }
-
-  // Bloco
-  if (m.bloco) partes.push(`pertencente ao bloco **${m.bloco}**`);
-
-  // Projeção
-  if (m.projecao_votos != null) {
-    partes.push(`com uma projeção de **${m.projecao_votos.toLocaleString('pt-BR')} votos**`);
-  }
-
-  // Dados eleitorais 2022 (TSE)
-  if (m.eleitores_22) {
-    let dados22 = `Em 2022, o município tinha **${m.eleitores_22.toLocaleString('pt-BR')} eleitores**`;
-    if (m.votos_validos_22) dados22 += `, com **${m.votos_validos_22.toLocaleString('pt-BR')} votos válidos**`;
+  // Dados TSE do primeiro registro
+  const m0e = registros.find((m: any) => m.eleitores_22);
+  if (m0e?.eleitores_22) {
+    let dados22 = `Em 2022, o município contava com **${m0e.eleitores_22.toLocaleString('pt-BR')} eleitores**`;
+    if (m0e.votos_validos_22) dados22 += `, com **${m0e.votos_validos_22.toLocaleString('pt-BR')} votos válidos**`;
     partes.push(dados22);
-  }
-  if (m.votos_22 != null && m.votos_22 > 0) {
-    const candidato = m.candidato_nome ? `**${m.candidato_nome}**` : 'o candidato';
-    const cargo = m.candidato_cargo ? ` para ${m.candidato_cargo}` : '';
-    let tse = `${candidato}${cargo} obteve **${m.votos_22.toLocaleString('pt-BR')} votos**`;
-    if (m.percentual_mv != null) tse += `, representando **${m.percentual_mv}%** dos votos válidos`;
-    partes.push(tse);
   }
 
   return partes.join('. ') + '.';
@@ -139,76 +165,126 @@ function NarrativaModal({
   onClose: () => void;
   onNovaBusca: () => void;
 }) {
+  // Agrupar registros por cidade
+  const grupos = Object.values(
+    municipios.reduce((acc: Record<string, any[]>, m: any) => {
+      const key = m.nome;
+      if (!acc[key]) acc[key] = [];
+      acc[key].push(m);
+      return acc;
+    }, {})
+  ) as any[][];
+
+  const totalCidades = grupos.length;
+  const totalRegistros = municipios.length;
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ background: 'rgba(0,0,0,0.45)' }}
+      style={{ background: 'rgba(0,0,0,0.5)' }}
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div
-        className="bg-white shadow-2xl flex flex-col w-full max-w-lg"
-        style={{ borderRadius: 22, maxHeight: '85vh' }}
+        className="bg-white shadow-2xl flex flex-col w-full max-w-xl"
+        style={{ borderRadius: 22, maxHeight: '88vh' }}
       >
         {/* Header */}
         <div className="flex items-center gap-3 px-6 py-4 border-b border-hairline flex-shrink-0">
-          <div
-            className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
-            style={{ background: '#0066cc' }}
-          >
+          <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#0066cc' }}>
             <MessageCircle size={18} color="white" />
           </div>
           <div className="flex-1">
-            <p className="text-[17px] font-semibold" style={{ color: '#1d1d1f' }}>Resultado da Consulta</p>
+            <p className="text-[17px] font-semibold" style={{ color: '#1d1d1f' }}>Análise Política</p>
             <p className="text-[12px]" style={{ color: '#7a7a7a' }}>
-              {municipios.length === 1
-                ? '1 município encontrado'
-                : `${municipios.length} municípios encontrados`}{' '}
-              para &ldquo;{query}&rdquo;
+              {totalCidades === 1
+                ? `1 município · ${totalRegistros} registro${totalRegistros !== 1 ? 's' : ''}`
+                : `${totalCidades} municípios · ${totalRegistros} registros`}
+              {' '}para &ldquo;{query}&rdquo;
             </p>
           </div>
-          <button
-            onClick={onClose}
-            className="w-8 h-8 rounded-full flex items-center justify-center transition-colors hover:bg-gray-100"
-          >
+          <button onClick={onClose} className="w-8 h-8 rounded-full flex items-center justify-center transition-colors hover:bg-parchment">
             <X size={18} color="#1d1d1f" />
           </button>
         </div>
 
-        {/* Body */}
-        <div className="flex-1 overflow-y-auto px-6 py-5 space-y-5">
-          {municipios.map((m: any, idx: number) => (
-            <div key={m.id ?? idx}>
-              {/* Nome */}
-              <p className="text-[21px] font-semibold mb-2" style={{ color: '#1d1d1f' }}>
-                {m.nome}
-              </p>
-              {/* Narrativa */}
+        {/* Body — um card por cidade */}
+        <div className="flex-1 overflow-y-auto px-5 py-5 space-y-4">
+          {grupos.map((grupo: any[], gIdx: number) => {
+            const m0 = grupo[0];
+            const totalVotos = grupo.reduce((s, m) => s + (m.projecao_votos || 0), 0);
+            return (
               <div
-                className="rounded-[14px] px-4 py-3"
-                style={{ background: '#f5f5f7' }}
+                key={m0.nome + gIdx}
+                className="rounded-[16px] border border-hairline overflow-hidden"
+                style={{ background: '#fafafa' }}
               >
-                <BotMessage text={gerarNarrativa(m)} />
+                {/* Card header: cidade + total votos */}
+                <div className="flex items-center justify-between px-5 pt-4 pb-3" style={{ background: '#fff' }}>
+                  <div>
+                    <p className="text-[22px] font-bold tracking-tight" style={{ color: '#1d1d1f', letterSpacing: '-0.3px' }}>
+                      {m0.nome}
+                    </p>
+                    {(m0.mesorregiao || m0.regiao) && (
+                      <p className="text-[12px] font-medium mt-0.5" style={{ color: '#7a7a7a' }}>
+                        {m0.mesorregiao || m0.regiao}
+                        {m0.bloco ? ` · Bloco ${m0.bloco}` : ''}
+                      </p>
+                    )}
+                  </div>
+                  <div className="text-right flex-shrink-0 ml-4">
+                    <p className="text-[24px] font-bold" style={{ color: '#0066cc', letterSpacing: '-0.5px' }}>
+                      {totalVotos.toLocaleString('pt-BR')}
+                    </p>
+                    <p className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: '#7a7a7a' }}>
+                      {grupo.length > 1 ? 'votos totais' : 'votos proj.'}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Narrativa consolidada */}
+                <div className="px-5 pb-4">
+                  <div className="rounded-[12px] px-4 py-3" style={{ background: '#f0f4ff' }}>
+                    <BotMessage text={gerarNarrativaConsolidada(grupo)} />
+                  </div>
+
+                  {/* Pills de lideranças (quick scan) */}
+                  {grupo.length > 1 && (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {grupo.map((m: any, i: number) => {
+                        const nome = m.lideranca || m.coordenacao || `Registro ${i + 1}`;
+                        const tipo = m.tipo_cadastro === 'EXTERNO' ? 'Ext.'
+                          : m.tipo_cadastro === 'BASE - INSTITUIÇÃO' ? 'Inst.'
+                          : m.tipo_cadastro === 'BASE APOIADORES' ? 'Apoio'
+                          : '';
+                        return (
+                          <span key={i} className="text-[11px] font-semibold px-2.5 py-1 rounded-full border"
+                            style={{ borderColor: '#0066cc22', color: '#0066cc', background: '#eff6ff' }}>
+                            {tipo && <span className="opacity-60 mr-1">{tipo}</span>}
+                            {nome}
+                            {m.projecao_votos ? ` · ${m.projecao_votos.toLocaleString('pt-BR')}` : ''}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
               </div>
-              {/* Separador entre múltiplos */}
-              {idx < municipios.length - 1 && (
-                <div className="mt-5 border-b border-hairline" />
-              )}
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Footer */}
         <div className="flex gap-3 px-6 py-4 border-t border-hairline flex-shrink-0">
           <button
             onClick={onNovaBusca}
-            className="flex-1 py-2 rounded-[9999px] border text-[15px] font-semibold transition-colors hover:bg-gray-50"
+            className="flex-1 py-2.5 rounded-[9999px] border text-[15px] font-semibold transition-colors hover:bg-parchment"
             style={{ borderColor: '#0066cc', color: '#0066cc' }}
           >
             Nova Busca
           </button>
           <button
             onClick={onClose}
-            className="flex-1 py-2 rounded-[9999px] text-[15px] font-semibold text-white transition-opacity hover:opacity-90"
+            className="flex-1 py-2.5 rounded-[9999px] text-[15px] font-semibold text-white transition-opacity hover:opacity-90"
             style={{ background: '#0066cc' }}
           >
             Fechar

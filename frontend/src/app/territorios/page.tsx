@@ -21,12 +21,16 @@ interface Territorio {
   divisao_regional: string;
 }
 
+type SortDir = 'asc' | 'desc';
+
 export default function TerritoriosPage() {
   const [territorios, setTerritorios] = useState<Territorio[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<Territorio | null>(null);
   const [search, setSearch] = useState('');
+  const [sortField, setSortField] = useState<keyof Territorio>('nome');
+  const [sortDir, setSortDir] = useState<SortDir>('asc');
 
   const [saving, setSaving] = useState(false);
   const { register, handleSubmit, reset } = useForm<Territorio>();
@@ -65,6 +69,28 @@ export default function TerritoriosPage() {
     load();
   };
 
+  const toggleSort = (field: keyof Territorio) => {
+    if (sortField === field) setSortDir(d => d === 'asc' ? 'desc' : 'asc');
+    else { setSortField(field); setSortDir('asc'); }
+  };
+
+  const sorted = [...territorios].sort((a, b) => {
+    const av = (a[sortField] || '') as string;
+    const bv = (b[sortField] || '') as string;
+    return sortDir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av);
+  });
+
+  const SortTh = ({ field, label, className = '' }: { field: keyof Territorio; label: string; className?: string }) => (
+    <th className={`table-th cursor-pointer select-none ${className}`} onClick={() => toggleSort(field)}>
+      <span className="flex items-center gap-1">
+        {label}
+        {sortField === field
+          ? <span className="text-primary text-[11px]">{sortDir === 'asc' ? '↑' : '↓'}</span>
+          : <span className="text-[#c7c7cc] text-[11px]">↕</span>}
+      </span>
+    </th>
+  );
+
   return (
     <Layout>
       <div className="space-y-6">
@@ -94,20 +120,20 @@ export default function TerritoriosPage() {
           <table className="w-full">
             <thead className="bg-parchment">
               <tr>
-                <th className="table-th">Município</th>
-                <th className="table-th hidden md:table-cell">RM / RA</th>
-                <th className="table-th hidden lg:table-cell">Mesorregião</th>
-                <th className="table-th hidden lg:table-cell">Microrregião</th>
-                <th className="table-th hidden xl:table-cell">Divisão Regional</th>
+                <SortTh field="nome" label="Município" />
+                <SortTh field="rm_ra" label="RM / RA" className="hidden md:table-cell" />
+                <SortTh field="mesorregiao" label="Mesorregião" className="hidden lg:table-cell" />
+                <SortTh field="microrregiao" label="Microrregião" className="hidden lg:table-cell" />
+                <SortTh field="divisao_regional" label="Divisão Regional" className="hidden xl:table-cell" />
                 <th className="table-th text-right">Ações</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr><td colSpan={6} className="table-td text-center text-ink-muted py-16">Carregando...</td></tr>
-              ) : territorios.length === 0 ? (
+              ) : sorted.length === 0 ? (
                 <tr><td colSpan={6} className="table-td text-center text-ink-muted py-16">Nenhum território cadastrado</td></tr>
-              ) : territorios.map(t => (
+              ) : sorted.map(t => (
                 <tr key={t.id} className="border-t border-hairline hover:bg-parchment/40 transition-colors">
                   <td className="table-td font-semibold uppercase">{t.nome}</td>
                   <td className="table-td hidden md:table-cell text-[13px] text-ink-muted uppercase">{t.rm_ra || '—'}</td>
