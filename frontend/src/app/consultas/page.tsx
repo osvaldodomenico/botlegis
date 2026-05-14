@@ -64,12 +64,23 @@ function gerarNarrativa(m: any): string {
     if (m.lideranca) {
       frase += frase ? `, temos como liderança **${m.lideranca}**` : `temos como liderança **${m.lideranca}**`;
       if (m.funcao) frase += `, exercendo a função de **${m.funcao}**`;
+    } else if (m.funcao) {
+      frase += frase ? `, função de **${m.funcao}**` : `função de **${m.funcao}**`;
     }
     if (frase) partes.push(frase);
   }
 
   // Coordenação
-  if (m.coordenacao) partes.push(`O coordenador responsável é **${m.coordenacao}**`);
+  if (m.coordenacao) {
+    let coord = `O coordenador responsável é **${m.coordenacao}**`;
+    if (m.funcao_cargo) coord += `, função de **${m.funcao_cargo}**`;
+    partes.push(coord);
+  }
+  if (m.coord_lideranca_2) {
+    let coord2 = `Segundo coordenador: **${m.coord_lideranca_2}**`;
+    if (m.funcao_cargo_2) coord2 += `, função de **${m.funcao_cargo_2}**`;
+    partes.push(coord2);
+  }
 
   // Bloco
   if (m.bloco) partes.push(`pertencente ao bloco **${m.bloco}**`);
@@ -254,9 +265,9 @@ function formatarRespostaBot(tipo: string, data: any, query: string): string {
     return resp;
   }
   if (tipo === 'ranking') {
-    const d = data;
-    return `🏆 **Ranking Top ${d.ranking?.length}**\n\n` +
-      (d.ranking || []).map((m: any) => `${m.posicao}. **${m.nome}** — ${m.projecao_votos?.toLocaleString('pt-BR')} votos`).join('\n');
+    const lista = data.data || data.ranking || [];
+    return `🏆 **Ranking Top ${lista.length}**\n\n` +
+      lista.map((m: any) => `${m.posicao}. **${m.nome}** — ${m.projecao_votos?.toLocaleString('pt-BR')} votos`).join('\n');
   }
   if (tipo === 'semcoordenador') {
     const ms = data.municipios || data;
@@ -562,9 +573,9 @@ export default function ConsultasPage() {
         {/* Resultado ranking */}
         {resultado?.tipo === 'ranking' && (
           <div className="space-y-4">
-            <h2 className="text-[21px] font-semibold text-ink">Ranking — Top {resultado.data.ranking.length}</h2>
+            <h2 className="text-[21px] font-semibold text-ink">Ranking — Top {(resultado.data.data || resultado.data.ranking || []).length}</h2>
             <div className="card p-0 overflow-hidden">
-              {resultado.data.ranking.map((m: any) => (
+              {(resultado.data.data || resultado.data.ranking || []).map((m: any) => (
                 <div key={m.id} className="flex items-center gap-4 px-6 py-3 border-b border-hairline last:border-0 hover:bg-parchment/40 transition-colors">
                   <span className="w-8 h-8 rounded-full flex items-center justify-center text-[14px] font-semibold flex-shrink-0"
                     style={{ background: m.posicao <= 3 ? '#0066cc' : '#f5f5f7', color: m.posicao <= 3 ? 'white' : '#7a7a7a' }}>

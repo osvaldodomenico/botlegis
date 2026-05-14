@@ -8,6 +8,7 @@ import { MapPin, TrendingUp, Globe, Award } from 'lucide-react';
 interface DashboardData {
   total_municipios: number;
   total_projecao: number;
+  por_tipo: { tipo: string; total_projecao: number; total_registros: number }[];
   por_regiao: { regiao: string; total_projecao: number; total_municipios: number }[];
   top10_projecao: { id: string; nome: string; regiao: string; projecao_votos: number }[];
 }
@@ -85,6 +86,35 @@ export default function DashboardPage() {
             </p>
           </div>
         </div>
+
+        {/* Cards por tipo de base */}
+        {data?.por_tipo && data.por_tipo.length > 0 && (
+          <div>
+            <h2 className="text-[17px] font-semibold text-ink mb-3">Projeção por Base</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {[
+                { key: 'EXTERNO', label: 'Base Externo', color: '#0066cc', bg: '#eff6ff' },
+                { key: 'BASE - INSTITUIÇÃO', label: 'Base Instituição', color: '#059669', bg: '#ecfdf5' },
+                { key: 'BASE APOIADORES', label: 'Base Apoiadores', color: '#d97706', bg: '#fffbeb' },
+              ].map(({ key, label, color, bg }) => {
+                const t = data.por_tipo.find(x => x.tipo === key);
+                return (
+                  <div key={key} className="stat-card" style={{ borderLeft: `4px solid ${color}` }}>
+                    <div className="text-[12px] font-semibold uppercase tracking-widest mb-2" style={{ color }}>
+                      {label}
+                    </div>
+                    <p className="text-[32px] font-semibold leading-none" style={{ color }}>
+                      {t?.total_projecao?.toLocaleString('pt-BR') ?? '0'}
+                    </p>
+                    <p className="text-[13px] text-ink-muted mt-1">
+                      votos · {t?.total_registros ?? 0} registro{(t?.total_registros ?? 0) !== 1 ? 's' : ''}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Charts + Table */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

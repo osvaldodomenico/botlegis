@@ -38,6 +38,10 @@ export default function MunicipiosPage() {
   const [editing, setEditing] = useState<Municipio | null>(null);
   const [orderBy, setOrderBy] = useState('nome');
   const [order, setOrder] = useState<'asc'|'desc'>('asc');
+  const [tipoBloqueado, setTipoBloqueado] = useState(false);
+  const [dobNome, setDobNome] = useState('');
+  const [dobCidade, setDobCidade] = useState('');
+  const [dobProjecao, setDobProjecao] = useState('');
   const debounceRef = useRef<any>(null);
 
   const { register, handleSubmit, reset, setValue, watch } = useForm<Municipio>();
@@ -117,16 +121,37 @@ export default function MunicipiosPage() {
   const openEdit = (m: Municipio) => {
     setEditing(m);
     Object.entries(m).forEach(([k, v]) => setValue(k as any, v as any));
+    setTipoBloqueado(true);
+    setDobNome(''); setDobCidade(''); setDobProjecao('');
     setShowForm(true);
   };
 
-  const openNew = () => { setEditing(null); reset(); setShowForm(true); };
+  const openNew = () => {
+    setEditing(null); reset();
+    setTipoBloqueado(false);
+    setDobNome(''); setDobCidade(''); setDobProjecao('');
+    setShowForm(true);
+  };
+
+  const closeForm = () => {
+    setShowForm(false);
+    setTipoBloqueado(false);
+    setDobNome(''); setDobCidade(''); setDobProjecao('');
+  };
 
   const onSubmit = async (data: Municipio) => {
     try {
       if (editing) await api.put(`/municipios/${editing.id}`, data);
       else await api.post('/municipios', data);
-      setShowForm(false);
+      // Salvar dobrada se preenchida (apenas em BASE - INSTITUIÇÃO)
+      if (data.tipo_cadastro === 'BASE - INSTITUIÇÃO' && dobNome && dobCidade) {
+        await api.post('/dobradas', {
+          nome: dobNome.toUpperCase(),
+          cidade: dobCidade,
+          projecao_votos: dobProjecao ? Number(dobProjecao) : 0,
+        });
+      }
+      closeForm();
       load();
     } catch (e: any) { alert(e.response?.data?.message || 'Erro ao salvar'); }
   };
@@ -254,16 +279,17 @@ export default function MunicipiosPage() {
                   <SortHeader field="nome" label="Município" />
                   <th className="table-th hidden md:table-cell">Bloco</th>
                   <th className="table-th hidden lg:table-cell">Função</th>
-                  <th className="table-th hidden lg:table-cell">Coordenador / Liderança</th>
+                  <th className="table-th hidden lg:table-cell">Coordenador</th>
+                  <th className="table-th hidden xl:table-cell">Liderança</th>
                   <SortHeader field="projecao_votos" label="Projeção" />
                   <th className="table-th w-20"></th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan={7} className="table-td text-center text-ink-muted py-16">Carregando...</td></tr>
+                  <tr><td colSpan={8} className="table-td text-center text-ink-muted py-16">Carregando...</td></tr>
                 ) : municipios.length === 0 ? (
-                  <tr><td colSpan={7} className="table-td text-center text-ink-muted py-16">Nenhum município encontrado</td></tr>
+                  <tr><td colSpan={8} className="table-td text-center text-ink-muted py-16">Nenhum município encontrado</td></tr>
                 ) : municipios.map((m) => (
                   <tr key={m.id} className="border-t border-hairline hover:bg-parchment/40 transition-colors">
                     <td className="table-td">
@@ -278,9 +304,8 @@ export default function MunicipiosPage() {
                     <td className="table-td font-semibold uppercase">{m.nome}</td>
                     <td className="table-td hidden md:table-cell text-[13px] text-ink-muted uppercase">{m.bloco || '—'}</td>
                     <td className="table-td hidden lg:table-cell text-[13px] text-ink-muted uppercase">{(m as any).funcao || '—'}</td>
-                    <td className="table-td hidden lg:table-cell text-[13px] text-ink-muted truncate max-w-[160px] uppercase">
-                      {m.tipo_cadastro === 'BASE - INSTITUIÇÃO' ? (m.coordenacao || '—') : (m.lideranca || '—')}
-                    </td>
+                    <td className="table-td hidden lg:table-cell text-[13px] text-ink-muted truncate max-w-[160px] uppercase">{m.coordenacao || '—'}</td>
+                    <td className="table-td hidden xl:table-cell text-[13px] text-ink-muted truncate max-w-[160px] uppercase">{m.lideranca || '—'}</td>
                     <td className="table-td font-semibold text-primary text-right">{m.projecao_votos?.toLocaleString('pt-BR') || '—'}</td>
                     <td className="table-td">
                       <div className="flex items-center gap-1 justify-end">
@@ -348,24 +373,37 @@ export default function MunicipiosPage() {
                     { value: 'EXTERNO', label: 'Externo' },
                     { value: 'BASE - INSTITUIÇÃO', label: 'Base Instituição' },
                     { value: 'BASE APOIADORES', label: 'Base Apoiadores' },
-                  ].map(({ value, label }) => (
-                    <button
-                      key={value}
-                      type="button"
-                      onClick={() => setValue('tipo_cadastro', value, { shouldDirty: true })}
-                      className={`px-3 py-3 rounded-[12px] text-[13px] font-semibold border-2 transition-all text-center leading-snug
-                        ${tipoCadastro === value
-                          ? value === 'EXTERNO'
-                            ? 'border-blue-500 bg-blue-50 text-blue-700'
-                            : value === 'BASE - INSTITUIÇÃO'
-                            ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
-                            : 'border-orange-500 bg-orange-50 text-orange-700'
-                          : 'border-[#e5e5ea] bg-white text-ink-muted hover:border-[#c7c7cc] hover:text-ink'
-                        }`}
-                    >
-                      {label}
-                    </button>
-                  ))}
+                  ].map(({ value, label }) => {
+                    const isSelected = tipoCadastro === value;
+                    const isLocked = tipoBloqueado && !isSelected;
+                    return (
+                      <button
+                        key={value}
+                        type="button"
+                        disabled={isLocked}
+                        onClick={() => {
+                          if (!tipoBloqueado) {
+                            setValue('tipo_cadastro', value, { shouldDirty: true });
+                            setTipoBloqueado(true);
+                          }
+                        }}
+                        title={isLocked ? 'Conclua ou cancele o cadastro para trocar o tipo' : ''}
+                        className={`px-3 py-3 rounded-[12px] text-[13px] font-semibold border-2 transition-all text-center leading-snug
+                          ${isSelected
+                            ? value === 'EXTERNO'
+                              ? 'border-blue-500 bg-blue-50 text-blue-700'
+                              : value === 'BASE - INSTITUIÇÃO'
+                              ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
+                              : 'border-orange-500 bg-orange-50 text-orange-700'
+                            : isLocked
+                            ? 'border-[#e5e5ea] bg-[#f5f5f7] text-[#c7c7cc] cursor-not-allowed opacity-50'
+                            : 'border-[#e5e5ea] bg-white text-ink-muted hover:border-[#c7c7cc] hover:text-ink'
+                          }`}
+                      >
+                        {label}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -385,7 +423,7 @@ export default function MunicipiosPage() {
                       <label className="label">Município *</label>
                       <select {...register('nome', { required: true })} className="input bg-white">
                         <option value="">Selecione o município ({MUNICIPIOS_SP.length})</option>
-                        {MUNICIPIOS_SP.map(nome => <option key={nome} value={nome}>{nome}</option>)}
+                        {MUNICIPIOS_SP.map(nome => <option key={nome} value={nome.toUpperCase()}>{nome}</option>)}
                       </select>
                     </div>
                     <div>
@@ -437,13 +475,14 @@ export default function MunicipiosPage() {
                       <label className="label">Função</label>
                       <select {...register('funcao')} className="input">
                         <option value="">Selecione</option>
-                        <option value="Ex-Prefeito">Ex-Prefeito</option>
-                        <option value="Liderança">Liderança</option>
-                        <option value="Pastor">Pastor</option>
-                        <option value="Prefeito">Prefeito</option>
-                        <option value="Secretário">Secretário</option>
-                        <option value="Vereador">Vereador</option>
-                        <option value="Vice">Vice</option>
+                        <option value="A DEFINIR">A Definir</option>
+                        <option value="EX-PREFEITO">Ex-Prefeito</option>
+                        <option value="LIDERANÇA">Liderança</option>
+                        <option value="PASTOR">Pastor</option>
+                        <option value="PREFEITO">Prefeito</option>
+                        <option value="SECRETÁRIO">Secretário</option>
+                        <option value="VEREADOR">Vereador</option>
+                        <option value="VICE">Vice</option>
                       </select>
                     </div>
                     <div>
@@ -467,17 +506,67 @@ export default function MunicipiosPage() {
                       <label className="label">Bloco</label>
                       <select {...register('bloco')} className="input">
                         <option value="">Selecione</option>
-                        <option value="Jundiaí">Jundiaí</option>
-                        <option value="São José dos Campos">São José dos Campos</option>
-                        <option value="Zona Sul">Zona Sul</option>
+                        <option value="BAURU">BAURU</option>
+                        <option value="CAMPINAS">CAMPINAS</option>
+                        <option value="FRANCA">FRANCA</option>
+                        <option value="GUARULHOS">GUARULHOS</option>
+                        <option value="ITAQUERA">ITAQUERA</option>
+                        <option value="JUNDIAI">JUNDIAI</option>
+                        <option value="LIMEIRA">LIMEIRA</option>
+                        <option value="OSASCO">OSASCO</option>
+                        <option value="PRAIA GRANDE">PRAIA GRANDE</option>
+                        <option value="PRESIDENTE PRUDENTE">PRESIDENTE PRUDENTE</option>
+                        <option value="RIBEIRÃO PRETO">RIBEIRÃO PRETO</option>
+                        <option value="SANTO ANDRÉ">SANTO ANDRÉ</option>
+                        <option value="SANTOS">SANTOS</option>
+                        <option value="SÃO JOSÉ DO RIO PRETO">SÃO JOSÉ DO RIO PRETO</option>
+                        <option value="SÃO JOSÉ DOS CAMPOS">SÃO JOSÉ DOS CAMPOS</option>
+                        <option value="SOROCABA">SOROCABA</option>
+                        <option value="TEMPLO">TEMPLO</option>
+                        <option value="ZONA LESTE">ZONA LESTE</option>
+                        <option value="ZONA NORTE">ZONA NORTE</option>
+                        <option value="ZONA SUL">ZONA SUL</option>
                       </select>
                     </div>
                     <div>
                       <label className="label">Cidade</label>
                       <select {...register('distrito')} className="input">
                         <option value="">Selecione o município</option>
-                        {MUNICIPIOS_SP.map(nome => <option key={nome} value={nome}>{nome}</option>)}
+                        {MUNICIPIOS_SP.map(nome => <option key={nome} value={nome.toUpperCase()}>{nome}</option>)}
                       </select>
+                    </div>
+                  </div>
+
+                  {/* Seção Dobrada */}
+                  <div className="border border-dashed border-emerald-300 rounded-[12px] p-4 space-y-3 bg-emerald-50/40">
+                    <p className="text-[11px] font-semibold text-emerald-600 uppercase tracking-widest">Dobrada (opcional)</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div>
+                        <label className="label">Nome</label>
+                        <input
+                          className="input uppercase"
+                          placeholder="Nome da dobrada"
+                          value={dobNome}
+                          onChange={e => setDobNome(e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <label className="label">Cidade</label>
+                        <select className="input" value={dobCidade} onChange={e => setDobCidade(e.target.value)}>
+                          <option value="">Selecione</option>
+                          {MUNICIPIOS_SP.map(n => <option key={n} value={n.toUpperCase()}>{n}</option>)}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="label">Projeção de Votos</label>
+                        <input
+                          type="number"
+                          className="input"
+                          placeholder="0"
+                          value={dobProjecao}
+                          onChange={e => setDobProjecao(e.target.value)}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -492,9 +581,26 @@ export default function MunicipiosPage() {
                       <label className="label">Bloco</label>
                       <select {...register('bloco')} className="input">
                         <option value="">Selecione</option>
-                        <option value="Jundiaí">Jundiaí</option>
-                        <option value="São José dos Campos">São José dos Campos</option>
-                        <option value="Zona Sul">Zona Sul</option>
+                        <option value="BAURU">BAURU</option>
+                        <option value="CAMPINAS">CAMPINAS</option>
+                        <option value="FRANCA">FRANCA</option>
+                        <option value="GUARULHOS">GUARULHOS</option>
+                        <option value="ITAQUERA">ITAQUERA</option>
+                        <option value="JUNDIAI">JUNDIAI</option>
+                        <option value="LIMEIRA">LIMEIRA</option>
+                        <option value="OSASCO">OSASCO</option>
+                        <option value="PRAIA GRANDE">PRAIA GRANDE</option>
+                        <option value="PRESIDENTE PRUDENTE">PRESIDENTE PRUDENTE</option>
+                        <option value="RIBEIRÃO PRETO">RIBEIRÃO PRETO</option>
+                        <option value="SANTO ANDRÉ">SANTO ANDRÉ</option>
+                        <option value="SANTOS">SANTOS</option>
+                        <option value="SÃO JOSÉ DO RIO PRETO">SÃO JOSÉ DO RIO PRETO</option>
+                        <option value="SÃO JOSÉ DOS CAMPOS">SÃO JOSÉ DOS CAMPOS</option>
+                        <option value="SOROCABA">SOROCABA</option>
+                        <option value="TEMPLO">TEMPLO</option>
+                        <option value="ZONA LESTE">ZONA LESTE</option>
+                        <option value="ZONA NORTE">ZONA NORTE</option>
+                        <option value="ZONA SUL">ZONA SUL</option>
                       </select>
                     </div>
                     <div>
@@ -505,13 +611,10 @@ export default function MunicipiosPage() {
                       <label className="label">Função</label>
                       <select {...register('funcao')} className="input">
                         <option value="">Selecione</option>
-                        <option value="Ex-Prefeito">Ex-Prefeito</option>
-                        <option value="Liderança">Liderança</option>
-                        <option value="Pastor">Pastor</option>
-                        <option value="Prefeito">Prefeito</option>
-                        <option value="Secretário">Secretário</option>
-                        <option value="Vereador">Vereador</option>
-                        <option value="Vice">Vice</option>
+                        <option value="VEREADOR">Vereador</option>
+                        <option value="POSTULANTE VEREADOR">Postulante Vereador</option>
+                        <option value="COOPERADOR">Cooperador</option>
+                        <option value="POSTULANTE COOPERADOR">Postulante Cooperador</option>
                       </select>
                     </div>
                     <div>
@@ -528,7 +631,7 @@ export default function MunicipiosPage() {
 
               {/* Botões */}
               <div className="flex gap-3 justify-end pt-2 border-t border-hairline">
-                <button type="button" onClick={() => setShowForm(false)} className="btn-secondary">Cancelar</button>
+                <button type="button" onClick={closeForm} className="btn-secondary">Cancelar</button>
                 <button type="submit" className="btn-primary" disabled={!tipoCadastro}>
                   {editing ? 'Salvar Alterações' : 'Criar Cadastro'}
                 </button>

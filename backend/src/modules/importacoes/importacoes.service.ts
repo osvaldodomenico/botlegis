@@ -74,11 +74,12 @@ export class ImportacoesService {
           percentual_perda: toFloat(row[headers.indexOf('% PERDA')]),
         };
 
-        await this.prisma.municipio.upsert({
-          where: { nome: data.nome },
-          update: data,
-          create: data,
-        });
+        const existing = await this.prisma.municipio.findFirst({ where: { nome: data.nome } });
+        if (existing) {
+          await this.prisma.municipio.update({ where: { id: existing.id }, data });
+        } else {
+          await this.prisma.municipio.create({ data });
+        }
 
         processadas++;
       } catch (err: any) {

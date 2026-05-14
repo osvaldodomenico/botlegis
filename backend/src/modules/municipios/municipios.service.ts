@@ -88,17 +88,6 @@ export class MunicipiosService {
 
   async create(dto: CreateMunicipioDto) {
     const data = this.prepareData(dto);
-    // Upsert: se já existe pelo nome, atualiza em vez de criar
-    const existing = await this.prisma.municipio.findFirst({
-      where: { nome: data.nome },
-    });
-    if (existing) {
-      const m = await this.prisma.municipio.update({
-        where: { id: existing.id },
-        data: data as any,
-      });
-      return this.serialize(m);
-    }
     const m = await this.prisma.municipio.create({ data: data as any });
     return this.serialize(m);
   }

@@ -1,0 +1,221 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <!-- Background gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d1117"/>
+      <stop offset="100%" style="stop-color:#161b22"/>
+    </linearGradient>
+
+    <!-- Cyan glow -->
+    <radialGradient id="eyeGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#00e5ff;stop-opacity:1"/>
+      <stop offset="60%" style="stop-color:#0088cc;stop-opacity:0.8"/>
+      <stop offset="100%" style="stop-color:#003366;stop-opacity:0"/>
+    </radialGradient>
+
+    <!-- Gold accent gradient -->
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffd700"/>
+      <stop offset="100%" style="stop-color:#ff8c00"/>
+    </linearGradient>
+
+    <!-- Steel gradient for face plate -->
+    <linearGradient id="steelGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2a3a4a"/>
+      <stop offset="50%" style="stop-color:#1a2535"/>
+      <stop offset="100%" style="stop-color:#0f1923"/>
+    </linearGradient>
+
+    <!-- Energy line gradient -->
+    <linearGradient id="energyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00e5ff;stop-opacity:0"/>
+      <stop offset="50%" style="stop-color:#00e5ff;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#00e5ff;stop-opacity:0"/>
+    </linearGradient>
+
+    <!-- Glow filter -->
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Strong glow -->
+    <filter id="strongGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Clip for rounded square avatar -->
+    <clipPath id="avatarClip">
+      <rect x="0" y="0" width="400" height="400" rx="64" ry="64"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#avatarClip)">
+
+    <!-- Background -->
+    <rect width="400" height="400" fill="url(#bgGrad)"/>
+
+    <!-- Subtle grid lines -->
+    <g stroke="#1e2d3d" stroke-width="0.5" opacity="0.4">
+      <line x1="0" y1="50" x2="400" y2="50"/>
+      <line x1="0" y1="100" x2="400" y2="100"/>
+      <line x1="0" y1="150" x2="400" y2="150"/>
+      <line x1="0" y1="200" x2="400" y2="200"/>
+      <line x1="0" y1="250" x2="400" y2="250"/>
+      <line x1="0" y1="300" x2="400" y2="300"/>
+      <line x1="0" y1="350" x2="400" y2="350"/>
+      <line x1="50" y1="0" x2="50" y2="400"/>
+      <line x1="100" y1="0" x2="100" y2="400"/>
+      <line x1="150" y1="0" x2="150" y2="400"/>
+      <line x1="200" y1="0" x2="200" y2="400"/>
+      <line x1="250" y1="0" x2="250" y2="400"/>
+      <line x1="300" y1="0" x2="300" y2="400"/>
+      <line x1="350" y1="0" x2="350" y2="400"/>
+    </g>
+
+    <!-- ─── SHOULDER ARMOR (transformer wings) ─── -->
+    <!-- Left shoulder pauldron -->
+    <polygon points="30,155 95,130 110,200 60,220" fill="#1e2d3d" stroke="#00e5ff" stroke-width="1.5"/>
+    <polygon points="30,155 70,138 80,168 45,178" fill="#253545" stroke="#00e5ff" stroke-width="0.8"/>
+    <!-- Left shoulder accent -->
+    <polygon points="34,160 64,146 70,162 42,170" fill="url(#goldGrad)" opacity="0.7"/>
+
+    <!-- Right shoulder pauldron -->
+    <polygon points="370,155 305,130 290,200 340,220" fill="#1e2d3d" stroke="#00e5ff" stroke-width="1.5"/>
+    <polygon points="370,155 330,138 320,168 355,178" fill="#253545" stroke="#00e5ff" stroke-width="0.8"/>
+    <!-- Right shoulder accent -->
+    <polygon points="366,160 336,146 330,162 358,170" fill="url(#goldGrad)" opacity="0.7"/>
+
+    <!-- ─── NECK COLLAR ─── -->
+    <rect x="155" y="218" width="90" height="22" rx="4" fill="#1a2535" stroke="#00e5ff" stroke-width="1.5"/>
+    <!-- Neck bolts -->
+    <circle cx="170" cy="229" r="4" fill="#2a3a4a" stroke="#00e5ff" stroke-width="1"/>
+    <circle cx="200" cy="229" r="4" fill="#2a3a4a" stroke="#00e5ff" stroke-width="1"/>
+    <circle cx="230" cy="229" r="4" fill="#2a3a4a" stroke="#00e5ff" stroke-width="1"/>
+
+    <!-- ─── MAIN HEAD SHAPE (transformer angular helmet) ─── -->
+    <!-- Outer helmet - angular transformer style -->
+    <polygon points="200,45 260,65 295,105 300,175 280,215 200,228 120,215 100,175 105,105 140,65"
+             fill="url(#steelGrad)" stroke="#2a4060" stroke-width="2"/>
+
+    <!-- Helmet side panels -->
+    <polygon points="105,105 140,65 145,95 118,125" fill="#162030" stroke="#1e3050" stroke-width="1"/>
+    <polygon points="295,105 260,65 255,95 282,125" fill="#162030" stroke="#1e3050" stroke-width="1"/>
+
+    <!-- Helmet top fin (transformer crest) -->
+    <polygon points="200,45 215,30 222,48 200,58 178,48 185,30"
+             fill="#1a2535" stroke="#00e5ff" stroke-width="1.5" filter="url(#glow)"/>
+    <!-- Crest gem -->
+    <polygon points="200,34 207,42 200,50 193,42" fill="url(#goldGrad)" filter="url(#strongGlow)"/>
+
+    <!-- Visor band (dark across eyes) -->
+    <rect x="118" y="130" width="164" height="52" rx="6"
+          fill="#0a1520" stroke="#1e3050" stroke-width="1.5"/>
+
+    <!-- ─── EYES (glowing transformer optics) ─── -->
+    <!-- Left eye housing -->
+    <polygon points="128,138 168,136 172,148 168,160 128,162 122,150" fill="#071018"/>
+    <!-- Left eye glow -->
+    <ellipse cx="148" cy="150" rx="16" ry="10" fill="url(#eyeGlow)" filter="url(#strongGlow)" opacity="0.9"/>
+    <!-- Left eye core -->
+    <ellipse cx="148" cy="150" rx="7" ry="6" fill="#00e5ff" filter="url(#strongGlow)"/>
+    <ellipse cx="148" cy="150" rx="3" ry="3" fill="white" opacity="0.9"/>
+
+    <!-- Right eye housing -->
+    <polygon points="232,136 272,138 278,150 272,162 232,160 228,148" fill="#071018"/>
+    <!-- Right eye glow -->
+    <ellipse cx="252" cy="150" rx="16" ry="10" fill="url(#eyeGlow)" filter="url(#strongGlow)" opacity="0.9"/>
+    <!-- Right eye core -->
+    <ellipse cx="252" cy="150" rx="7" ry="6" fill="#00e5ff" filter="url(#strongGlow)"/>
+    <ellipse cx="252" cy="150" rx="3" ry="3" fill="white" opacity="0.9"/>
+
+    <!-- Eye connector beam -->
+    <line x1="164" y1="150" x2="236" y2="150" stroke="#00e5ff" stroke-width="1" opacity="0.3" stroke-dasharray="4,4"/>
+
+    <!-- ─── FACE PLATE (lower face) ─── -->
+    <polygon points="130,185 200,192 270,185 265,215 200,222 135,215"
+             fill="#162030" stroke="#1e3050" stroke-width="1.5"/>
+
+    <!-- Mouth grille slits -->
+    <rect x="158" y="195" width="14" height="5" rx="1" fill="#00e5ff" opacity="0.6"/>
+    <rect x="178" y="195" width="14" height="5" rx="1" fill="#00e5ff" opacity="0.6"/>
+    <rect x="198" y="195" width="14" height="5" rx="1" fill="#00e5ff" opacity="0.6"/>
+    <rect x="218" y="195" width="14" height="5" rx="1" fill="#00e5ff" opacity="0.6"/>
+
+    <!-- Cheek plates -->
+    <polygon points="112,150 130,140 132,185 108,178" fill="#1a2a3a" stroke="#1e3050" stroke-width="1"/>
+    <polygon points="288,150 270,140 268,185 292,178" fill="#1a2a3a" stroke="#1e3050" stroke-width="1"/>
+
+    <!-- ─── HELMET EDGE TRIM (gold accents) ─── -->
+    <polyline points="140,65 130,85 112,110 106,150"
+              fill="none" stroke="url(#goldGrad)" stroke-width="2" opacity="0.8"/>
+    <polyline points="260,65 270,85 288,110 294,150"
+              fill="none" stroke="url(#goldGrad)" stroke-width="2" opacity="0.8"/>
+
+    <!-- Top helmet ridge lines -->
+    <line x1="165" y1="55" x2="155" y2="80" stroke="#00e5ff" stroke-width="1" opacity="0.5"/>
+    <line x1="200" y1="48" x2="200" y2="75" stroke="#00e5ff" stroke-width="1" opacity="0.5"/>
+    <line x1="235" y1="55" x2="245" y2="80" stroke="#00e5ff" stroke-width="1" opacity="0.5"/>
+
+    <!-- ─── ENERGY CORE (chest, below neck) ─── -->
+    <rect x="168" y="248" width="64" height="50" rx="8" fill="#0d1a26" stroke="#1e3050" stroke-width="1.5"/>
+    <!-- Core hexagon -->
+    <polygon points="200,255 212,262 212,276 200,283 188,276 188,262"
+             fill="#071018" stroke="#00e5ff" stroke-width="1.5" filter="url(#glow)"/>
+    <!-- Core inner glow -->
+    <polygon points="200,261 208,265 208,273 200,277 192,273 192,265"
+             fill="#00e5ff" opacity="0.8" filter="url(#strongGlow)"/>
+    <!-- Core lines -->
+    <line x1="168" y1="266" x2="188" y2="266" stroke="#00e5ff" stroke-width="1" opacity="0.4"/>
+    <line x1="212" y1="266" x2="232" y2="266" stroke="#00e5ff" stroke-width="1" opacity="0.4"/>
+    <line x1="168" y1="274" x2="188" y2="274" stroke="#00e5ff" stroke-width="1" opacity="0.4"/>
+    <line x1="212" y1="274" x2="232" y2="274" stroke="#00e5ff" stroke-width="1" opacity="0.4"/>
+
+    <!-- ─── ENERGY LINES emanating from core ─── -->
+    <line x1="200" y1="298" x2="200" y2="320" stroke="#00e5ff" stroke-width="1.5" opacity="0.5" filter="url(#glow)"/>
+    <line x1="186" y1="296" x2="170" y2="316" stroke="#00e5ff" stroke-width="1" opacity="0.35"/>
+    <line x1="214" y1="296" x2="230" y2="316" stroke="#00e5ff" stroke-width="1" opacity="0.35"/>
+
+    <!-- ─── TEXT ─── -->
+    <!-- "LEGIS" -->
+    <text x="200" y="352" text-anchor="middle"
+          font-family="'SF Pro Display', system-ui, -apple-system, sans-serif"
+          font-size="32" font-weight="700" letter-spacing="8"
+          fill="#00e5ff" filter="url(#glow)">LEGIS</text>
+
+    <!-- "BOT" with gold accent -->
+    <text x="200" y="383" text-anchor="middle"
+          font-family="'SF Pro Display', system-ui, -apple-system, sans-serif"
+          font-size="22" font-weight="400" letter-spacing="12"
+          fill="url(#goldGrad)" filter="url(#glow)">BOT</text>
+
+    <!-- Separator line -->
+    <line x1="80" y1="330" x2="320" y2="330" stroke="url(#energyGrad)" stroke-width="1" opacity="0.6"/>
+
+    <!-- Corner circuit details -->
+    <!-- Bottom left -->
+    <polyline points="20,380 20,360 40,360" fill="none" stroke="#00e5ff" stroke-width="1" opacity="0.3"/>
+    <circle cx="40" cy="360" r="2" fill="#00e5ff" opacity="0.5"/>
+    <!-- Bottom right -->
+    <polyline points="380,380 380,360 360,360" fill="none" stroke="#00e5ff" stroke-width="1" opacity="0.3"/>
+    <circle cx="360" cy="360" r="2" fill="#00e5ff" opacity="0.5"/>
+    <!-- Top left -->
+    <polyline points="20,20 20,40 40,40" fill="none" stroke="#00e5ff" stroke-width="1" opacity="0.3"/>
+    <circle cx="40" cy="40" r="2" fill="#00e5ff" opacity="0.5"/>
+    <!-- Top right -->
+    <polyline points="380,20 380,40 360,40" fill="none" stroke="#00e5ff" stroke-width="1" opacity="0.3"/>
+    <circle cx="360" cy="40" r="2" fill="#00e5ff" opacity="0.5"/>
+
+    <!-- Border glow rim -->
+    <rect x="1" y="1" width="398" height="398" rx="63" ry="63"
+          fill="none" stroke="#00e5ff" stroke-width="1.5" opacity="0.15"/>
+
+  </g>
+</svg>

@@ -6,7 +6,7 @@ export class DashboardService {
   constructor(private prisma: PrismaService) {}
 
   async getStats() {
-    const [totalMunicipios, projecaoAgg, porRegiao, top10] = await Promise.all([
+    const [totalMunicipios, projecaoAgg, porRegiao, top10, porTipo] = await Promise.all([
       this.prisma.municipio.count(),
       this.prisma.municipio.aggregate({ _sum: { projecao_votos: true } }),
       this.prisma.municipio.groupBy({
@@ -20,11 +20,21 @@ export class DashboardService {
         orderBy: { projecao_votos: 'desc' },
         take: 10,
       }),
+      this.prisma.municipio.groupBy({
+        by: ['tipo_cadastro'],
+        _sum: { projecao_votos: true },
+        _count: { id: true },
+      }),
     ]);
 
     return {
       total_municipios: totalMunicipios,
       total_projecao: projecaoAgg._sum.projecao_votos || 0,
+      por_tipo: porTipo.map(t => ({
+        tipo: t.tipo_cadastro || 'Sem Tipo',
+        total_projecao: t._sum.projecao_votos || 0,
+        total_registros: t._count.id,
+      })),
       por_regiao: porRegiao.map(r => ({
         regiao: r.regiao || 'Sem Região',
         total_projecao: r._sum.projecao_votos || 0,

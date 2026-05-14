@@ -7,6 +7,7 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { ImportacoesModule } from './modules/importacoes/importacoes.module';
 import { BuscaModule } from './modules/busca/busca.module';
 import { TerritoriosModule } from './modules/territorios/territorios.module';
+import { DobradaModule } from './modules/dobradas/dobradas.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { TerritoriosModule } from './modules/territorios/territorios.module';
     ImportacoesModule,
     BuscaModule,
     TerritoriosModule,
+    DobradaModule,
   ],
 })
 export class AppModule {}
