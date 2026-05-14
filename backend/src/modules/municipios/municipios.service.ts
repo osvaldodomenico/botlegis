@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateMunicipioDto, UpdateMunicipioDto, ListMunicipiosDto } from './dto/municipio.dto';
 
@@ -65,18 +65,57 @@ export class MunicipiosService {
     return this.serialize(m);
   }
 
+  private prepareData(dto: any) {
+    const STRING_FIELDS = [
+      'nome', 'uf', 'tipo_cadastro', 'funcao', 'distrito', 'bloco', 'regiao',
+      'rm_ra', 'mesorregiao', 'microrregiao', 'divisao_regional', 'coordenacao',
+      'lideranca', 'funcao_cargo', 'coord_lideranca_2', 'funcao_cargo_2',
+      'candidato_nome', 'candidato_cargo',
+    ];
+    const NUM_FIELDS = [
+      'projecao_votos', 'projecao_2', 'projecao_apoio_iurd', 'projecao_base',
+      'eleitores_22', 'votos_validos_22', 'votos_22', 'percentual_mv', 'percentual_perda',
+    ];
+    const result: any = { ...dto };
+    for (const f of STRING_FIELDS) {
+      if (result[f] && typeof result[f] === 'string') result[f] = result[f].trim().toUpperCase();
+    }
+    for (const f of NUM_FIELDS) {
+      if (result[f] === '' || result[f] === null) result[f] = undefined;
+    }
+    return result;
+  }
+
   async create(dto: CreateMunicipioDto) {
-    const m = await this.prisma.municipio.create({ data: dto as any });
+    const data = this.prepareData(dto);
+    // Upsert: se já existe pelo nome, atualiza em vez de criar
+    const existing = await this.prisma.municipio.findFirst({
+      where: { nome: data.nome },
+    });
+    if (existing) {
+      const m = await this.prisma.municipio.update({
+        where: { id: existing.id },
+        data: data as any,
+      });
+      return this.serialize(m);
+    }
+    const m = await this.prisma.municipio.create({ data: data as any });
     return this.serialize(m);
   }
 
   async update(id: number, dto: UpdateMunicipioDto) {
     await this.findOne(id);
-    const m = await this.prisma.municipio.update({
-      where: { id: BigInt(id) },
-      data: dto as any,
-    });
-    return this.serialize(m);
+    try {
+      const data = this.prepareData(dto);
+      const m = await this.prisma.municipio.update({
+        where: { id: BigInt(id) },
+        data: data as any,
+      });
+      return this.serialize(m);
+    } catch (e: any) {
+      if (e.code === 'P2002') throw new ConflictException(`Município "${(dto.nome || '').toUpperCase()}" já está cadastrado`);
+      throw e;
+    }
   }
 
   async remove(id: number) {

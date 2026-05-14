@@ -427,11 +427,11 @@ export default function MunicipiosPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="sm:col-span-2">
                       <label className="label">Coordenador(a)</label>
-                      <input {...register('coordenacao')} className="input" placeholder="Nome do(a) coordenador(a)" />
+                      <input {...register('coordenacao')} className="input uppercase" placeholder="Nome do(a) coordenador(a)" />
                     </div>
                     <div className="sm:col-span-2">
                       <label className="label">Nome da Liderança</label>
-                      <input {...register('lideranca')} className="input" placeholder="Nome da liderança" />
+                      <input {...register('lideranca')} className="input uppercase" placeholder="Nome da liderança" />
                     </div>
                     <div>
                       <label className="label">Função</label>
@@ -461,7 +461,7 @@ export default function MunicipiosPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="sm:col-span-2">
                       <label className="label">Coordenador</label>
-                      <input {...register('coordenacao')} className="input" placeholder="Nome do coordenador" />
+                      <input {...register('coordenacao')} className="input uppercase" placeholder="Nome do coordenador" />
                     </div>
                     <div>
                       <label className="label">Bloco</label>
@@ -516,7 +516,7 @@ export default function MunicipiosPage() {
                     </div>
                     <div>
                       <label className="label">Nome</label>
-                      <input {...register('lideranca')} className="input" placeholder="Nome do apoiador" />
+                      <input {...register('lideranca')} className="input uppercase" placeholder="Nome do apoiador" />
                     </div>
                     <div className="sm:col-span-2">
                       <label className="label">Projeção de Votos</label>
