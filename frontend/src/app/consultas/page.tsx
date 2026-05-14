@@ -54,7 +54,7 @@ function gerarNarrativaConsolidada(registros: any[]): string {
   if (m0.mesorregiao) abertura += `, na mesorregião de **${m0.mesorregiao}**`;
   else if (m0.regiao) abertura += `, região **${m0.regiao}**`;
 
-  const blocos = [...new Set(registros.map((m: any) => m.bloco).filter(Boolean))];
+  const blocos = registros.map((m: any) => m.bloco).filter(Boolean).filter((v: string, i: number, a: string[]) => a.indexOf(v) === i);
   const nLider = registros.length;
   if (nLider === 1) {
     abertura += blocos.length === 1
