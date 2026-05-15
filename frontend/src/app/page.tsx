@@ -9,7 +9,7 @@ interface DashboardData {
   total_municipios: number;
   total_projecao: number;
   por_tipo: { tipo: string; total_projecao: number; total_registros: number }[];
-  por_regiao: { regiao: string; total_projecao: number; total_municipios: number }[];
+  por_rm_ra: { rm_ra: string; total_projecao: number; total_municipios: number }[];
   top10_projecao: { id: string; nome: string; regiao: string; projecao_votos: number }[];
 }
 
@@ -65,12 +65,12 @@ export default function DashboardPage() {
           <div className="stat-card">
             <div className="flex items-center gap-2 text-ink-muted text-[13px] mb-2">
               <Globe size={15} />
-              Regiões
+              RM/RA
             </div>
             <p className="text-[40px] font-semibold text-ink leading-none" style={{ letterSpacing: '-0.5px' }}>
-              {data?.por_regiao?.length ?? '—'}
+              {data?.por_rm_ra?.length ?? '—'}
             </p>
-            <p className="text-[13px] text-ink-muted mt-1">regiões cobertas</p>
+            <p className="text-[13px] text-ink-muted mt-1">RM/RA cobertas</p>
           </div>
 
           <div className="stat-card">
@@ -121,19 +121,19 @@ export default function DashboardPage() {
           {/* Bar Chart */}
           <div className="card">
             <h2 className="text-[21px] font-semibold text-ink mb-6" style={{ letterSpacing: '-0.022em' }}>
-              Projeção por Região
+              Projeção por RM/RA
             </h2>
             <ResponsiveContainer width="100%" height={280}>
-              <BarChart data={data?.por_regiao} barSize={32}>
+              <BarChart data={data?.por_rm_ra} barSize={32}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
-                <XAxis dataKey="regiao" tick={{ fontSize: 12, fill: '#7a7a7a' }} axisLine={false} tickLine={false} />
+                <XAxis dataKey="rm_ra" tick={{ fontSize: 12, fill: '#7a7a7a' }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fontSize: 12, fill: '#7a7a7a' }} axisLine={false} tickLine={false} />
                 <Tooltip
                   contentStyle={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: 11, fontSize: 14 }}
                   cursor={{ fill: '#f5f5f7' }}
                 />
                 <Bar dataKey="total_projecao" name="Projeção" radius={[6, 6, 0, 0]}>
-                  {data?.por_regiao.map((_, i) => (
+                  {data?.por_rm_ra?.map((_, i) => (
                     <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />
                   ))}
                 </Bar>

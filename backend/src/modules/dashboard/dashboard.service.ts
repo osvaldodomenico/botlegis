@@ -6,11 +6,11 @@ export class DashboardService {
   constructor(private prisma: PrismaService) {}
 
   async getStats() {
-    const [totalMunicipios, projecaoAgg, porRegiao, top10, porTipo] = await Promise.all([
+    const [totalMunicipios, projecaoAgg, porRmRa, top10, porTipo] = await Promise.all([
       this.prisma.municipio.count(),
       this.prisma.municipio.aggregate({ _sum: { projecao_votos: true } }),
       this.prisma.municipio.groupBy({
-        by: ['regiao'],
+        by: ['rm_ra'],
         _sum: { projecao_votos: true },
         _count: { id: true },
         orderBy: { _sum: { projecao_votos: 'desc' } },
@@ -35,8 +35,8 @@ export class DashboardService {
         total_projecao: t._sum.projecao_votos || 0,
         total_registros: t._count.id,
       })),
-      por_regiao: porRegiao.map(r => ({
-        regiao: r.regiao || 'Sem Região',
+      por_rm_ra: porRmRa.map(r => ({
+        rm_ra: r.rm_ra || 'Sem RM/RA',
         total_projecao: r._sum.projecao_votos || 0,
         total_municipios: r._count.id,
       })),
