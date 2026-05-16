@@ -10,28 +10,46 @@ export class BuscaService {
     if (!q || q.trim().length < 2) return { municipios: [], total: 0 };
 
     const term = q.trim();
+    const termUpper = term.toUpperCase();
+
+    const select = {
+      id: true, nome: true, uf: true, regiao: true, bloco: true,
+      rm_ra: true, mesorregiao: true, microrregiao: true,
+      projecao_votos: true, coordenacao: true, lideranca: true,
+      funcao_cargo: true, eleitores_22: true, observacoes: true,
+    } as const;
+
+    const exatos = await this.prisma.municipio.findMany({
+      where: { nome: termUpper },
+      take: Number(limit),
+      orderBy: { projecao_votos: 'desc' },
+      select,
+    });
+
+    if (exatos.length > 0) {
+      return {
+        query: term,
+        total: exatos.length,
+        municipios: exatos.map(m => ({ ...m, id: m.id.toString() })),
+      };
+    }
 
     const municipios = await this.prisma.municipio.findMany({
       where: {
         OR: [
-          { nome: { contains: term } },
-          { coordenacao: { contains: term } },
-          { lideranca: { contains: term } },
-          { coord_lideranca_2: { contains: term } },
-          { regiao: { contains: term } },
-          { bloco: { contains: term } },
-          { mesorregiao: { contains: term } },
-          { microrregiao: { contains: term } },
+          { nome: { contains: termUpper } },
+          { coordenacao: { contains: termUpper } },
+          { lideranca: { contains: termUpper } },
+          { coord_lideranca_2: { contains: termUpper } },
+          { regiao: { contains: termUpper } },
+          { bloco: { contains: termUpper } },
+          { mesorregiao: { contains: termUpper } },
+          { microrregiao: { contains: termUpper } },
         ],
       },
       take: Number(limit),
       orderBy: { projecao_votos: 'desc' },
-      select: {
-        id: true, nome: true, uf: true, regiao: true, bloco: true,
-        rm_ra: true, mesorregiao: true, microrregiao: true,
-        projecao_votos: true, coordenacao: true, lideranca: true,
-        funcao_cargo: true, eleitores_22: true, observacoes: true,
-      },
+      select,
     });
 
     return {

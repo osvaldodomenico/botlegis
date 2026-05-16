@@ -8,6 +8,7 @@ import { ImportacoesModule } from './modules/importacoes/importacoes.module';
 import { BuscaModule } from './modules/busca/busca.module';
 import { TerritoriosModule } from './modules/territorios/territorios.module';
 import { DobradaModule } from './modules/dobradas/dobradas.module';
+import { IntegracoesModule } from './modules/integracoes/integracoes.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { DobradaModule } from './modules/dobradas/dobradas.module';
     BuscaModule,
     TerritoriosModule,
     DobradaModule,
+    IntegracoesModule,
   ],
 })
 export class AppModule {}

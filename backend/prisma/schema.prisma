@@ -108,3 +108,17 @@ model Territorio {
 
   @@map("territorios")
 }
+
+model IntegracaoConfiguracao {
+  id         BigInt   @id @default(autoincrement())
+  namespace  String   @db.VarChar(50)
+  chave      String   @db.VarChar(100)
+  valor      String   @db.Text
+  criptografado Boolean @default(false)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@unique([namespace, chave])
+  @@index([namespace])
+  @@map("integracoes_configuracoes")
+}
