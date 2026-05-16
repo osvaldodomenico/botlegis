@@ -2,7 +2,16 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get('mv2026_token')?.value;
+  const host = request.headers.get('host') || '';
+  const hostname = host.split(':')[0]?.toLowerCase() || '';
+
+  if (hostname === 'lideranca.shiftworks.app.br') {
+    const url = request.nextUrl.clone();
+    url.protocol = 'https:';
+    url.hostname = 'mobile.lideranca.shiftworks.app.br';
+    return NextResponse.redirect(url, 308);
+  }
+
   const { pathname } = request.nextUrl;
 
   if (pathname === '/login') return NextResponse.next();

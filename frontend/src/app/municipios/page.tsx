@@ -2,7 +2,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
-import { Search, Plus, Edit2, Trash2, X, ChevronLeft, ChevronRight, Filter, ChevronDown, ExternalLink } from 'lucide-react';
+import { Search, Plus, Edit2, Trash2, X, ChevronLeft, ChevronRight, Filter, ChevronDown } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { MUNICIPIOS_SP } from '@/lib/municipios-sp';
 
@@ -10,7 +10,6 @@ const RM_RA_OPCOES = ['ARAÇATUBA','BAIXADA SANTISTA','BARRETOS','BAURU','CAMPIN
 const MESORREGIAO_OPCOES = ['ARAÇATUBA','ARARAQUARA','ASSIS','BAURU','CAMPINAS','ITAPETININGA','LITORAL SUL','MACRO METROPOLITANA','MARILIA','METROPOLITANA SP','PIRACICABA','PRESIDENTE PRUDENTE','RIBEIRÃO PRETO','SÃO JOSÉ DO RIO PRETO','VALE DO PARAIBA'];
 const MICRORREGIAO_OPCOES = ['ADAMANTINA','AMPARO','ANDRADINA','ARAÇATUBA','ARARAQUARA','ASSIS','AURIFLAMA','AVARÉ','BANANAL','BARRETOS','BATATAIS','BAURU','BIRIGUI','BOTUCATU','BRAGANÇA PAULISTA','CAMPINAS','CAMPOS DO JORDÃO','CAPÃO BONITO','CARAGUATATUBA','CATANDUVA','DRACENA','FERNANDÓPOLIS','FRANCA','FRANCO DA ROCHA','GUARATINGUETA','GUARULHOS','ITANHAÉM','ITAPECERICA DA SERRA','ITAPETININGA','ITAPEVA','ITUVERAVA','JABOTICABAL','JALES','JAÚ','JUNDIAI','LIMEIRA','LINS','MARÍLIA','MOGI DAS CRUZES','MOGI MIRIM','NHANDEARA','NOVO HORIZONTE','OSASCO','OURINHOS','PARAIBUNA/PARAITINGA','PIEDADE','PIRACICABA','PIRASSUNUNGA','PRESIDENTE PRUDENTE','REGISTRO','RIBEIRÃO PRETO','RIO CLARO','SANTOS','SÃO CARLOS','SÃO JOÃO DA BOA VISTA','SÃO JOAQUIM DA BARRA','SÃO JOSÉ DO RIO PRETO','SÃO JOSÉ DOS CAMPOS','SÃO PAULO','SOROCABA','TATUÍ','TUPÃ','VOTUPORANGA'];
 const DIVISAO_REGIONAL_OPCOES = ['ALTO TIETE','BRAGANTINA','LITORAL NORTE','SAO JOSE DOS CAMPOS','SERRA DA MANTIQUEIRA','TAUBATE','VALE DA FÉ','VALE HISTORICO'];
-import Link from 'next/link';
 
 interface Municipio {
   id: string; nome: string; uf: string; tipo_cadastro: string; funcao: string; distrito: string; bloco: string; regiao: string;
@@ -40,8 +39,8 @@ export default function MunicipiosPage() {
   const [order, setOrder] = useState<'asc'|'desc'>('asc');
   const [tipoBloqueado, setTipoBloqueado] = useState(false);
   const [dobNome, setDobNome] = useState('');
-  const [dobCidade, setDobCidade] = useState('');
   const [dobProjecao, setDobProjecao] = useState('');
+  const [dobradasMap, setDobradasMap] = useState<Record<string, any>>({});
   const debounceRef = useRef<any>(null);
 
   const { register, handleSubmit, reset, setValue, watch } = useForm<Municipio>();
@@ -86,6 +85,17 @@ export default function MunicipiosPage() {
 
   useEffect(() => { load(); }, [load]);
 
+  useEffect(() => {
+    const cidades = Array.from(new Set(municipios.map(m => (m.nome || '').toUpperCase()).filter(Boolean)));
+    if (cidades.length === 0) {
+      setDobradasMap({});
+      return;
+    }
+    api.get('/dobradas/mapa-por-cidades', { params: { cidades: cidades.join(',') } })
+      .then(r => setDobradasMap(r.data || {}))
+      .catch(() => setDobradasMap({}));
+  }, [municipios]);
+
   const setFilter = (key: string, value: string) => {
     const next = { ...filters, [key]: value };
     setFilters(next);
@@ -122,21 +132,21 @@ export default function MunicipiosPage() {
     setEditing(m);
     Object.entries(m).forEach(([k, v]) => setValue(k as any, v as any));
     setTipoBloqueado(true);
-    setDobNome(''); setDobCidade(''); setDobProjecao('');
+    setDobNome(''); setDobProjecao('');
     setShowForm(true);
   };
 
   const openNew = () => {
     setEditing(null); reset();
     setTipoBloqueado(false);
-    setDobNome(''); setDobCidade(''); setDobProjecao('');
+    setDobNome(''); setDobProjecao('');
     setShowForm(true);
   };
 
   const closeForm = () => {
     setShowForm(false);
     setTipoBloqueado(false);
-    setDobNome(''); setDobCidade(''); setDobProjecao('');
+    setDobNome(''); setDobProjecao('');
   };
 
   const onSubmit = async (data: Municipio) => {
@@ -144,10 +154,10 @@ export default function MunicipiosPage() {
       if (editing) await api.put(`/municipios/${editing.id}`, data);
       else await api.post('/municipios', data);
       // Salvar dobrada se preenchida (apenas em BASE - INSTITUIÇÃO)
-      if (data.tipo_cadastro === 'BASE - INSTITUIÇÃO' && dobNome && dobCidade) {
+      if (data.tipo_cadastro === 'BASE - INSTITUIÇÃO' && dobNome) {
         await api.post('/dobradas', {
           nome: dobNome.toUpperCase(),
-          cidade: dobCidade,
+          cidade: (data.nome || '').toUpperCase(),
           projecao_votos: dobProjecao ? Number(dobProjecao) : 0,
         });
       }
@@ -278,18 +288,19 @@ export default function MunicipiosPage() {
                   <th className="table-th">Tipo</th>
                   <SortHeader field="nome" label="Município" />
                   <th className="table-th hidden md:table-cell">Bloco</th>
-                  <th className="table-th hidden lg:table-cell">Função</th>
                   <th className="table-th hidden lg:table-cell">Coordenador</th>
+                  <th className="table-th hidden lg:table-cell">Função</th>
                   <th className="table-th hidden xl:table-cell">Liderança</th>
+                  <th className="table-th hidden xl:table-cell">Dobrada</th>
                   <SortHeader field="projecao_votos" label="Projeção" />
                   <th className="table-th w-20"></th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan={8} className="table-td text-center text-ink-muted py-16">Carregando...</td></tr>
+                  <tr><td colSpan={9} className="table-td text-center text-ink-muted py-16">Carregando...</td></tr>
                 ) : municipios.length === 0 ? (
-                  <tr><td colSpan={8} className="table-td text-center text-ink-muted py-16">Nenhum município encontrado</td></tr>
+                  <tr><td colSpan={9} className="table-td text-center text-ink-muted py-16">Nenhum município encontrado</td></tr>
                 ) : municipios.map((m) => (
                   <tr key={m.id} className="border-t border-hairline hover:bg-parchment/40 transition-colors">
                     <td className="table-td">
@@ -303,9 +314,10 @@ export default function MunicipiosPage() {
                     </td>
                     <td className="table-td font-semibold uppercase">{m.nome}</td>
                     <td className="table-td hidden md:table-cell text-[13px] text-ink-muted uppercase">{m.bloco || '—'}</td>
-                    <td className="table-td hidden lg:table-cell text-[13px] text-ink-muted uppercase">{(m as any).funcao || '—'}</td>
                     <td className="table-td hidden lg:table-cell text-[13px] text-ink-muted truncate max-w-[160px] uppercase">{m.coordenacao || '—'}</td>
+                    <td className="table-td hidden lg:table-cell text-[13px] text-ink-muted uppercase">{(m as any).funcao || '—'}</td>
                     <td className="table-td hidden xl:table-cell text-[13px] text-ink-muted truncate max-w-[160px] uppercase">{m.lideranca || '—'}</td>
+                    <td className="table-td hidden xl:table-cell text-[13px] text-ink-muted truncate max-w-[160px] uppercase">{dobradasMap[(m.nome || '').toUpperCase()]?.nome || '—'}</td>
                     <td className="table-td font-semibold text-primary text-right">{m.projecao_votos?.toLocaleString('pt-BR') || '—'}</td>
                     <td className="table-td">
                       <div className="flex items-center gap-1 justify-end">
@@ -498,7 +510,7 @@ export default function MunicipiosPage() {
                 <div className="border-l-4 border-emerald-500 pl-5 space-y-4">
                   <p className="text-[11px] font-semibold text-emerald-600 uppercase tracking-widest">Dados Instituição</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="sm:col-span-2">
+                    <div>
                       <label className="label">Coordenador</label>
                       <input {...register('coordenacao')} className="input uppercase" placeholder="Nome do coordenador" />
                     </div>
@@ -528,19 +540,16 @@ export default function MunicipiosPage() {
                         <option value="ZONA SUL">ZONA SUL</option>
                       </select>
                     </div>
-                    <div>
-                      <label className="label">Cidade</label>
-                      <select {...register('distrito')} className="input">
-                        <option value="">Selecione o município</option>
-                        {MUNICIPIOS_SP.map(nome => <option key={nome} value={nome.toUpperCase()}>{nome}</option>)}
-                      </select>
+                    <div className="sm:col-span-2">
+                      <label className="label">Projeção de Votos</label>
+                      <input {...register('projecao_votos')} type="number" className="input" placeholder="0" />
                     </div>
                   </div>
 
                   {/* Seção Dobrada */}
                   <div className="border border-dashed border-emerald-300 rounded-[12px] p-4 space-y-3 bg-emerald-50/40">
                     <p className="text-[11px] font-semibold text-emerald-600 uppercase tracking-widest">Dobrada (opcional)</p>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
                         <label className="label">Nome</label>
                         <input
@@ -549,13 +558,6 @@ export default function MunicipiosPage() {
                           value={dobNome}
                           onChange={e => setDobNome(e.target.value)}
                         />
-                      </div>
-                      <div>
-                        <label className="label">Cidade</label>
-                        <select className="input" value={dobCidade} onChange={e => setDobCidade(e.target.value)}>
-                          <option value="">Selecione</option>
-                          {MUNICIPIOS_SP.map(n => <option key={n} value={n.toUpperCase()}>{n}</option>)}
-                        </select>
                       </div>
                       <div>
                         <label className="label">Projeção de Votos</label>

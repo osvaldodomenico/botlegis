@@ -34,6 +34,28 @@ export class DobradaService {
     return rows.map(d => ({ ...d, id: d.id.toString() }));
   }
 
+  async mapByCidades(cidadesCsv: string) {
+    const cidades = (cidadesCsv || '')
+      .split(',')
+      .map(s => s.trim().toUpperCase())
+      .filter(Boolean);
+
+    if (cidades.length === 0) return {};
+
+    const rows = await this.prisma.dobrada.findMany({
+      where: { cidade: { in: cidades } },
+      orderBy: { created_at: 'desc' },
+    });
+
+    const map: Record<string, any> = {};
+    for (const d of rows) {
+      const cidade = (d.cidade || '').toUpperCase();
+      if (!cidade) continue;
+      if (!map[cidade]) map[cidade] = { ...d, id: d.id.toString() };
+    }
+    return map;
+  }
+
   async create(dto: CreateDobradaDto) {
     const d = await this.prisma.dobrada.create({ data: dto as any });
     return { ...d, id: d.id.toString() };
