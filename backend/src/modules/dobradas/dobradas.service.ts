@@ -8,7 +8,7 @@ export class DobradaService {
 
   async list(query: ListDobradaDto) {
     const page = query.page || 1;
-    const limit = query.limit || 50;
+    const limit = Math.min(25, Math.max(1, Number(query.limit) || 25));
     const skip = (page - 1) * limit;
 
     const where: any = {};

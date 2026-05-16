@@ -26,8 +26,9 @@ interface Opcoes { regioes: string[]; blocos: string[]; rm_ras: string[]; mesorr
 const EMPTY_FILTERS = { nome: '', regiao: '', bloco: '', rm_ra: '', mesorregiao: '', microrregiao: '', coordenacao: '', projecao_min: '', projecao_max: '' };
 
 export default function MunicipiosPage() {
+  const PAGE_SIZE = 25;
   const [municipios, setMunicipios] = useState<Municipio[]>([]);
-  const [meta, setMeta] = useState<Meta>({ total: 0, page: 1, limit: 20, pages: 1 });
+  const [meta, setMeta] = useState<Meta>({ total: 0, page: 1, limit: PAGE_SIZE, pages: 1 });
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState(EMPTY_FILTERS);
   const [page, setPage] = useState(1);
@@ -43,25 +44,31 @@ export default function MunicipiosPage() {
   const [dobradasMap, setDobradasMap] = useState<Record<string, any>>({});
   const debounceRef = useRef<any>(null);
   const prevNomeRef = useRef<string | undefined>(undefined);
+  const territorioReqRef = useRef(0);
 
   const { register, handleSubmit, reset, setValue, watch } = useForm<Municipio>();
   const tipoCadastro = watch('tipo_cadastro');
   const nomeWatch = watch('nome');
   useEffect(() => {
     if (!showForm) return;
+    const currentNome = nomeWatch;
 
-    if (prevNomeRef.current !== nomeWatch) {
-      prevNomeRef.current = nomeWatch;
+    if (prevNomeRef.current !== currentNome) {
+      prevNomeRef.current = currentNome;
       setValue('rm_ra', '');
       setValue('mesorregiao', '');
       setValue('microrregiao', '');
       setValue('divisao_regional', '');
     }
 
-    if (!nomeWatch) return;
+    const reqId = ++territorioReqRef.current;
 
-    api.get('/territorios/por-municipio', { params: { nome: nomeWatch } })
+    if (!currentNome) return;
+
+    api.get('/territorios/por-municipio', { params: { nome: currentNome } })
       .then(r => {
+        if (territorioReqRef.current !== reqId) return;
+        if (prevNomeRef.current !== currentNome) return;
         if (r.data.length === 1) {
           const t = r.data[0];
           if (t.rm_ra) setValue('rm_ra', t.rm_ra);
@@ -79,7 +86,7 @@ export default function MunicipiosPage() {
   const load = useCallback(async (f = filters, p = page, ob = orderBy, o = order) => {
     setLoading(true);
     try {
-      const params: any = { page: p, limit: 20, orderBy: ob, order: o };
+      const params: any = { page: p, limit: PAGE_SIZE, orderBy: ob, order: o };
       if (f.nome) params.nome = f.nome;
       if (f.regiao) params.regiao = f.regiao;
       if (f.bloco) params.bloco = f.bloco;
@@ -350,7 +357,7 @@ export default function MunicipiosPage() {
           {meta.pages > 1 && (
             <div className="flex items-center justify-between px-4 py-3 border-t border-hairline bg-parchment/40">
               <p className="text-[13px] text-ink-muted">
-                Mostrando {((page - 1) * 20) + 1}–{Math.min(page * 20, meta.total)} de {meta.total.toLocaleString('pt-BR')}
+                Mostrando {((page - 1) * meta.limit) + 1}–{Math.min(page * meta.limit, meta.total)} de {meta.total.toLocaleString('pt-BR')}
               </p>
               <div className="flex items-center gap-2">
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}

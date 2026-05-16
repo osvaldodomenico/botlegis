@@ -10,10 +10,11 @@ export class MunicipiosService {
     const {
       nome, regiao, bloco, rm_ra, mesorregiao, microrregiao,
       coordenacao, projecao_min, projecao_max,
-      page = 1, limit = 20, orderBy = 'nome', order = 'asc'
+      page = 1, limit = 25, orderBy = 'nome', order = 'asc'
     } = query;
 
-    const skip = (Number(page) - 1) * Number(limit);
+    const safeLimit = Math.min(25, Math.max(1, Number(limit) || 25));
+    const skip = (Number(page) - 1) * safeLimit;
 
     const where: any = {};
     if (nome) where.nome = { contains: nome };
@@ -42,7 +43,7 @@ export class MunicipiosService {
       this.prisma.municipio.findMany({
         where,
         skip,
-        take: Number(limit),
+        take: safeLimit,
         orderBy: { [sortField]: order },
       }),
       this.prisma.municipio.count({ where }),
@@ -53,8 +54,8 @@ export class MunicipiosService {
       meta: {
         total,
         page: Number(page),
-        limit: Number(limit),
-        pages: Math.ceil(total / Number(limit)),
+        limit: safeLimit,
+        pages: Math.ceil(total / safeLimit),
       },
     };
   }

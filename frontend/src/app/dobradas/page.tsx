@@ -15,6 +15,7 @@ interface Dobrada {
 type SortDir = 'asc' | 'desc';
 
 export default function DobradaPage() {
+  const PAGE_SIZE = 25;
   const [dobradas, setDobradas] = useState<Dobrada[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -25,31 +26,36 @@ export default function DobradaPage() {
   const [projecao, setProjecao] = useState('');
   const [sortField, setSortField] = useState<keyof Dobrada>('cidade');
   const [sortDir, setSortDir] = useState<SortDir>('asc');
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(1);
 
-  const load = async (cidade = busca) => {
+  const load = async (p = page, cidade = busca) => {
     setLoading(true);
     try {
-      const params: any = { limit: 100 };
+      const params: any = { page: p, limit: PAGE_SIZE };
       if (cidade) params.cidade = cidade;
       const r = await api.get('/dobradas', { params });
       setDobradas(r.data.data);
       setTotal(r.data.meta.total);
+      setPages(r.data.meta.pages || 1);
     } finally { setLoading(false); }
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(1); setPage(1); }, []);
+  useEffect(() => { setPage(1); }, [busca]);
+  useEffect(() => { load(page); }, [page, busca]);
 
   const handleSave = async () => {
     if (!nome || !cidade) return alert('Preencha Nome e Cidade');
     await api.post('/dobradas', { nome: nome.toUpperCase(), cidade, projecao_votos: projecao ? Number(projecao) : 0 });
     setNome(''); setCidade(''); setProjecao(''); setShowForm(false);
-    load();
+    setPage(1);
   };
 
   const handleDelete = async (id: string, nome: string) => {
     if (!confirm(`Excluir dobrada "${nome}"?`)) return;
     await api.delete(`/dobradas/${id}`);
-    load();
+    setPage(1);
   };
 
   const toggleSort = (field: keyof Dobrada) => {
@@ -102,7 +108,7 @@ export default function DobradaPage() {
               className="input pl-9 text-[15px]"
               placeholder="Filtrar por cidade..."
               value={busca}
-              onChange={e => { setBusca(e.target.value); load(e.target.value); }}
+              onChange={e => { setBusca(e.target.value); }}
             />
           </div>
         </div>
@@ -143,6 +149,25 @@ export default function DobradaPage() {
             </tbody>
           </table>
         </div>
+
+        {pages > 1 && (
+          <div className="flex items-center justify-between px-4 py-3 border border-hairline rounded-[14px] bg-parchment/40">
+            <p className="text-[13px] text-ink-muted">
+              Mostrando {((page - 1) * PAGE_SIZE) + 1}–{Math.min(page * PAGE_SIZE, total)} de {total.toLocaleString('pt-BR')}
+            </p>
+            <div className="flex items-center gap-2">
+              <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
+                className="p-2 rounded-[8px] text-ink-muted hover:bg-white disabled:opacity-30 border border-hairline transition-colors">
+                ←
+              </button>
+              <span className="text-[13px] text-ink px-2">Pág {page} / {pages}</span>
+              <button onClick={() => setPage(p => Math.min(pages, p + 1))} disabled={page === pages}
+                className="p-2 rounded-[8px] text-ink-muted hover:bg-white disabled:opacity-30 border border-hairline transition-colors">
+                →
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Modal novo */}
         {showForm && (

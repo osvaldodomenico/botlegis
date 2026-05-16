@@ -22,8 +22,10 @@ interface Territorio {
 }
 
 type SortDir = 'asc' | 'desc';
+type Meta = { total: number; page: number; limit: number; pages: number; };
 
 export default function TerritoriosPage() {
+  const PAGE_SIZE = 25;
   const [territorios, setTerritorios] = useState<Territorio[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -31,19 +33,23 @@ export default function TerritoriosPage() {
   const [search, setSearch] = useState('');
   const [sortField, setSortField] = useState<keyof Territorio>('nome');
   const [sortDir, setSortDir] = useState<SortDir>('asc');
+  const [page, setPage] = useState(1);
+  const [meta, setMeta] = useState<Meta>({ total: 0, page: 1, limit: PAGE_SIZE, pages: 1 });
 
   const [saving, setSaving] = useState(false);
   const { register, handleSubmit, reset } = useForm<Territorio>();
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (p: number) => {
     setLoading(true);
     try {
-      const r = await api.get('/territorios', { params: { nome: search || undefined, limit: 200 } });
+      const r = await api.get('/territorios', { params: { nome: search || undefined, page: p, limit: PAGE_SIZE } });
       setTerritorios(r.data.data);
+      setMeta(r.data.meta);
     } finally { setLoading(false); }
   }, [search]);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { setPage(1); }, [search]);
+  useEffect(() => { load(page); }, [page, load]);
 
   const openNew = () => { setEditing(null); reset({ nome: '', rm_ra: '', mesorregiao: '', microrregiao: '', divisao_regional: '' }); setShowForm(true); };
   const openEdit = (t: Territorio) => { setEditing(t); reset(t); setShowForm(true); };
@@ -55,7 +61,7 @@ export default function TerritoriosPage() {
       if (editing) await api.put(`/territorios/${editing.id}`, data);
       else await api.post('/territorios', data);
       closeForm();
-      load();
+      setPage(1);
     } catch (e: any) {
       alert('Erro ao salvar: ' + (e?.response?.data?.message || e?.message || 'Tente novamente'));
     } finally {
@@ -66,7 +72,7 @@ export default function TerritoriosPage() {
   const handleDelete = async (id: string, nome: string) => {
     if (!confirm(`Remover território de "${nome}"?`)) return;
     await api.delete(`/territorios/${id}`);
-    load();
+    setPage(1);
   };
 
   const toggleSort = (field: keyof Territorio) => {
@@ -151,6 +157,25 @@ export default function TerritoriosPage() {
             </tbody>
           </table>
         </div>
+
+        {meta.pages > 1 && (
+          <div className="flex items-center justify-between px-4 py-3 border border-hairline rounded-[14px] bg-parchment/40">
+            <p className="text-[13px] text-ink-muted">
+              Mostrando {((page - 1) * meta.limit) + 1}–{Math.min(page * meta.limit, meta.total)} de {meta.total.toLocaleString('pt-BR')}
+            </p>
+            <div className="flex items-center gap-2">
+              <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
+                className="p-2 rounded-[8px] text-ink-muted hover:bg-white disabled:opacity-30 border border-hairline transition-colors">
+                ←
+              </button>
+              <span className="text-[13px] text-ink px-2">Pág {page} / {meta.pages}</span>
+              <button onClick={() => setPage(p => Math.min(meta.pages, p + 1))} disabled={page === meta.pages}
+                className="p-2 rounded-[8px] text-ink-muted hover:bg-white disabled:opacity-30 border border-hairline transition-colors">
+                →
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Modal */}

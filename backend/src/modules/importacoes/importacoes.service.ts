@@ -117,7 +117,7 @@ export class ImportacoesService {
   async findAll() {
     const logs = await this.prisma.logImportacao.findMany({
       orderBy: { created_at: 'desc' },
-      take: 50,
+      take: 25,
     });
     return logs.map(l => ({ ...l, id: l.id.toString() }));
   }

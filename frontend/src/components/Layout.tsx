@@ -113,9 +113,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 p-6 lg:p-8 max-w-[1440px] w-full mx-auto">
+        <main className="flex-1 p-6 lg:p-8 max-w-[1440px] w-full mx-auto pb-20">
           {children}
         </main>
+
+        <footer className="fixed bottom-0 left-0 right-0 lg:left-64 z-30 border-t border-hairline bg-white/95 backdrop-blur-sm">
+          <div className="px-6 py-3">
+            <p className="text-[12px] text-ink-muted text-center">
+              ShiftWorks Tecnologia e Marketing do Brasil. 2026 | CNPJ 65.693.427/0001-68
+            </p>
+          </div>
+        </footer>
       </div>
     </div>
   );
