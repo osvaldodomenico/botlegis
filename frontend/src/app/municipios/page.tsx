@@ -42,12 +42,24 @@ export default function MunicipiosPage() {
   const [dobProjecao, setDobProjecao] = useState('');
   const [dobradasMap, setDobradasMap] = useState<Record<string, any>>({});
   const debounceRef = useRef<any>(null);
+  const prevNomeRef = useRef<string | undefined>(undefined);
 
   const { register, handleSubmit, reset, setValue, watch } = useForm<Municipio>();
   const tipoCadastro = watch('tipo_cadastro');
   const nomeWatch = watch('nome');
   useEffect(() => {
-    if (!nomeWatch || !showForm) return;
+    if (!showForm) return;
+
+    if (prevNomeRef.current !== nomeWatch) {
+      prevNomeRef.current = nomeWatch;
+      setValue('rm_ra', '');
+      setValue('mesorregiao', '');
+      setValue('microrregiao', '');
+      setValue('divisao_regional', '');
+    }
+
+    if (!nomeWatch) return;
+
     api.get('/territorios/por-municipio', { params: { nome: nomeWatch } })
       .then(r => {
         if (r.data.length === 1) {
