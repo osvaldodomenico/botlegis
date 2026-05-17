@@ -296,6 +296,80 @@ export class WebhooksService {
     return melhorScore >= 1 ? melhor : null;
   }
 
+  // ── Busca regional (mesorregião / região) ────────────────────────────────
+
+  private readonly REGIOES_MAP: Record<string, { campo: 'mesorregiao' | 'regiao'; valor: string }> = {
+    'VALE DO PARAIBA': { campo: 'mesorregiao', valor: 'VALE DO PARAIBA' },
+    'VALE HISTORICO': { campo: 'mesorregiao', valor: 'VALE DO PARAIBA' },
+    'VALE': { campo: 'mesorregiao', valor: 'VALE DO PARAIBA' },
+    'SAO JOSE DO RIO PRETO': { campo: 'mesorregiao', valor: 'SÃO JOSÉ DO RIO PRETO' },
+    'RIBEIRAO PRETO': { campo: 'mesorregiao', valor: 'RIBEIRÃO PRETO' },
+    'CAMPINAS': { campo: 'mesorregiao', valor: 'CAMPINAS' },
+    'BAURU': { campo: 'mesorregiao', valor: 'BAURU' },
+    'PRESIDENTE PRUDENTE': { campo: 'mesorregiao', valor: 'PRESIDENTE PRUDENTE' },
+    'ARACATUBA': { campo: 'mesorregiao', valor: 'ARAÇATUBA' },
+    'MARILIA': { campo: 'mesorregiao', valor: 'MARILIA' },
+    'PIRACICABA': { campo: 'mesorregiao', valor: 'PIRACICABA' },
+    'ITAPETININGA': { campo: 'mesorregiao', valor: 'ITAPETININGA' },
+    'ASSIS': { campo: 'mesorregiao', valor: 'ASSIS' },
+    'ARARAQUARA': { campo: 'mesorregiao', valor: 'ARARAQUARA' },
+    'LITORAL SUL': { campo: 'mesorregiao', valor: 'LITORAL SUL' },
+    'METROPOLITANA': { campo: 'mesorregiao', valor: 'METROPOLITANA SP' },
+    'MACRO METROPOLITANA': { campo: 'mesorregiao', valor: 'MACRO METROPOLITANA' },
+  };
+
+  private detectarRegiao(texto: string): { campo: 'mesorregiao' | 'regiao'; valor: string } | null {
+    const norm = this.normalizarNome(texto);
+    for (const [chave, cfg] of Object.entries(this.REGIOES_MAP)) {
+      if (norm.includes(chave)) return cfg;
+    }
+    return null;
+  }
+
+  private async buscarMunicipiosPorRegiao(campo: 'mesorregiao' | 'regiao', valor: string): Promise<any[]> {
+    return this.municipios().findMany({
+      where: { uf: 'SP', [campo]: valor },
+      select: {
+        id: true, nome: true, mesorregiao: true, rm_ra: true, regiao: true, bloco: true,
+        projecao_votos: true, projecao_base: true, projecao_2: true, projecao_apoio_iurd: true,
+        lideranca: true, coordenacao: true, funcao_cargo: true,
+        coord_lideranca_2: true, funcao_cargo_2: true,
+        votos_22: true, eleitores_22: true, votos_validos_22: true,
+        percentual_mv: true, ranking_mv: true,
+      },
+      orderBy: { eleitores_22: 'desc' },
+    });
+  }
+
+  private contextoRegiao(cidades: any[], nomeRegiao: string): string {
+    const totalVotos22 = cidades.reduce((s, c) => s + (c.votos_22 || 0), 0);
+    const totalMeta = cidades.reduce((s, c) => {
+      const contrib = [c.projecao_votos, c.projecao_base, c.projecao_2, c.projecao_apoio_iurd].filter(Boolean).reduce((a: number, b: number) => a + b, 0);
+      return s + (c.votos_22 || 0) + contrib;
+    }, 0);
+    const linhas: string[] = [
+      `📊 Região *${nomeRegiao}* — ${cidades.length} municípios:`,
+      `• Total votos MV 2022: ${totalVotos22.toLocaleString('pt-BR')} | Meta mínima 2026: ${totalMeta.toLocaleString('pt-BR')}`,
+      '',
+    ];
+    for (const c of cidades) {
+      const contrib = [c.projecao_votos, c.projecao_base, c.projecao_2, c.projecao_apoio_iurd].filter(Boolean).reduce((a: number, b: number) => a + b, 0);
+      const meta = (c.votos_22 || 0) + contrib;
+      linhas.push(`🏙️ ${c.nome}`);
+      linhas.push(`  2022: ${(c.votos_22 || 0).toLocaleString('pt-BR')} votos | #${c.ranking_mv || '?'}º ranking | ${c.percentual_mv ? (c.percentual_mv * 100).toFixed(2) + '%' : '0%'} | ${(c.eleitores_22 || 0).toLocaleString('pt-BR')} eleitores`);
+      if (c.lideranca || c.coordenacao) {
+        linhas.push(`  Liderança: ${c.lideranca || '-'} | Coord.: ${c.coordenacao || '-'}`);
+      }
+      if (c.projecao_2 || c.coord_lideranca_2) {
+        linhas.push(`  Liderança 2: ${c.coord_lideranca_2 || '-'} | Proj.2: ${c.projecao_2 ? c.projecao_2.toLocaleString('pt-BR') : '-'}`);
+      }
+      if (contrib > 0) {
+        linhas.push(`  Projeções 2026: +${contrib.toLocaleString('pt-BR')} | META MÍNIMA: ${meta.toLocaleString('pt-BR')}`);
+      }
+    }
+    return linhas.join('\n');
+  }
+
   // ── Contexto de município para a IA ──────────────────────────────────────
 
   private contextoMunicipio(mun: any): string {
@@ -525,10 +599,16 @@ export class WebhooksService {
           }
         }
 
-        // Verifica se usuário está perguntando sobre outra cidade
+        // Verifica se usuário está perguntando sobre outra cidade ou região
         const outraMunicipio = await this.buscarMunicipio(textoUsuario);
         if (outraMunicipio && outraMunicipio.id !== contato.municipio_id) {
           extraContexto = this.contextoMunicipio(outraMunicipio);
+        } else if (!outraMunicipio) {
+          const regiao = this.detectarRegiao(textoUsuario);
+          if (regiao) {
+            const cidades = await this.buscarMunicipiosPorRegiao(regiao.campo, regiao.valor);
+            if (cidades.length > 0) extraContexto = this.contextoRegiao(cidades, regiao.valor);
+          }
         }
 
         resposta =
@@ -601,10 +681,16 @@ export class WebhooksService {
       }
     }
 
-    // Verifica se a mensagem menciona outra cidade
+    // Verifica se a mensagem menciona outra cidade ou região
     const mun = await this.buscarMunicipio(textoUsuario);
     if (mun && (!contato.municipio_id || String(mun.id) !== String(contato.municipio_id))) {
       extraContexto = this.contextoMunicipio(mun);
+    } else if (!mun) {
+      const regiao = this.detectarRegiao(textoUsuario);
+      if (regiao) {
+        const cidades = await this.buscarMunicipiosPorRegiao(regiao.campo, regiao.valor);
+        if (cidades.length > 0) extraContexto = this.contextoRegiao(cidades, regiao.valor);
+      }
     }
 
     const resposta =
