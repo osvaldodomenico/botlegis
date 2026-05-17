@@ -41,6 +41,7 @@ model Municipio {
   updated_at          DateTime  @updatedAt
 
   auditorias          AuditoriaProjecao[]
+  bot_contatos        BotContato[]
 
   @@index([nome])
   @@index([regiao])
@@ -121,4 +122,33 @@ model IntegracaoConfiguracao {
   @@unique([namespace, chave])
   @@index([namespace])
   @@map("integracoes_configuracoes")
+}
+
+model BotContato {
+  id           BigInt       @id @default(autoincrement())
+  telefone     String       @unique @db.VarChar(30)
+  nome         String?      @db.VarChar(150)
+  estado       String       @default("NOVO") @db.VarChar(30)
+  municipio_id BigInt?
+  municipio    Municipio?   @relation(fields: [municipio_id], references: [id])
+  created_at   DateTime     @default(now())
+  updated_at   DateTime     @updatedAt
+  mensagens    BotMensagem[]
+
+  @@index([estado])
+  @@index([municipio_id])
+  @@map("bot_contatos")
+}
+
+model BotMensagem {
+  id         BigInt     @id @default(autoincrement())
+  contato_id BigInt
+  contato    BotContato @relation(fields: [contato_id], references: [id])
+  direcao    String     @db.VarChar(10)
+  texto      String     @db.Text
+  created_at DateTime   @default(now())
+
+  @@index([contato_id])
+  @@index([created_at])
+  @@map("bot_mensagens")
 }
