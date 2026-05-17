@@ -70,12 +70,19 @@ REGRAS PARA RESPONDER SOBRE DADOS:
 - Perguntas específicas de cidade ("como foi em Campinas?") → use o contexto do município se disponível, ou pergunte a cidade
 - NUNCA peça informação que você já tem. Se o dado está no contexto ou nos dados gerais acima, responda direto.
 
+SEMÂNTICA DAS PROJEÇÕES — REGRA CRÍTICA:
+As projeções de votos (liderança 1, liderança 2, base, IURD) são contribuições ADICIONAIS esperadas de cada estrutura de trabalho — são paralelas, não substituem os votos de 2022.
+- "Votos projetados pela liderança 1": quanto aquela liderança/coordenação pretende trazer a mais
+- META MÍNIMA REAL = votos em 2022 + soma de todas as projeções de liderança/base
+- NUNCA interprete projecao_votos como "o total de votos esperados" — isso geraria análise errada (ex: dizer que houve "queda de 9.663 para 1.000" quando na verdade a meta é 9.663 + 1.000 = 10.663)
+- O contexto já calcula e exibe a "META MÍNIMA 2026" — use esse número como referência de crescimento
+
 QUANDO MENCIONAR UMA CIDADE, faça uma ANÁLISE ESTRATÉGICA real — não apenas liste os dados. Obrigatoriamente:
-1. Compare 2022 vs projeção 2026: quanto cresceu? É realista? Por quê?
-2. Contextualize o ranking 2022: estar em #7 num município de 500k eleitores é diferente de #7 num de 5k
-3. Aponte oportunidades: eleitores ainda não convertidos, potencial de crescimento
-4. Destaque quem são as lideranças e o que isso significa na prática
-5. Se o desempenho 2022 foi fraco (poucos votos, ranking baixo), seja direto sobre isso e aponte o que mudou para 2026
+1. Apresente os votos de 2022 como BASE HISTÓRICA a ser mantida e superada
+2. Mostre as projeções de liderança como CRESCIMENTO ADICIONAL sobre essa base
+3. Destaque a META MÍNIMA 2026 (base 2022 + contribuições) como o objetivo concreto
+4. Contextualize o ranking 2022: estar em #7 num município de 500k eleitores é diferente de #7 num de 5k
+5. Destaque quem são as lideranças e o que isso significa na prática para atingir a meta
 
 NUNCA apenas liste os campos do banco. Sempre conecte os pontos: o que os dados dizem sobre a estratégia da campanha naquele município?
 Nunca omita os dados de 2022 — números pequenos são estratégicos (mostram onde crescer).
@@ -290,18 +297,26 @@ export class WebhooksService {
     if (mun.mesorregiao) linhas.push(`• Mesorregião: ${mun.mesorregiao}`);
     if (mun.rm_ra) linhas.push(`• RM/RA: ${mun.rm_ra}`);
     if (mun.regiao) linhas.push(`• Região: ${mun.regiao}`);
-    if (mun.projecao_votos) linhas.push(`• Projeção de votos (2026): ${mun.projecao_votos.toLocaleString('pt-BR')}`);
-    if (mun.projecao_base) linhas.push(`• Projeção base: ${mun.projecao_base.toLocaleString('pt-BR')}`);
-    if (mun.lideranca) linhas.push(`• Liderança 1: ${mun.lideranca}${mun.funcao_cargo ? ` (${mun.funcao_cargo})` : ''}`);
-    if (mun.coordenacao) linhas.push(`• Coordenação 1: ${mun.coordenacao}`);
-    if (mun.projecao_2) linhas.push(`• Projeção liderança 2: ${mun.projecao_2.toLocaleString('pt-BR')}`);
-    if (mun.coord_lideranca_2) linhas.push(`• Liderança 2: ${mun.coord_lideranca_2}${mun.funcao_cargo_2 ? ` (${mun.funcao_cargo_2})` : ''}`);
-    if (mun.votos_22) linhas.push(`• Votos em 2022: ${mun.votos_22.toLocaleString('pt-BR')}`);
+    // Votos 2022 (base histórica)
+    if (mun.votos_22) linhas.push(`• Votos em 2022 (base histórica): ${mun.votos_22.toLocaleString('pt-BR')}`);
     if (mun.eleitores_22) linhas.push(`• Eleitores em 2022: ${mun.eleitores_22.toLocaleString('pt-BR')}`);
     if (mun.votos_validos_22) linhas.push(`• Votos válidos 2022: ${mun.votos_validos_22.toLocaleString('pt-BR')}`);
     if (mun.percentual_mv) linhas.push(`• % dos votos válidos 2022: ${(mun.percentual_mv * 100).toFixed(2)}%`);
     if (mun.ranking_mv) linhas.push(`• Ranking entre deputados federais 2022: ${mun.ranking_mv}º lugar`);
-    if (mun.projecao_apoio_iurd) linhas.push(`• Projeção apoio IURD: ${mun.projecao_apoio_iurd.toLocaleString('pt-BR')}`);
+    // Projeções 2026 (trabalho de lideranças — paralelo ao mínimo de 2022)
+    if (mun.projecao_votos) linhas.push(`• Votos projetados pela liderança 1 (2026): ${mun.projecao_votos.toLocaleString('pt-BR')}`);
+    if (mun.projecao_base) linhas.push(`• Votos projetados pela base (2026): ${mun.projecao_base.toLocaleString('pt-BR')}`);
+    if (mun.lideranca) linhas.push(`• Liderança 1: ${mun.lideranca}${mun.funcao_cargo ? ` (${mun.funcao_cargo})` : ''}`);
+    if (mun.coordenacao) linhas.push(`• Coordenação 1: ${mun.coordenacao}`);
+    if (mun.projecao_2) linhas.push(`• Votos projetados pela liderança 2 (2026): ${mun.projecao_2.toLocaleString('pt-BR')}`);
+    if (mun.coord_lideranca_2) linhas.push(`• Liderança 2: ${mun.coord_lideranca_2}${mun.funcao_cargo_2 ? ` (${mun.funcao_cargo_2})` : ''}`);
+    if (mun.projecao_apoio_iurd) linhas.push(`• Votos projetados apoio IURD (2026): ${mun.projecao_apoio_iurd.toLocaleString('pt-BR')}`);
+    // Meta mínima consolidada
+    const contribuicoes = [mun.projecao_votos, mun.projecao_base, mun.projecao_2, mun.projecao_apoio_iurd].filter(Boolean);
+    const totalContribuicoes = contribuicoes.reduce((s: number, v: number) => s + v, 0);
+    if (mun.votos_22 && totalContribuicoes > 0) {
+      linhas.push(`• META MÍNIMA 2026 (base 2022 + lideranças): ${(mun.votos_22 + totalContribuicoes).toLocaleString('pt-BR')} votos`);
+    }
     if (mun.candidato_nome) linhas.push(`• Candidato vinculado: ${mun.candidato_nome} (${mun.candidato_cargo || ''})`);
     return linhas.join('\n');
   }
