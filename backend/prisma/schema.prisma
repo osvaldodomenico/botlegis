@@ -130,7 +130,11 @@ model BotContato {
   telefone     String       @unique @db.VarChar(30)
   nome         String?      @db.VarChar(150)
   estado       String       @default("NOVO") @db.VarChar(30)
-  municipio_id BigInt?
+  municipio_id  BigInt?
+  ultima_cidade String?  @db.VarChar(150)
+  ultima_regiao String?  @db.VarChar(150)
+  ultimo_topico String?  @db.VarChar(50)
+  perfil        String?  @db.VarChar(30)
   municipio    Municipio?   @relation(fields: [municipio_id], references: [id])
   created_at   DateTime     @default(now())
   updated_at   DateTime     @updatedAt
