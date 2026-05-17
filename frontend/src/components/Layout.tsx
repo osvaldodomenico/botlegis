@@ -37,7 +37,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         fixed inset-y-0 left-0 z-50 w-64 flex flex-col
         bg-tile text-white transition-transform duration-200
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-        lg:translate-x-0 lg:static lg:flex
+        lg:translate-x-0
       `}>
         {/* Logo */}
         <div className="px-5 py-5 border-b border-white/10 flex items-center gap-3">
@@ -54,7 +54,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 px-3 py-4 space-y-1">
+        <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           {navItems.map(({ href, label, icon: Icon }) => {
             const active = pathname === href;
             return (
@@ -103,7 +103,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       )}
 
       {/* Main */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 lg:pl-64">
         {/* Top bar (mobile) */}
         <header className="lg:hidden flex items-center gap-3 px-4 py-3 bg-tile text-white">
           <button onClick={() => setSidebarOpen(!sidebarOpen)}>

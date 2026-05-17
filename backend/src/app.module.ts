@@ -9,6 +9,7 @@ import { BuscaModule } from './modules/busca/busca.module';
 import { TerritoriosModule } from './modules/territorios/territorios.module';
 import { DobradaModule } from './modules/dobradas/dobradas.module';
 import { IntegracoesModule } from './modules/integracoes/integracoes.module';
+import { WebhooksModule } from './modules/webhooks/webhooks.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { IntegracoesModule } from './modules/integracoes/integracoes.module';
     TerritoriosModule,
     DobradaModule,
     IntegracoesModule,
+    WebhooksModule,
   ],
 })
 export class AppModule {}
