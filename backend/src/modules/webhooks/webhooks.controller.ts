@@ -11,7 +11,7 @@ export class WebhooksController {
   }
 
   @Post('simulate')
-  simulate(@Body() body: { phone?: string; name?: string; message: string }) {
+  simulate(@Body() body: { phone?: string; name?: string; message?: string; audioUrl?: string }) {
     return this.service.simulateMessage(body);
   }
 }

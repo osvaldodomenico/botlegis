@@ -390,11 +390,21 @@ export class WebhooksService {
 
   // ── Simulate (same pipeline as production, no Evolution send) ────────────
 
-  async simulateMessage(input: { phone?: string; name?: string; message: string }) {
+  async simulateMessage(input: { phone?: string; name?: string; message?: string; audioUrl?: string }) {
     const telefone = (input.phone || '5500000000000').replace(/\D/g, '');
     const nome = input.name || 'Simulação';
-    const textoRaw = input.message?.trim();
-    if (!textoRaw) return { response: '' };
+    let textoRaw = input.message?.trim() || '';
+
+    // Audio transcription (simulate audio message)
+    if (!textoRaw && input.audioUrl) {
+      const transcribed = await this.botAudio.transcribe(input.audioUrl);
+      if (transcribed) {
+        textoRaw = this.botAudio.normalizeTranscription(transcribed);
+        this.logger.log(`[simulate] Áudio transcrito: "${textoRaw}"`);
+      }
+    }
+
+    if (!textoRaw) return { response: '', transcribed: null };
 
     const contato = await this.getOrCreateContato(telefone);
     if (nome && !contato.nome) {
@@ -456,6 +466,8 @@ export class WebhooksService {
     else if (/\b(tchau|até logo|até mais|obrigado|obrigada|valeu|flw)\b/i.test(textLower)) stickerUrl = this.escolherSticker('despedida');
     else if (Math.random() < 0.3) stickerUrl = this.escolherSticker('aprovacao');
 
-    return { response: resposta, stickerUrl };
+    // Return transcribed text so frontend can display it
+    const transcribed = (input.audioUrl && !input.message) ? textoRaw : null;
+    return { response: resposta, stickerUrl, transcribed };
   }
 }
