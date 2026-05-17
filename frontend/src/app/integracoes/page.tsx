@@ -44,6 +44,8 @@ export default function IntegracoesPage() {
   const [pairingCode, setPairingCode] = useState('');
   const [qrRaw, setQrRaw] = useState('');
   const [connecting, setConnecting] = useState(false);
+  const [syncingBI, setSyncingBI] = useState(false);
+  const [syncBIResult, setSyncBIResult] = useState<{ updated: number; notFound: string[] } | null>(null);
 
   const qrSrc = useMemo(() => {
     const v = (qrBase64 || '').trim();
@@ -127,6 +129,20 @@ export default function IntegracoesPage() {
     }
   };
 
+
+  const syncBI = async () => {
+    setSyncingBI(true);
+    setSyncBIResult(null);
+    setErro('');
+    try {
+      const res = await api.post('/integracoes/bi/sync-municipios');
+      setSyncBIResult(res.data);
+    } catch (e: any) {
+      setErro(e?.response?.data?.message || 'Erro ao sincronizar com BI');
+    } finally {
+      setSyncingBI(false);
+    }
+  };
 
   const configurarWebhook = async () => {
     setConfiguringWebhook(true);
@@ -269,6 +285,29 @@ export default function IntegracoesPage() {
               </button>
               {openAISaveOk && <span className="text-[13px] text-green-600">Salvo com sucesso.</span>}
             </div>
+          </div>
+        </div>
+
+        {/* ── BI Sync ─────────────────────────────────────────────────── */}
+        <div className="card">
+          <div className="card-body space-y-4">
+            <div>
+              <h2 className="text-[17px] font-semibold text-ink">Dados Eleitorais — BI</h2>
+              <p className="text-[13px] text-ink-muted mt-1">
+                Sincroniza votos 2022, eleitores, votos válidos, % e ranking de todos os municípios com o banco de dados do BI.
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
+              <button onClick={syncBI} disabled={syncingBI} className="btn-primary">
+                {syncingBI ? 'Sincronizando...' : '⟳ Sincronizar Municípios com BI'}
+              </button>
+            </div>
+            {syncBIResult && (
+              <p className="text-[13px] text-green-600">
+                ✓ {syncBIResult.updated} municípios atualizados.
+                {syncBIResult.notFound.length > 0 && ` Não encontrados: ${syncBIResult.notFound.slice(0, 5).join(', ')}${syncBIResult.notFound.length > 5 ? '...' : ''}`}
+              </p>
+            )}
           </div>
         </div>
 
