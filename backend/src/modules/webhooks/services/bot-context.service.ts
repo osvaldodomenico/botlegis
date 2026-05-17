@@ -10,18 +10,19 @@ export class BotContextService {
     if (mun.mesorregiao) linhas.push(`• Mesorregião: ${mun.mesorregiao}`);
     if (mun.rm_ra) linhas.push(`• RM/RA: ${mun.rm_ra}`);
     if (mun.regiao) linhas.push(`• Região: ${mun.regiao}`);
-    if (mun.votos_22) linhas.push(`• Votos em 2022 (base histórica): ${mun.votos_22.toLocaleString('pt-BR')}`);
-    if (mun.eleitores_22) linhas.push(`• Eleitores em 2022: ${mun.eleitores_22.toLocaleString('pt-BR')}`);
-    if (mun.votos_validos_22) linhas.push(`• Votos válidos 2022: ${mun.votos_validos_22.toLocaleString('pt-BR')}`);
-    if (mun.percentual_mv) linhas.push(`• % dos votos válidos 2022: ${(mun.percentual_mv * 100).toFixed(2)}%`);
-    if (mun.ranking_mv) linhas.push(`• Ranking entre deputados federais 2022: ${mun.ranking_mv}º lugar`);
-    if (mun.projecao_votos) linhas.push(`• Votos projetados pela liderança 1 (2026): ${mun.projecao_votos.toLocaleString('pt-BR')}`);
-    if (mun.projecao_base) linhas.push(`• Votos projetados pela base (2026): ${mun.projecao_base.toLocaleString('pt-BR')}`);
+    // votos_22 = 0 é dado real e DEVE ser mostrado (não omitir zero!)
+    if (mun.votos_22 != null) linhas.push(`• Votos MV em 2022: ${mun.votos_22 === 0 ? '*0 votos* (sem presença registrada em 2022)' : mun.votos_22.toLocaleString('pt-BR')}`);
+    if (mun.eleitores_22 != null) linhas.push(`• Eleitores em 2022: ${mun.eleitores_22.toLocaleString('pt-BR')}`);
+    if (mun.votos_validos_22 != null) linhas.push(`• Votos válidos 2022: ${mun.votos_validos_22.toLocaleString('pt-BR')}`);
+    if (mun.percentual_mv != null) linhas.push(`• % dos votos válidos 2022: ${(mun.percentual_mv * 100).toFixed(2)}%`);
+    if (mun.ranking_mv != null) linhas.push(`• Ranking entre deputados federais 2022: ${mun.ranking_mv}º lugar`);
     if (mun.lideranca) linhas.push(`• Liderança 1: ${mun.lideranca}${mun.funcao_cargo ? ` (${mun.funcao_cargo})` : ''}`);
     if (mun.coordenacao) linhas.push(`• Coordenação 1: ${mun.coordenacao}`);
-    if (mun.projecao_2) linhas.push(`• Votos projetados pela liderança 2 (2026): ${mun.projecao_2.toLocaleString('pt-BR')}`);
+    if (mun.projecao_votos != null) linhas.push(`• Votos projetados pela liderança 1 (2026): ${mun.projecao_votos.toLocaleString('pt-BR')}`);
+    if (mun.projecao_base != null) linhas.push(`• Votos projetados pela base (2026): ${mun.projecao_base.toLocaleString('pt-BR')}`);
     if (mun.coord_lideranca_2) linhas.push(`• Liderança 2: ${mun.coord_lideranca_2}${mun.funcao_cargo_2 ? ` (${mun.funcao_cargo_2})` : ''}`);
-    if (mun.projecao_apoio_iurd) linhas.push(`• Votos projetados apoio IURD (2026): ${mun.projecao_apoio_iurd.toLocaleString('pt-BR')}`);
+    if (mun.projecao_2 != null) linhas.push(`• Votos projetados pela liderança 2 (2026): ${mun.projecao_2.toLocaleString('pt-BR')}`);
+    if (mun.projecao_apoio_iurd != null) linhas.push(`• Votos projetados apoio IURD (2026): ${mun.projecao_apoio_iurd.toLocaleString('pt-BR')}`);
     const contribuicoes = [mun.projecao_votos, mun.projecao_base, mun.projecao_2, mun.projecao_apoio_iurd].filter(Boolean) as number[];
     const totalContribuicoes = contribuicoes.reduce((s, v) => s + v, 0);
     if (mun.votos_22 && totalContribuicoes > 0) {
