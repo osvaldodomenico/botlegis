@@ -59,6 +59,11 @@ QUANDO MENCIONAR UMA CIDADE, faça uma ANÁLISE ESTRATÉGICA real — não apena
 NUNCA apenas liste os campos do banco. Sempre conecte os pontos: o que os dados dizem sobre a estratégia da campanha naquele município?
 Nunca omita os dados de 2022 — números pequenos são estratégicos (mostram onde crescer).
 
+INTEGRIDADE DOS DADOS — REGRA ABSOLUTA:
+- Use APENAS os dados fornecidos no contexto. NUNCA invente nomes, números ou informações.
+- Se um campo não está no contexto (ex: segunda liderança), simplesmente não mencione. Não suponha, não complete, não crie.
+- Dados inventados destroem a confiança da campanha. Prefira dizer "não tenho esse dado" a inventar.
+
 FORMATAÇÃO (WhatsApp):
 - Para análises de cidade: pode usar até 6-8 linhas — o usuário precisa da inteligência completa
 - Para respostas simples: máximo 3 linhas
@@ -221,8 +226,12 @@ export class WebhooksService {
         regiao: true,
         projecao_votos: true,
         projecao_base: true,
+        projecao_2: true,
         lideranca: true,
         coordenacao: true,
+        funcao_cargo: true,
+        coord_lideranca_2: true,
+        funcao_cargo_2: true,
         votos_22: true,
         eleitores_22: true,
         votos_validos_22: true,
@@ -262,8 +271,10 @@ export class WebhooksService {
     if (mun.regiao) linhas.push(`• Região: ${mun.regiao}`);
     if (mun.projecao_votos) linhas.push(`• Projeção de votos (2026): ${mun.projecao_votos.toLocaleString('pt-BR')}`);
     if (mun.projecao_base) linhas.push(`• Projeção base: ${mun.projecao_base.toLocaleString('pt-BR')}`);
-    if (mun.lideranca) linhas.push(`• Liderança principal: ${mun.lideranca}`);
-    if (mun.coordenacao) linhas.push(`• Coordenação: ${mun.coordenacao}`);
+    if (mun.lideranca) linhas.push(`• Liderança 1: ${mun.lideranca}${mun.funcao_cargo ? ` (${mun.funcao_cargo})` : ''}`);
+    if (mun.coordenacao) linhas.push(`• Coordenação 1: ${mun.coordenacao}`);
+    if (mun.projecao_2) linhas.push(`• Projeção liderança 2: ${mun.projecao_2.toLocaleString('pt-BR')}`);
+    if (mun.coord_lideranca_2) linhas.push(`• Liderança 2: ${mun.coord_lideranca_2}${mun.funcao_cargo_2 ? ` (${mun.funcao_cargo_2})` : ''}`);
     if (mun.votos_22) linhas.push(`• Votos em 2022: ${mun.votos_22.toLocaleString('pt-BR')}`);
     if (mun.eleitores_22) linhas.push(`• Eleitores em 2022: ${mun.eleitores_22.toLocaleString('pt-BR')}`);
     if (mun.votos_validos_22) linhas.push(`• Votos válidos 2022: ${mun.votos_validos_22.toLocaleString('pt-BR')}`);
@@ -457,7 +468,9 @@ export class WebhooksService {
               select: {
                 id: true, nome: true, mesorregiao: true, rm_ra: true, regiao: true,
                 projecao_votos: true, projecao_base: true, lideranca: true,
-                coordenacao: true, votos_22: true, eleitores_22: true,
+                coordenacao: true, funcao_cargo: true,
+                projecao_2: true, coord_lideranca_2: true, funcao_cargo_2: true,
+                votos_22: true, eleitores_22: true,
                 votos_validos_22: true, percentual_mv: true, ranking_mv: true,
                 projecao_apoio_iurd: true, candidato_nome: true, candidato_cargo: true,
               },
