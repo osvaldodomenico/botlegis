@@ -2,12 +2,13 @@
 import { useState, useRef, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
-import { Send, Bot, User, RefreshCw } from 'lucide-react';
+import { Send, Bot, User, RefreshCw, Mic } from 'lucide-react';
 
 interface Message {
   role: 'user' | 'bot';
   text: string;
   ts: Date;
+  isAudio?: boolean;
 }
 
 export default function SimularPage() {
@@ -19,6 +20,8 @@ export default function SimularPage() {
     },
   ]);
   const [input, setInput] = useState('');
+  const [audioUrl, setAudioUrl] = useState('');
+  const [showAudioInput, setShowAudioInput] = useState(false);
   const [loading, setLoading] = useState(false);
   const [phone, setPhone] = useState('5511999999999');
   const [name, setName] = useState('Simulação');
@@ -28,26 +31,36 @@ export default function SimularPage() {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, loading]);
 
-  const send = async () => {
-    const text = input.trim();
-    if (!text || loading) return;
+  const send = async (overrideText?: string, overrideAudioUrl?: string) => {
+    const text = overrideText ?? input.trim();
+    const aUrl = overrideAudioUrl ?? (showAudioInput ? audioUrl.trim() : '');
+
+    if ((!text && !aUrl) || loading) return;
     setInput('');
-    setMessages(prev => [...prev, { role: 'user', text, ts: new Date() }]);
+    setAudioUrl('');
+    setShowAudioInput(false);
+
+    const displayText = text || `🎤 Áudio enviado`;
+    setMessages(prev => [...prev, { role: 'user', text: displayText, ts: new Date(), isAudio: !text && !!aUrl }]);
     setLoading(true);
+
     try {
-      const { data } = await api.post('/webhooks/simulate', {
-        phone,
-        name,
-        message: text,
-      });
+      const payload: Record<string, string> = { phone, name };
+      if (text) payload.message = text;
+      if (aUrl) payload.audioUrl = aUrl;
+
+      const { data } = await api.post('/webhooks/simulate', payload);
+
+      const botText = data.response || '…';
+      const transcribed = data.transcribed ? `\n\n_Transcrição: "${data.transcribed}"_` : '';
       setMessages(prev => [
         ...prev,
-        { role: 'bot', text: data.response || '…', ts: new Date() },
+        { role: 'bot', text: botText + transcribed, ts: new Date() },
       ]);
     } catch {
       setMessages(prev => [
         ...prev,
-        { role: 'bot', text: '⚠️ Erro ao obter resposta. Tente novamente.', ts: new Date() },
+        { role: 'bot', text: '⚠️ Erro ao obter resposta. Verifique se o backend está rodando.', ts: new Date() },
       ]);
     } finally {
       setLoading(false);
@@ -148,6 +161,11 @@ export default function SimularPage() {
                       : 'bg-[#f0f0f0] text-ink rounded-bl-[4px]'
                   }`}
                 >
+                  {m.isAudio && (
+                    <span className="flex items-center gap-1 mb-1 opacity-80 text-[11px]">
+                      <Mic size={11} /> áudio
+                    </span>
+                  )}
                   {m.text}
                   <span
                     className={`block text-[10px] mt-1 text-right ${
@@ -181,20 +199,60 @@ export default function SimularPage() {
             <div ref={bottomRef} />
           </div>
 
+          {/* Audio URL input (expandable) */}
+          {showAudioInput && (
+            <div className="px-4 py-2 border-t border-hairline bg-parchment/30 flex gap-2 items-center">
+              <Mic size={14} className="text-ink-muted flex-shrink-0" />
+              <input
+                value={audioUrl}
+                onChange={e => setAudioUrl(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && send()}
+                placeholder="URL do áudio (.ogg, .mp4, .m4a)..."
+                className="flex-1 px-3 py-1.5 text-[13px] border border-hairline rounded-[8px] bg-white focus:outline-none focus:ring-2 focus:ring-primary/30"
+                autoFocus
+              />
+              <button
+                onClick={() => send()}
+                disabled={!audioUrl.trim() || loading}
+                className="px-3 py-1.5 text-[12px] bg-primary text-white rounded-[8px] disabled:opacity-40 transition-opacity"
+              >
+                Enviar
+              </button>
+              <button
+                onClick={() => { setShowAudioInput(false); setAudioUrl(''); }}
+                className="text-[12px] text-ink-muted hover:text-ink"
+              >
+                Cancelar
+              </button>
+            </div>
+          )}
+
           {/* Input */}
-          <div className="border-t border-hairline px-4 py-3 flex items-center gap-3 bg-parchment/50">
+          <div className="border-t border-hairline px-4 py-3 flex items-center gap-2 bg-parchment/50">
+            {/* Mic button */}
+            <button
+              onClick={() => setShowAudioInput(v => !v)}
+              title="Simular áudio (Whisper)"
+              className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors flex-shrink-0 ${
+                showAudioInput
+                  ? 'bg-primary text-white'
+                  : 'bg-white border border-hairline text-ink-muted hover:text-primary hover:border-primary'
+              }`}
+            >
+              <Mic size={15} />
+            </button>
             <input
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}
               placeholder="Digite uma mensagem..."
-              disabled={loading}
+              disabled={loading || showAudioInput}
               className="flex-1 px-3.5 py-2.5 text-[14px] border border-hairline rounded-[999px] bg-white focus:outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-50"
             />
             <button
-              onClick={send}
-              disabled={!input.trim() || loading}
-              className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center hover:bg-primary/90 transition-colors disabled:opacity-40"
+              onClick={() => send()}
+              disabled={(!input.trim() && !audioUrl.trim()) || loading}
+              className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center hover:bg-primary/90 transition-colors disabled:opacity-40 flex-shrink-0"
             >
               <Send size={16} />
             </button>
