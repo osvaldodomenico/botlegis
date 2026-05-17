@@ -33,6 +33,7 @@ model Municipio {
   votos_validos_22    Int?
   percentual_mv       Float?
   votos_22            Int?
+  ranking_mv          Int?
   percentual_perda    Float?
   candidato_nome      String?   @db.VarChar(150)
   candidato_cargo     String?   @db.VarChar(100)

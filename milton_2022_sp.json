@@ -1,0 +1,5807 @@
+[
+  {
+    "id_municipio_tse": 61018,
+    "municipio": "Adamantina",
+    "total_eleitores": 27635,
+    "total_votos_validos": 17886,
+    "votos_mv": 5,
+    "pct_mv": 0.03,
+    "ranking_mv": 174
+  },
+  {
+    "id_municipio_tse": 61034,
+    "municipio": "Adolfo",
+    "total_eleitores": 4298,
+    "total_votos_validos": 2906,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 168
+  },
+  {
+    "id_municipio_tse": 61050,
+    "municipio": "Aguaí",
+    "total_eleitores": 24068,
+    "total_votos_validos": 15048,
+    "votos_mv": 3,
+    "pct_mv": 0.02,
+    "ranking_mv": 197
+  },
+  {
+    "id_municipio_tse": 61077,
+    "municipio": "Águas da Prata",
+    "total_eleitores": 6322,
+    "total_votos_validos": 4217,
+    "votos_mv": 1,
+    "pct_mv": 0.02,
+    "ranking_mv": 156
+  },
+  {
+    "id_municipio_tse": 61093,
+    "municipio": "Águas de Lindóia",
+    "total_eleitores": 14897,
+    "total_votos_validos": 10066,
+    "votos_mv": 2,
+    "pct_mv": 0.02,
+    "ranking_mv": 188
+  },
+  {
+    "id_municipio_tse": 70190,
+    "municipio": "Águas de Santa Bárbara",
+    "total_eleitores": 5357,
+    "total_votos_validos": 3365,
+    "votos_mv": 1,
+    "pct_mv": 0.03,
+    "ranking_mv": 178
+  },
+  {
+    "id_municipio_tse": 61115,
+    "municipio": "Águas de São Pedro",
+    "total_eleitores": 3972,
+    "total_votos_validos": 2920,
+    "votos_mv": 1,
+    "pct_mv": 0.03,
+    "ranking_mv": 168
+  },
+  {
+    "id_municipio_tse": 61131,
+    "municipio": "Agudos",
+    "total_eleitores": 30494,
+    "total_votos_validos": 20190,
+    "votos_mv": 5,
+    "pct_mv": 0.02,
+    "ranking_mv": 187
+  },
+  {
+    "id_municipio_tse": 61581,
+    "municipio": "Alambari",
+    "total_eleitores": 4929,
+    "total_votos_validos": 3649,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 177
+  },
+  {
+    "id_municipio_tse": 61158,
+    "municipio": "Alfredo Marcondes",
+    "total_eleitores": 4047,
+    "total_votos_validos": 2834,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 180
+  },
+  {
+    "id_municipio_tse": 61174,
+    "municipio": "Altair",
+    "total_eleitores": 3194,
+    "total_votos_validos": 2110,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 151
+  },
+  {
+    "id_municipio_tse": 61190,
+    "municipio": "Altinópolis",
+    "total_eleitores": 12382,
+    "total_votos_validos": 8376,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 304
+  },
+  {
+    "id_municipio_tse": 61212,
+    "municipio": "Alto Alegre",
+    "total_eleitores": 3642,
+    "total_votos_validos": 2473,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 169
+  },
+  {
+    "id_municipio_tse": 61220,
+    "municipio": "Alumínio",
+    "total_eleitores": 14510,
+    "total_votos_validos": 9984,
+    "votos_mv": 6,
+    "pct_mv": 0.06,
+    "ranking_mv": 113
+  },
+  {
+    "id_municipio_tse": 61239,
+    "municipio": "Álvares Florence",
+    "total_eleitores": 3800,
+    "total_votos_validos": 2510,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 182
+  },
+  {
+    "id_municipio_tse": 61255,
+    "municipio": "Álvares Machado",
+    "total_eleitores": 19226,
+    "total_votos_validos": 13089,
+    "votos_mv": 6,
+    "pct_mv": 0.05,
+    "ranking_mv": 122
+  },
+  {
+    "id_municipio_tse": 61271,
+    "municipio": "Álvaro de Carvalho",
+    "total_eleitores": 3005,
+    "total_votos_validos": 1980,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 156
+  },
+  {
+    "id_municipio_tse": 61298,
+    "municipio": "Alvinlândia",
+    "total_eleitores": 2717,
+    "total_votos_validos": 1811,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 134
+  },
+  {
+    "id_municipio_tse": 61310,
+    "municipio": "Americana",
+    "total_eleitores": 180269,
+    "total_votos_validos": 126397,
+    "votos_mv": 42,
+    "pct_mv": 0.03,
+    "ranking_mv": 157
+  },
+  {
+    "id_municipio_tse": 61336,
+    "municipio": "Américo Brasiliense",
+    "total_eleitores": 28575,
+    "total_votos_validos": 18534,
+    "votos_mv": 2,
+    "pct_mv": 0.01,
+    "ranking_mv": 247
+  },
+  {
+    "id_municipio_tse": 61352,
+    "municipio": "Américo de Campos",
+    "total_eleitores": 4938,
+    "total_votos_validos": 3555,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 195
+  },
+  {
+    "id_municipio_tse": 61379,
+    "municipio": "Amparo",
+    "total_eleitores": 57379,
+    "total_votos_validos": 37192,
+    "votos_mv": 13,
+    "pct_mv": 0.03,
+    "ranking_mv": 147
+  },
+  {
+    "id_municipio_tse": 61395,
+    "municipio": "Analândia",
+    "total_eleitores": 4539,
+    "total_votos_validos": 2795,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 233
+  },
+  {
+    "id_municipio_tse": 61417,
+    "municipio": "Andradina",
+    "total_eleitores": 45529,
+    "total_votos_validos": 29577,
+    "votos_mv": 4,
+    "pct_mv": 0.01,
+    "ranking_mv": 248
+  },
+  {
+    "id_municipio_tse": 61433,
+    "municipio": "Angatuba",
+    "total_eleitores": 18371,
+    "total_votos_validos": 12426,
+    "votos_mv": 6,
+    "pct_mv": 0.05,
+    "ranking_mv": 108
+  },
+  {
+    "id_municipio_tse": 61450,
+    "municipio": "Anhembi",
+    "total_eleitores": 5905,
+    "total_votos_validos": 3615,
+    "votos_mv": 2,
+    "pct_mv": 0.06,
+    "ranking_mv": 116
+  },
+  {
+    "id_municipio_tse": 61476,
+    "municipio": "Anhumas",
+    "total_eleitores": 3398,
+    "total_votos_validos": 2428,
+    "votos_mv": 35,
+    "pct_mv": 1.44,
+    "ranking_mv": 13
+  },
+  {
+    "id_municipio_tse": 61492,
+    "municipio": "Aparecida",
+    "total_eleitores": 28542,
+    "total_votos_validos": 20413,
+    "votos_mv": 186,
+    "pct_mv": 0.91,
+    "ranking_mv": 27
+  },
+  {
+    "id_municipio_tse": 61514,
+    "municipio": "Aparecida d'Oeste",
+    "total_eleitores": 3998,
+    "total_votos_validos": 2719,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 180
+  },
+  {
+    "id_municipio_tse": 61530,
+    "municipio": "Apiaí",
+    "total_eleitores": 20465,
+    "total_votos_validos": 12818,
+    "votos_mv": 2,
+    "pct_mv": 0.02,
+    "ranking_mv": 175
+  },
+  {
+    "id_municipio_tse": 61263,
+    "municipio": "Araçariguama",
+    "total_eleitores": 17247,
+    "total_votos_validos": 11192,
+    "votos_mv": 2,
+    "pct_mv": 0.02,
+    "ranking_mv": 213
+  },
+  {
+    "id_municipio_tse": 61557,
+    "municipio": "Araçatuba",
+    "total_eleitores": 153573,
+    "total_votos_validos": 106646,
+    "votos_mv": 2,
+    "pct_mv": 0.0,
+    "ranking_mv": 490
+  },
+  {
+    "id_municipio_tse": 61573,
+    "municipio": "Araçoiaba da Serra",
+    "total_eleitores": 24769,
+    "total_votos_validos": 17534,
+    "votos_mv": 18,
+    "pct_mv": 0.1,
+    "ranking_mv": 90
+  },
+  {
+    "id_municipio_tse": 61590,
+    "municipio": "Aramina",
+    "total_eleitores": 4608,
+    "total_votos_validos": 3091,
+    "votos_mv": 2,
+    "pct_mv": 0.06,
+    "ranking_mv": 96
+  },
+  {
+    "id_municipio_tse": 61611,
+    "municipio": "Arandu",
+    "total_eleitores": 5810,
+    "total_votos_validos": 3856,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 226
+  },
+  {
+    "id_municipio_tse": 61646,
+    "municipio": "Arapeí",
+    "total_eleitores": 2479,
+    "total_votos_validos": 1737,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 114
+  },
+  {
+    "id_municipio_tse": 61638,
+    "municipio": "Araraquara",
+    "total_eleitores": 181154,
+    "total_votos_validos": 115024,
+    "votos_mv": 18,
+    "pct_mv": 0.02,
+    "ranking_mv": 248
+  },
+  {
+    "id_municipio_tse": 61654,
+    "municipio": "Araras",
+    "total_eleitores": 101414,
+    "total_votos_validos": 67150,
+    "votos_mv": 21,
+    "pct_mv": 0.03,
+    "ranking_mv": 168
+  },
+  {
+    "id_municipio_tse": 62065,
+    "municipio": "Arco-Íris",
+    "total_eleitores": 2249,
+    "total_votos_validos": 1617,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 119
+  },
+  {
+    "id_municipio_tse": 61670,
+    "municipio": "Arealva",
+    "total_eleitores": 6381,
+    "total_votos_validos": 4186,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 247
+  },
+  {
+    "id_municipio_tse": 61697,
+    "municipio": "Areias",
+    "total_eleitores": 3257,
+    "total_votos_validos": 2438,
+    "votos_mv": 1,
+    "pct_mv": 0.04,
+    "ranking_mv": 118
+  },
+  {
+    "id_municipio_tse": 61719,
+    "municipio": "Areiópolis",
+    "total_eleitores": 8556,
+    "total_votos_validos": 5655,
+    "votos_mv": 7,
+    "pct_mv": 0.12,
+    "ranking_mv": 68
+  },
+  {
+    "id_municipio_tse": 61735,
+    "municipio": "Ariranha",
+    "total_eleitores": 6959,
+    "total_votos_validos": 4585,
+    "votos_mv": 2,
+    "pct_mv": 0.04,
+    "ranking_mv": 113
+  },
+  {
+    "id_municipio_tse": 61751,
+    "municipio": "Artur Nogueira",
+    "total_eleitores": 38409,
+    "total_votos_validos": 26552,
+    "votos_mv": 5,
+    "pct_mv": 0.02,
+    "ranking_mv": 207
+  },
+  {
+    "id_municipio_tse": 61778,
+    "municipio": "Arujá",
+    "total_eleitores": 71032,
+    "total_votos_validos": 48624,
+    "votos_mv": 142,
+    "pct_mv": 0.29,
+    "ranking_mv": 50
+  },
+  {
+    "id_municipio_tse": 61522,
+    "municipio": "Aspásia",
+    "total_eleitores": 1894,
+    "total_votos_validos": 1361,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 136
+  },
+  {
+    "id_municipio_tse": 61794,
+    "municipio": "Assis",
+    "total_eleitores": 73870,
+    "total_votos_validos": 48223,
+    "votos_mv": 6,
+    "pct_mv": 0.01,
+    "ranking_mv": 280
+  },
+  {
+    "id_municipio_tse": 61816,
+    "municipio": "Atibaia",
+    "total_eleitores": 119905,
+    "total_votos_validos": 80138,
+    "votos_mv": 27,
+    "pct_mv": 0.03,
+    "ranking_mv": 169
+  },
+  {
+    "id_municipio_tse": 61832,
+    "municipio": "Auriflama",
+    "total_eleitores": 10943,
+    "total_votos_validos": 7808,
+    "votos_mv": 1,
+    "pct_mv": 0.01,
+    "ranking_mv": 198
+  },
+  {
+    "id_municipio_tse": 61859,
+    "municipio": "Avaí",
+    "total_eleitores": 4141,
+    "total_votos_validos": 2829,
+    "votos_mv": 1,
+    "pct_mv": 0.04,
+    "ranking_mv": 116
+  },
+  {
+    "id_municipio_tse": 61875,
+    "municipio": "Avanhandava",
+    "total_eleitores": 7905,
+    "total_votos_validos": 5234,
+    "votos_mv": 1,
+    "pct_mv": 0.02,
+    "ranking_mv": 164
+  },
+  {
+    "id_municipio_tse": 61891,
+    "municipio": "Avaré",
+    "total_eleitores": 68651,
+    "total_votos_validos": 43043,
+    "votos_mv": 8,
+    "pct_mv": 0.02,
+    "ranking_mv": 217
+  },
+  {
+    "id_municipio_tse": 61913,
+    "municipio": "Bady Bassitt",
+    "total_eleitores": 14324,
+    "total_votos_validos": 9960,
+    "votos_mv": 5,
+    "pct_mv": 0.05,
+    "ranking_mv": 146
+  },
+  {
+    "id_municipio_tse": 61930,
+    "municipio": "Balbinos",
+    "total_eleitores": 1529,
+    "total_votos_validos": 981,
+    "votos_mv": 1,
+    "pct_mv": 0.1,
+    "ranking_mv": 74
+  },
+  {
+    "id_municipio_tse": 61956,
+    "municipio": "Bálsamo",
+    "total_eleitores": 7480,
+    "total_votos_validos": 5226,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 250
+  },
+  {
+    "id_municipio_tse": 61972,
+    "municipio": "Bananal",
+    "total_eleitores": 8775,
+    "total_votos_validos": 5782,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 268
+  },
+  {
+    "id_municipio_tse": 62014,
+    "municipio": "Barão de Antonina",
+    "total_eleitores": 2786,
+    "total_votos_validos": 1883,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 130
+  },
+  {
+    "id_municipio_tse": 61999,
+    "municipio": "Barbosa",
+    "total_eleitores": 5259,
+    "total_votos_validos": 3610,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 203
+  },
+  {
+    "id_municipio_tse": 62030,
+    "municipio": "Bariri",
+    "total_eleitores": 25217,
+    "total_votos_validos": 16330,
+    "votos_mv": 8,
+    "pct_mv": 0.05,
+    "ranking_mv": 133
+  },
+  {
+    "id_municipio_tse": 62057,
+    "municipio": "Barra Bonita",
+    "total_eleitores": 30100,
+    "total_votos_validos": 20032,
+    "votos_mv": 10,
+    "pct_mv": 0.05,
+    "ranking_mv": 142
+  },
+  {
+    "id_municipio_tse": 61360,
+    "municipio": "Barra do Chapéu",
+    "total_eleitores": 4795,
+    "total_votos_validos": 3343,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 152
+  },
+  {
+    "id_municipio_tse": 62073,
+    "municipio": "Barra do Turvo",
+    "total_eleitores": 7233,
+    "total_votos_validos": 4321,
+    "votos_mv": 2,
+    "pct_mv": 0.05,
+    "ranking_mv": 78
+  },
+  {
+    "id_municipio_tse": 62090,
+    "municipio": "Barretos",
+    "total_eleitores": 90889,
+    "total_votos_validos": 57647,
+    "votos_mv": 10,
+    "pct_mv": 0.02,
+    "ranking_mv": 209
+  },
+  {
+    "id_municipio_tse": 62111,
+    "municipio": "Barrinha",
+    "total_eleitores": 24530,
+    "total_votos_validos": 16521,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 388
+  },
+  {
+    "id_municipio_tse": 62138,
+    "municipio": "Barueri",
+    "total_eleitores": 279166,
+    "total_votos_validos": 192626,
+    "votos_mv": 149,
+    "pct_mv": 0.08,
+    "ranking_mv": 133
+  },
+  {
+    "id_municipio_tse": 62154,
+    "municipio": "Bastos",
+    "total_eleitores": 18084,
+    "total_votos_validos": 11839,
+    "votos_mv": 1,
+    "pct_mv": 0.01,
+    "ranking_mv": 229
+  },
+  {
+    "id_municipio_tse": 62170,
+    "municipio": "Batatais",
+    "total_eleitores": 44987,
+    "total_votos_validos": 29005,
+    "votos_mv": 11,
+    "pct_mv": 0.04,
+    "ranking_mv": 139
+  },
+  {
+    "id_municipio_tse": 62197,
+    "municipio": "Bauru",
+    "total_eleitores": 280158,
+    "total_votos_validos": 187869,
+    "votos_mv": 47,
+    "pct_mv": 0.03,
+    "ranking_mv": 189
+  },
+  {
+    "id_municipio_tse": 62219,
+    "municipio": "Bebedouro",
+    "total_eleitores": 59974,
+    "total_votos_validos": 37747,
+    "votos_mv": 3,
+    "pct_mv": 0.01,
+    "ranking_mv": 296
+  },
+  {
+    "id_municipio_tse": 62235,
+    "municipio": "Bento de Abreu",
+    "total_eleitores": 2160,
+    "total_votos_validos": 1529,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 118
+  },
+  {
+    "id_municipio_tse": 62251,
+    "municipio": "Bernardino de Campos",
+    "total_eleitores": 8450,
+    "total_votos_validos": 5516,
+    "votos_mv": 1,
+    "pct_mv": 0.02,
+    "ranking_mv": 169
+  },
+  {
+    "id_municipio_tse": 61280,
+    "municipio": "Bertioga",
+    "total_eleitores": 48181,
+    "total_votos_validos": 32532,
+    "votos_mv": 17,
+    "pct_mv": 0.05,
+    "ranking_mv": 132
+  },
+  {
+    "id_municipio_tse": 62278,
+    "municipio": "Bilac",
+    "total_eleitores": 6407,
+    "total_votos_validos": 4450,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 234
+  },
+  {
+    "id_municipio_tse": 62294,
+    "municipio": "Birigui",
+    "total_eleitores": 89199,
+    "total_votos_validos": 58320,
+    "votos_mv": 3,
+    "pct_mv": 0.01,
+    "ranking_mv": 338
+  },
+  {
+    "id_municipio_tse": 62316,
+    "municipio": "Biritiba-Mirim",
+    "total_eleitores": 23966,
+    "total_votos_validos": 16449,
+    "votos_mv": 5,
+    "pct_mv": 0.03,
+    "ranking_mv": 133
+  },
+  {
+    "id_municipio_tse": 62332,
+    "municipio": "Boa Esperança do Sul",
+    "total_eleitores": 10485,
+    "total_votos_validos": 7000,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 280
+  },
+  {
+    "id_municipio_tse": 62359,
+    "municipio": "Bocaina",
+    "total_eleitores": 9128,
+    "total_votos_validos": 6085,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 276
+  },
+  {
+    "id_municipio_tse": 62375,
+    "municipio": "Bofete",
+    "total_eleitores": 8598,
+    "total_votos_validos": 5355,
+    "votos_mv": 4,
+    "pct_mv": 0.07,
+    "ranking_mv": 109
+  },
+  {
+    "id_municipio_tse": 62391,
+    "municipio": "Boituva",
+    "total_eleitores": 46398,
+    "total_votos_validos": 30470,
+    "votos_mv": 108,
+    "pct_mv": 0.35,
+    "ranking_mv": 51
+  },
+  {
+    "id_municipio_tse": 62413,
+    "municipio": "Bom Jesus dos Perdões",
+    "total_eleitores": 18377,
+    "total_votos_validos": 12403,
+    "votos_mv": 12,
+    "pct_mv": 0.1,
+    "ranking_mv": 93
+  },
+  {
+    "id_municipio_tse": 61786,
+    "municipio": "Bom Sucesso de Itararé",
+    "total_eleitores": 3335,
+    "total_votos_validos": 2394,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 130
+  },
+  {
+    "id_municipio_tse": 62430,
+    "municipio": "Borá",
+    "total_eleitores": 1039,
+    "total_votos_validos": 773,
+    "votos_mv": 1,
+    "pct_mv": 0.13,
+    "ranking_mv": 62
+  },
+  {
+    "id_municipio_tse": 62456,
+    "municipio": "Boracéia",
+    "total_eleitores": 3989,
+    "total_votos_validos": 2652,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 179
+  },
+  {
+    "id_municipio_tse": 62472,
+    "municipio": "Borborema",
+    "total_eleitores": 11540,
+    "total_votos_validos": 7693,
+    "votos_mv": 3,
+    "pct_mv": 0.04,
+    "ranking_mv": 138
+  },
+  {
+    "id_municipio_tse": 61026,
+    "municipio": "Borebi",
+    "total_eleitores": 2222,
+    "total_votos_validos": 1599,
+    "votos_mv": 1,
+    "pct_mv": 0.06,
+    "ranking_mv": 91
+  },
+  {
+    "id_municipio_tse": 62499,
+    "municipio": "Botucatu",
+    "total_eleitores": 107268,
+    "total_votos_validos": 74637,
+    "votos_mv": 14,
+    "pct_mv": 0.02,
+    "ranking_mv": 208
+  },
+  {
+    "id_municipio_tse": 62510,
+    "municipio": "Bragança Paulista",
+    "total_eleitores": 135364,
+    "total_votos_validos": 90053,
+    "votos_mv": 54,
+    "pct_mv": 0.06,
+    "ranking_mv": 132
+  },
+  {
+    "id_municipio_tse": 62553,
+    "municipio": "Braúna",
+    "total_eleitores": 4272,
+    "total_votos_validos": 3074,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 176
+  },
+  {
+    "id_municipio_tse": 62081,
+    "municipio": "Brejo Alegre",
+    "total_eleitores": 2571,
+    "total_votos_validos": 1778,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 156
+  },
+  {
+    "id_municipio_tse": 62570,
+    "municipio": "Brodowski",
+    "total_eleitores": 18148,
+    "total_votos_validos": 12331,
+    "votos_mv": 1,
+    "pct_mv": 0.01,
+    "ranking_mv": 229
+  },
+  {
+    "id_municipio_tse": 62596,
+    "municipio": "Brotas",
+    "total_eleitores": 18919,
+    "total_votos_validos": 11903,
+    "votos_mv": 3,
+    "pct_mv": 0.03,
+    "ranking_mv": 196
+  },
+  {
+    "id_municipio_tse": 62618,
+    "municipio": "Buri",
+    "total_eleitores": 15827,
+    "total_votos_validos": 10684,
+    "votos_mv": 1,
+    "pct_mv": 0.01,
+    "ranking_mv": 191
+  },
+  {
+    "id_municipio_tse": 62634,
+    "municipio": "Buritama",
+    "total_eleitores": 13662,
+    "total_votos_validos": 8682,
+    "votos_mv": 2,
+    "pct_mv": 0.02,
+    "ranking_mv": 161
+  },
+  {
+    "id_municipio_tse": 62650,
+    "municipio": "Buritizal",
+    "total_eleitores": 3820,
+    "total_votos_validos": 2762,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 141
+  },
+  {
+    "id_municipio_tse": 62677,
+    "municipio": "Cabrália Paulista",
+    "total_eleitores": 3392,
+    "total_votos_validos": 2301,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 178
+  },
+  {
+    "id_municipio_tse": 62693,
+    "municipio": "Cabreúva",
+    "total_eleitores": 35419,
+    "total_votos_validos": 23562,
+    "votos_mv": 16,
+    "pct_mv": 0.07,
+    "ranking_mv": 118
+  },
+  {
+    "id_municipio_tse": 62715,
+    "municipio": "Caçapava",
+    "total_eleitores": 74790,
+    "total_votos_validos": 51166,
+    "votos_mv": 943,
+    "pct_mv": 1.84,
+    "ranking_mv": 11
+  },
+  {
+    "id_municipio_tse": 62731,
+    "municipio": "Cachoeira Paulista",
+    "total_eleitores": 25478,
+    "total_votos_validos": 17093,
+    "votos_mv": 109,
+    "pct_mv": 0.64,
+    "ranking_mv": 42
+  },
+  {
+    "id_municipio_tse": 62758,
+    "municipio": "Caconde",
+    "total_eleitores": 14572,
+    "total_votos_validos": 9306,
+    "votos_mv": 1,
+    "pct_mv": 0.01,
+    "ranking_mv": 213
+  },
+  {
+    "id_municipio_tse": 62774,
+    "municipio": "Cafelândia",
+    "total_eleitores": 13214,
+    "total_votos_validos": 8618,
+    "votos_mv": 2,
+    "pct_mv": 0.02,
+    "ranking_mv": 171
+  },
+  {
+    "id_municipio_tse": 62790,
+    "municipio": "Caiabu",
+    "total_eleitores": 3315,
+    "total_votos_validos": 2508,
+    "votos_mv": 35,
+    "pct_mv": 1.4,
+    "ranking_mv": 15
+  },
+  {
+    "id_municipio_tse": 62812,
+    "municipio": "Caieiras",
+    "total_eleitores": 70844,
+    "total_votos_validos": 48945,
+    "votos_mv": 23,
+    "pct_mv": 0.05,
+    "ranking_mv": 144
+  },
+  {
+    "id_municipio_tse": 62839,
+    "municipio": "Caiuá",
+    "total_eleitores": 3939,
+    "total_votos_validos": 2765,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 182
+  },
+  {
+    "id_municipio_tse": 62855,
+    "municipio": "Cajamar",
+    "total_eleitores": 67967,
+    "total_votos_validos": 45649,
+    "votos_mv": 24,
+    "pct_mv": 0.05,
+    "ranking_mv": 141
+  },
+  {
+    "id_municipio_tse": 61484,
+    "municipio": "Cajati",
+    "total_eleitores": 24122,
+    "total_votos_validos": 15345,
+    "votos_mv": 8,
+    "pct_mv": 0.05,
+    "ranking_mv": 116
+  },
+  {
+    "id_municipio_tse": 62871,
+    "municipio": "Cajobi",
+    "total_eleitores": 7842,
+    "total_votos_validos": 5345,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 237
+  },
+  {
+    "id_municipio_tse": 62898,
+    "municipio": "Cajuru",
+    "total_eleitores": 19306,
+    "total_votos_validos": 11985,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 343
+  },
+  {
+    "id_municipio_tse": 61506,
+    "municipio": "Campina do Monte Alegre",
+    "total_eleitores": 4950,
+    "total_votos_validos": 3585,
+    "votos_mv": 2,
+    "pct_mv": 0.06,
+    "ranking_mv": 91
+  },
+  {
+    "id_municipio_tse": 62910,
+    "municipio": "Campinas",
+    "total_eleitores": 878804,
+    "total_votos_validos": 588245,
+    "votos_mv": 222,
+    "pct_mv": 0.04,
+    "ranking_mv": 174
+  },
+  {
+    "id_municipio_tse": 62936,
+    "municipio": "Campo Limpo Paulista",
+    "total_eleitores": 61518,
+    "total_votos_validos": 40798,
+    "votos_mv": 8,
+    "pct_mv": 0.02,
+    "ranking_mv": 234
+  },
+  {
+    "id_municipio_tse": 62952,
+    "municipio": "Campos do Jordão",
+    "total_eleitores": 39846,
+    "total_votos_validos": 24305,
+    "votos_mv": 482,
+    "pct_mv": 1.98,
+    "ranking_mv": 9
+  },
+  {
+    "id_municipio_tse": 62979,
+    "municipio": "Campos Novos Paulista",
+    "total_eleitores": 3795,
+    "total_votos_validos": 2648,
+    "votos_mv": 1,
+    "pct_mv": 0.04,
+    "ranking_mv": 104
+  },
+  {
+    "id_municipio_tse": 62995,
+    "municipio": "Cananéia",
+    "total_eleitores": 9925,
+    "total_votos_validos": 7053,
+    "votos_mv": 3,
+    "pct_mv": 0.04,
+    "ranking_mv": 120
+  },
+  {
+    "id_municipio_tse": 62103,
+    "municipio": "Canas",
+    "total_eleitores": 3935,
+    "total_votos_validos": 2763,
+    "votos_mv": 67,
+    "pct_mv": 2.42,
+    "ranking_mv": 8
+  },
+  {
+    "id_municipio_tse": 63010,
+    "municipio": "Cândido Mota",
+    "total_eleitores": 24697,
+    "total_votos_validos": 15945,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 414
+  },
+  {
+    "id_municipio_tse": 63037,
+    "municipio": "Cândido Rodrigues",
+    "total_eleitores": 2573,
+    "total_votos_validos": 1714,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 128
+  },
+  {
+    "id_municipio_tse": 61344,
+    "municipio": "Canitar",
+    "total_eleitores": 3907,
+    "total_votos_validos": 2649,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 210
+  },
+  {
+    "id_municipio_tse": 63053,
+    "municipio": "Capão Bonito",
+    "total_eleitores": 36479,
+    "total_votos_validos": 24363,
+    "votos_mv": 1,
+    "pct_mv": 0.0,
+    "ranking_mv": 290
+  },
+  {
+    "id_municipio_tse": 63070,
+    "municipio": "Capela do Alto",
+    "total_eleitores": 14894,
+    "total_votos_validos": 10205,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 310
+  },
+  {
+    "id_municipio_tse": 63096,
+    "municipio": "Capivari",
+    "total_eleitores": 39229,
+    "total_votos_validos": 26315,
+    "votos_mv": 2,
+    "pct_mv": 0.01,
+    "ranking_mv": 295
+  },
+  {
+    "id_municipio_tse": 63118,
+    "municipio": "Caraguatatuba",
+    "total_eleitores": 105088,
+    "total_votos_validos": 69731,
+    "votos_mv": 2461,
+    "pct_mv": 3.53,
+    "ranking_mv": 5
+  },
+  {
+    "id_municipio_tse": 63134,
+    "municipio": "Carapicuíba",
+    "total_eleitores": 300194,
+    "total_votos_validos": 195499,
+    "votos_mv": 1506,
+    "pct_mv": 0.77,
+    "ranking_mv": 31
+  },
+  {
+    "id_municipio_tse": 63150,
+    "municipio": "Cardoso",
+    "total_eleitores": 10218,
+    "total_votos_validos": 6099,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 302
+  },
+  {
+    "id_municipio_tse": 63177,
+    "municipio": "Casa Branca",
+    "total_eleitores": 20835,
+    "total_votos_validos": 13113,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 412
+  },
+  {
+    "id_municipio_tse": 63193,
+    "municipio": "Cássia dos Coqueiros",
+    "total_eleitores": 2813,
+    "total_votos_validos": 1750,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 160
+  },
+  {
+    "id_municipio_tse": 63215,
+    "municipio": "Castilho",
+    "total_eleitores": 15730,
+    "total_votos_validos": 10391,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 371
+  },
+  {
+    "id_municipio_tse": 63231,
+    "municipio": "Catanduva",
+    "total_eleitores": 87973,
+    "total_votos_validos": 60359,
+    "votos_mv": 11,
+    "pct_mv": 0.02,
+    "ranking_mv": 197
+  },
+  {
+    "id_municipio_tse": 63258,
+    "municipio": "Catiguá",
+    "total_eleitores": 5823,
+    "total_votos_validos": 3993,
+    "votos_mv": 1,
+    "pct_mv": 0.03,
+    "ranking_mv": 134
+  },
+  {
+    "id_municipio_tse": 63274,
+    "municipio": "Cedral",
+    "total_eleitores": 7697,
+    "total_votos_validos": 5359,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 269
+  },
+  {
+    "id_municipio_tse": 63290,
+    "municipio": "Cerqueira César",
+    "total_eleitores": 16019,
+    "total_votos_validos": 9808,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 392
+  },
+  {
+    "id_municipio_tse": 63312,
+    "municipio": "Cerquilho",
+    "total_eleitores": 36775,
+    "total_votos_validos": 24192,
+    "votos_mv": 8,
+    "pct_mv": 0.03,
+    "ranking_mv": 169
+  },
+  {
+    "id_municipio_tse": 63339,
+    "municipio": "Cesário Lange",
+    "total_eleitores": 13963,
+    "total_votos_validos": 8666,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 308
+  },
+  {
+    "id_municipio_tse": 63355,
+    "municipio": "Charqueada",
+    "total_eleitores": 13297,
+    "total_votos_validos": 9210,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 297
+  },
+  {
+    "id_municipio_tse": 63371,
+    "municipio": "Chavantes",
+    "total_eleitores": 8771,
+    "total_votos_validos": 6298,
+    "votos_mv": 3,
+    "pct_mv": 0.05,
+    "ranking_mv": 124
+  },
+  {
+    "id_municipio_tse": 63398,
+    "municipio": "Clementina",
+    "total_eleitores": 5522,
+    "total_votos_validos": 3692,
+    "votos_mv": 1,
+    "pct_mv": 0.03,
+    "ranking_mv": 142
+  },
+  {
+    "id_municipio_tse": 63410,
+    "municipio": "Colina",
+    "total_eleitores": 15008,
+    "total_votos_validos": 9716,
+    "votos_mv": 2,
+    "pct_mv": 0.02,
+    "ranking_mv": 158
+  },
+  {
+    "id_municipio_tse": 63436,
+    "municipio": "Colômbia",
+    "total_eleitores": 5830,
+    "total_votos_validos": 3872,
+    "votos_mv": 1,
+    "pct_mv": 0.03,
+    "ranking_mv": 119
+  },
+  {
+    "id_municipio_tse": 63452,
+    "municipio": "Conchal",
+    "total_eleitores": 22058,
+    "total_votos_validos": 13957,
+    "votos_mv": 11,
+    "pct_mv": 0.08,
+    "ranking_mv": 98
+  },
+  {
+    "id_municipio_tse": 63479,
+    "municipio": "Conchas",
+    "total_eleitores": 13757,
+    "total_votos_validos": 8561,
+    "votos_mv": 3,
+    "pct_mv": 0.04,
+    "ranking_mv": 169
+  },
+  {
+    "id_municipio_tse": 63495,
+    "municipio": "Cordeirópolis",
+    "total_eleitores": 19832,
+    "total_votos_validos": 13565,
+    "votos_mv": 10,
+    "pct_mv": 0.07,
+    "ranking_mv": 116
+  },
+  {
+    "id_municipio_tse": 63517,
+    "municipio": "Coroados",
+    "total_eleitores": 4180,
+    "total_votos_validos": 2958,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 195
+  },
+  {
+    "id_municipio_tse": 63533,
+    "municipio": "Coronel Macedo",
+    "total_eleitores": 3831,
+    "total_votos_validos": 2875,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 167
+  },
+  {
+    "id_municipio_tse": 63550,
+    "municipio": "Corumbataí",
+    "total_eleitores": 3516,
+    "total_votos_validos": 2373,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 189
+  },
+  {
+    "id_municipio_tse": 63576,
+    "municipio": "Cosmópolis",
+    "total_eleitores": 46420,
+    "total_votos_validos": 28937,
+    "votos_mv": 15,
+    "pct_mv": 0.05,
+    "ranking_mv": 150
+  },
+  {
+    "id_municipio_tse": 63592,
+    "municipio": "Cosmorama",
+    "total_eleitores": 7127,
+    "total_votos_validos": 5069,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 228
+  },
+  {
+    "id_municipio_tse": 63614,
+    "municipio": "Cotia",
+    "total_eleitores": 184910,
+    "total_votos_validos": 128692,
+    "votos_mv": 132,
+    "pct_mv": 0.1,
+    "ranking_mv": 121
+  },
+  {
+    "id_municipio_tse": 63630,
+    "municipio": "Cravinhos",
+    "total_eleitores": 27313,
+    "total_votos_validos": 17663,
+    "votos_mv": 3,
+    "pct_mv": 0.02,
+    "ranking_mv": 182
+  },
+  {
+    "id_municipio_tse": 63657,
+    "municipio": "Cristais Paulista",
+    "total_eleitores": 7453,
+    "total_votos_validos": 5087,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 247
+  },
+  {
+    "id_municipio_tse": 63673,
+    "municipio": "Cruzália",
+    "total_eleitores": 2013,
+    "total_votos_validos": 1551,
+    "votos_mv": 26,
+    "pct_mv": 1.68,
+    "ranking_mv": 15
+  },
+  {
+    "id_municipio_tse": 63690,
+    "municipio": "Cruzeiro",
+    "total_eleitores": 60199,
+    "total_votos_validos": 39663,
+    "votos_mv": 264,
+    "pct_mv": 0.67,
+    "ranking_mv": 31
+  },
+  {
+    "id_municipio_tse": 63711,
+    "municipio": "Cubatão",
+    "total_eleitores": 94223,
+    "total_votos_validos": 66927,
+    "votos_mv": 9,
+    "pct_mv": 0.01,
+    "ranking_mv": 215
+  },
+  {
+    "id_municipio_tse": 63738,
+    "municipio": "Cunha",
+    "total_eleitores": 17418,
+    "total_votos_validos": 12425,
+    "votos_mv": 138,
+    "pct_mv": 1.11,
+    "ranking_mv": 16
+  },
+  {
+    "id_municipio_tse": 63754,
+    "municipio": "Descalvado",
+    "total_eleitores": 25197,
+    "total_votos_validos": 15382,
+    "votos_mv": 5,
+    "pct_mv": 0.03,
+    "ranking_mv": 163
+  },
+  {
+    "id_municipio_tse": 63770,
+    "municipio": "Diadema",
+    "total_eleitores": 338922,
+    "total_votos_validos": 233275,
+    "votos_mv": 2287,
+    "pct_mv": 0.98,
+    "ranking_mv": 22
+  },
+  {
+    "id_municipio_tse": 61123,
+    "municipio": "Dirce Reis",
+    "total_eleitores": 1626,
+    "total_votos_validos": 1204,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 89
+  },
+  {
+    "id_municipio_tse": 63797,
+    "municipio": "Divinolândia",
+    "total_eleitores": 9522,
+    "total_votos_validos": 6436,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 264
+  },
+  {
+    "id_municipio_tse": 63819,
+    "municipio": "Dobrada",
+    "total_eleitores": 6536,
+    "total_votos_validos": 4375,
+    "votos_mv": 1,
+    "pct_mv": 0.02,
+    "ranking_mv": 157
+  },
+  {
+    "id_municipio_tse": 63835,
+    "municipio": "Dois Córregos",
+    "total_eleitores": 19951,
+    "total_votos_validos": 12523,
+    "votos_mv": 1,
+    "pct_mv": 0.01,
+    "ranking_mv": 263
+  },
+  {
+    "id_municipio_tse": 63851,
+    "municipio": "Dolcinópolis",
+    "total_eleitores": 2182,
+    "total_votos_validos": 1510,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 148
+  },
+  {
+    "id_municipio_tse": 63878,
+    "municipio": "Dourado",
+    "total_eleitores": 7314,
+    "total_votos_validos": 4307,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 291
+  },
+  {
+    "id_municipio_tse": 63894,
+    "municipio": "Dracena",
+    "total_eleitores": 35295,
+    "total_votos_validos": 23489,
+    "votos_mv": 410,
+    "pct_mv": 1.75,
+    "ranking_mv": 9
+  },
+  {
+    "id_municipio_tse": 63916,
+    "municipio": "Duartina",
+    "total_eleitores": 10505,
+    "total_votos_validos": 7011,
+    "votos_mv": 12,
+    "pct_mv": 0.17,
+    "ranking_mv": 70
+  },
+  {
+    "id_municipio_tse": 63932,
+    "municipio": "Dumont",
+    "total_eleitores": 7142,
+    "total_votos_validos": 4971,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 261
+  },
+  {
+    "id_municipio_tse": 63959,
+    "municipio": "Echaporã",
+    "total_eleitores": 5289,
+    "total_votos_validos": 3563,
+    "votos_mv": 2,
+    "pct_mv": 0.06,
+    "ranking_mv": 122
+  },
+  {
+    "id_municipio_tse": 63975,
+    "municipio": "Eldorado",
+    "total_eleitores": 11780,
+    "total_votos_validos": 7544,
+    "votos_mv": 1,
+    "pct_mv": 0.01,
+    "ranking_mv": 177
+  },
+  {
+    "id_municipio_tse": 63991,
+    "municipio": "Elias Fausto",
+    "total_eleitores": 14084,
+    "total_votos_validos": 9413,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 324
+  },
+  {
+    "id_municipio_tse": 61760,
+    "municipio": "Elisiário",
+    "total_eleitores": 2726,
+    "total_votos_validos": 1925,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 141
+  },
+  {
+    "id_municipio_tse": 61182,
+    "municipio": "Embaúba",
+    "total_eleitores": 2375,
+    "total_votos_validos": 1746,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 138
+  },
+  {
+    "id_municipio_tse": 64017,
+    "municipio": "Embu das Artes",
+    "total_eleitores": 199468,
+    "total_votos_validos": 141948,
+    "votos_mv": 3291,
+    "pct_mv": 2.32,
+    "ranking_mv": 6
+  },
+  {
+    "id_municipio_tse": 64033,
+    "municipio": "Embu-Guaçu",
+    "total_eleitores": 56344,
+    "total_votos_validos": 35103,
+    "votos_mv": 691,
+    "pct_mv": 1.97,
+    "ranking_mv": 9
+  },
+  {
+    "id_municipio_tse": 61387,
+    "municipio": "Emilianópolis",
+    "total_eleitores": 2725,
+    "total_votos_validos": 1915,
+    "votos_mv": 4,
+    "pct_mv": 0.21,
+    "ranking_mv": 45
+  },
+  {
+    "id_municipio_tse": 61689,
+    "municipio": "Engenheiro Coelho",
+    "total_eleitores": 14927,
+    "total_votos_validos": 10186,
+    "votos_mv": 2,
+    "pct_mv": 0.02,
+    "ranking_mv": 194
+  },
+  {
+    "id_municipio_tse": 68659,
+    "municipio": "Espírito Santo do Pinhal",
+    "total_eleitores": 33750,
+    "total_votos_validos": 21568,
+    "votos_mv": 4,
+    "pct_mv": 0.02,
+    "ranking_mv": 175
+  },
+  {
+    "id_municipio_tse": 61140,
+    "municipio": "Espírito Santo do Turvo",
+    "total_eleitores": 3530,
+    "total_votos_validos": 2344,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 147
+  },
+  {
+    "id_municipio_tse": 61662,
+    "municipio": "Estiva Gerbi",
+    "total_eleitores": 9436,
+    "total_votos_validos": 6831,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 241
+  },
+  {
+    "id_municipio_tse": 64050,
+    "municipio": "Estrela d'Oeste",
+    "total_eleitores": 7304,
+    "total_votos_validos": 4576,
+    "votos_mv": 2,
+    "pct_mv": 0.04,
+    "ranking_mv": 139
+  },
+  {
+    "id_municipio_tse": 64076,
+    "municipio": "Estrela do Norte",
+    "total_eleitores": 2563,
+    "total_votos_validos": 1856,
+    "votos_mv": 184,
+    "pct_mv": 9.91,
+    "ranking_mv": 3
+  },
+  {
+    "id_municipio_tse": 61000,
+    "municipio": "Euclides da Cunha Paulista",
+    "total_eleitores": 7114,
+    "total_votos_validos": 4537,
+    "votos_mv": 4,
+    "pct_mv": 0.09,
+    "ranking_mv": 61
+  },
+  {
+    "id_municipio_tse": 64092,
+    "municipio": "Fartura",
+    "total_eleitores": 13239,
+    "total_votos_validos": 8787,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 317
+  },
+  {
+    "id_municipio_tse": 64130,
+    "municipio": "Fernando Prestes",
+    "total_eleitores": 5091,
+    "total_votos_validos": 3392,
+    "votos_mv": 1,
+    "pct_mv": 0.03,
+    "ranking_mv": 114
+  },
+  {
+    "id_municipio_tse": 64114,
+    "municipio": "Fernandópolis",
+    "total_eleitores": 54223,
+    "total_votos_validos": 34139,
+    "votos_mv": 18,
+    "pct_mv": 0.05,
+    "ranking_mv": 137
+  },
+  {
+    "id_municipio_tse": 62286,
+    "municipio": "Fernão",
+    "total_eleitores": 1586,
+    "total_votos_validos": 1091,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 108
+  },
+  {
+    "id_municipio_tse": 64157,
+    "municipio": "Ferraz de Vasconcelos",
+    "total_eleitores": 133659,
+    "total_votos_validos": 91659,
+    "votos_mv": 42,
+    "pct_mv": 0.05,
+    "ranking_mv": 134
+  },
+  {
+    "id_municipio_tse": 64173,
+    "municipio": "Flora Rica",
+    "total_eleitores": 1582,
+    "total_votos_validos": 1053,
+    "votos_mv": 2,
+    "pct_mv": 0.19,
+    "ranking_mv": 55
+  },
+  {
+    "id_municipio_tse": 64190,
+    "municipio": "Floreal",
+    "total_eleitores": 2658,
+    "total_votos_validos": 1913,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 160
+  },
+  {
+    "id_municipio_tse": 64211,
+    "municipio": "Flórida Paulista",
+    "total_eleitores": 8064,
+    "total_votos_validos": 5321,
+    "votos_mv": 9,
+    "pct_mv": 0.17,
+    "ranking_mv": 69
+  },
+  {
+    "id_municipio_tse": 64238,
+    "municipio": "Florínia",
+    "total_eleitores": 2704,
+    "total_votos_validos": 1970,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 142
+  },
+  {
+    "id_municipio_tse": 64254,
+    "municipio": "Franca",
+    "total_eleitores": 247349,
+    "total_votos_validos": 168978,
+    "votos_mv": 21,
+    "pct_mv": 0.01,
+    "ranking_mv": 229
+  },
+  {
+    "id_municipio_tse": 64270,
+    "municipio": "Francisco Morato",
+    "total_eleitores": 131141,
+    "total_votos_validos": 85994,
+    "votos_mv": 21,
+    "pct_mv": 0.02,
+    "ranking_mv": 175
+  },
+  {
+    "id_municipio_tse": 64297,
+    "municipio": "Franco da Rocha",
+    "total_eleitores": 104955,
+    "total_votos_validos": 71231,
+    "votos_mv": 21,
+    "pct_mv": 0.03,
+    "ranking_mv": 157
+  },
+  {
+    "id_municipio_tse": 64319,
+    "municipio": "Gabriel Monteiro",
+    "total_eleitores": 2552,
+    "total_votos_validos": 1869,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 141
+  },
+  {
+    "id_municipio_tse": 64335,
+    "municipio": "Gália",
+    "total_eleitores": 5261,
+    "total_votos_validos": 3554,
+    "votos_mv": 2,
+    "pct_mv": 0.06,
+    "ranking_mv": 100
+  },
+  {
+    "id_municipio_tse": 64351,
+    "municipio": "Garça",
+    "total_eleitores": 35475,
+    "total_votos_validos": 22669,
+    "votos_mv": 2,
+    "pct_mv": 0.01,
+    "ranking_mv": 280
+  },
+  {
+    "id_municipio_tse": 64378,
+    "municipio": "Gastão Vidigal",
+    "total_eleitores": 2863,
+    "total_votos_validos": 2020,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 173
+  },
+  {
+    "id_municipio_tse": 62308,
+    "municipio": "Gavião Peixoto",
+    "total_eleitores": 4125,
+    "total_votos_validos": 2938,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 165
+  },
+  {
+    "id_municipio_tse": 64394,
+    "municipio": "General Salgado",
+    "total_eleitores": 8369,
+    "total_votos_validos": 5821,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 275
+  },
+  {
+    "id_municipio_tse": 64416,
+    "municipio": "Getulina",
+    "total_eleitores": 8071,
+    "total_votos_validos": 4739,
+    "votos_mv": 14,
+    "pct_mv": 0.3,
+    "ranking_mv": 62
+  },
+  {
+    "id_municipio_tse": 64432,
+    "municipio": "Glicério",
+    "total_eleitores": 3869,
+    "total_votos_validos": 2650,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 183
+  },
+  {
+    "id_municipio_tse": 64459,
+    "municipio": "Guaiçara",
+    "total_eleitores": 8688,
+    "total_votos_validos": 5430,
+    "votos_mv": 3,
+    "pct_mv": 0.06,
+    "ranking_mv": 124
+  },
+  {
+    "id_municipio_tse": 64475,
+    "municipio": "Guaimbê",
+    "total_eleitores": 4721,
+    "total_votos_validos": 3126,
+    "votos_mv": 2,
+    "pct_mv": 0.06,
+    "ranking_mv": 92
+  },
+  {
+    "id_municipio_tse": 64491,
+    "municipio": "Guaíra",
+    "total_eleitores": 30900,
+    "total_votos_validos": 18364,
+    "votos_mv": 1,
+    "pct_mv": 0.01,
+    "ranking_mv": 294
+  },
+  {
+    "id_municipio_tse": 64513,
+    "municipio": "Guapiaçu",
+    "total_eleitores": 15549,
+    "total_votos_validos": 10169,
+    "votos_mv": 4,
+    "pct_mv": 0.04,
+    "ranking_mv": 152
+  },
+  {
+    "id_municipio_tse": 64530,
+    "municipio": "Guapiara",
+    "total_eleitores": 15058,
+    "total_votos_validos": 10026,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 275
+  },
+  {
+    "id_municipio_tse": 64556,
+    "municipio": "Guará",
+    "total_eleitores": 14114,
+    "total_votos_validos": 10403,
+    "votos_mv": 4,
+    "pct_mv": 0.04,
+    "ranking_mv": 132
+  },
+  {
+    "id_municipio_tse": 64572,
+    "municipio": "Guaraçaí",
+    "total_eleitores": 6646,
+    "total_votos_validos": 4424,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 260
+  },
+  {
+    "id_municipio_tse": 64599,
+    "municipio": "Guaraci",
+    "total_eleitores": 8551,
+    "total_votos_validos": 5898,
+    "votos_mv": 1,
+    "pct_mv": 0.02,
+    "ranking_mv": 154
+  },
+  {
+    "id_municipio_tse": 64610,
+    "municipio": "Guarani d'Oeste",
+    "total_eleitores": 1631,
+    "total_votos_validos": 1265,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 120
+  },
+  {
+    "id_municipio_tse": 64637,
+    "municipio": "Guarantã",
+    "total_eleitores": 5176,
+    "total_votos_validos": 3308,
+    "votos_mv": 1,
+    "pct_mv": 0.03,
+    "ranking_mv": 138
+  },
+  {
+    "id_municipio_tse": 64653,
+    "municipio": "Guararapes",
+    "total_eleitores": 23376,
+    "total_votos_validos": 16369,
+    "votos_mv": 2,
+    "pct_mv": 0.01,
+    "ranking_mv": 228
+  },
+  {
+    "id_municipio_tse": 64670,
+    "municipio": "Guararema",
+    "total_eleitores": 25642,
+    "total_votos_validos": 18530,
+    "votos_mv": 315,
+    "pct_mv": 1.7,
+    "ranking_mv": 5
+  },
+  {
+    "id_municipio_tse": 64696,
+    "municipio": "Guaratinguetá",
+    "total_eleitores": 95373,
+    "total_votos_validos": 66546,
+    "votos_mv": 950,
+    "pct_mv": 1.43,
+    "ranking_mv": 12
+  },
+  {
+    "id_municipio_tse": 64718,
+    "municipio": "Guareí",
+    "total_eleitores": 9533,
+    "total_votos_validos": 6481,
+    "votos_mv": 3,
+    "pct_mv": 0.05,
+    "ranking_mv": 101
+  },
+  {
+    "id_municipio_tse": 64734,
+    "municipio": "Guariba",
+    "total_eleitores": 29547,
+    "total_votos_validos": 20119,
+    "votos_mv": 2,
+    "pct_mv": 0.01,
+    "ranking_mv": 238
+  },
+  {
+    "id_municipio_tse": 64750,
+    "municipio": "Guarujá",
+    "total_eleitores": 235696,
+    "total_votos_validos": 165248,
+    "votos_mv": 898,
+    "pct_mv": 0.54,
+    "ranking_mv": 27
+  },
+  {
+    "id_municipio_tse": 64777,
+    "municipio": "Guarulhos",
+    "total_eleitores": 927537,
+    "total_votos_validos": 649330,
+    "votos_mv": 272,
+    "pct_mv": 0.04,
+    "ranking_mv": 177
+  },
+  {
+    "id_municipio_tse": 61107,
+    "municipio": "Guatapará",
+    "total_eleitores": 5901,
+    "total_votos_validos": 4009,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 204
+  },
+  {
+    "id_municipio_tse": 64793,
+    "municipio": "Guzolândia",
+    "total_eleitores": 3547,
+    "total_votos_validos": 2491,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 174
+  },
+  {
+    "id_municipio_tse": 64815,
+    "municipio": "Herculândia",
+    "total_eleitores": 7222,
+    "total_votos_validos": 4828,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 217
+  },
+  {
+    "id_municipio_tse": 61743,
+    "municipio": "Holambra",
+    "total_eleitores": 12272,
+    "total_votos_validos": 8964,
+    "votos_mv": 4,
+    "pct_mv": 0.04,
+    "ranking_mv": 130
+  },
+  {
+    "id_municipio_tse": 61727,
+    "municipio": "Hortolândia",
+    "total_eleitores": 165338,
+    "total_votos_validos": 112885,
+    "votos_mv": 781,
+    "pct_mv": 0.69,
+    "ranking_mv": 32
+  },
+  {
+    "id_municipio_tse": 64831,
+    "municipio": "Iacanga",
+    "total_eleitores": 8592,
+    "total_votos_validos": 5964,
+    "votos_mv": 2,
+    "pct_mv": 0.03,
+    "ranking_mv": 140
+  },
+  {
+    "id_municipio_tse": 64858,
+    "municipio": "Iacri",
+    "total_eleitores": 5129,
+    "total_votos_validos": 3441,
+    "votos_mv": 8,
+    "pct_mv": 0.23,
+    "ranking_mv": 50
+  },
+  {
+    "id_municipio_tse": 61085,
+    "municipio": "Iaras",
+    "total_eleitores": 4570,
+    "total_votos_validos": 2821,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 219
+  },
+  {
+    "id_municipio_tse": 64874,
+    "municipio": "Ibaté",
+    "total_eleitores": 26294,
+    "total_votos_validos": 15539,
+    "votos_mv": 1,
+    "pct_mv": 0.01,
+    "ranking_mv": 318
+  },
+  {
+    "id_municipio_tse": 64890,
+    "municipio": "Ibirá",
+    "total_eleitores": 9335,
+    "total_votos_validos": 6312,
+    "votos_mv": 4,
+    "pct_mv": 0.06,
+    "ranking_mv": 105
+  },
+  {
+    "id_municipio_tse": 64912,
+    "municipio": "Ibirarema",
+    "total_eleitores": 5241,
+    "total_votos_validos": 3579,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 218
+  },
+  {
+    "id_municipio_tse": 64939,
+    "municipio": "Ibitinga",
+    "total_eleitores": 44182,
+    "total_votos_validos": 28673,
+    "votos_mv": 7,
+    "pct_mv": 0.02,
+    "ranking_mv": 187
+  },
+  {
+    "id_municipio_tse": 64955,
+    "municipio": "Ibiúna",
+    "total_eleitores": 63362,
+    "total_votos_validos": 41088,
+    "votos_mv": 12,
+    "pct_mv": 0.03,
+    "ranking_mv": 178
+  },
+  {
+    "id_municipio_tse": 64971,
+    "municipio": "Icém",
+    "total_eleitores": 6323,
+    "total_votos_validos": 4425,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 218
+  },
+  {
+    "id_municipio_tse": 64998,
+    "municipio": "Iepê",
+    "total_eleitores": 6337,
+    "total_votos_validos": 4594,
+    "votos_mv": 24,
+    "pct_mv": 0.52,
+    "ranking_mv": 29
+  },
+  {
+    "id_municipio_tse": 65013,
+    "municipio": "Igaraçu do Tietê",
+    "total_eleitores": 18739,
+    "total_votos_validos": 11773,
+    "votos_mv": 2,
+    "pct_mv": 0.02,
+    "ranking_mv": 208
+  },
+  {
+    "id_municipio_tse": 65030,
+    "municipio": "Igarapava",
+    "total_eleitores": 21415,
+    "total_votos_validos": 13372,
+    "votos_mv": 13,
+    "pct_mv": 0.1,
+    "ranking_mv": 91
+  },
+  {
+    "id_municipio_tse": 65056,
+    "municipio": "Igaratá",
+    "total_eleitores": 9095,
+    "total_votos_validos": 6489,
+    "votos_mv": 71,
+    "pct_mv": 1.09,
+    "ranking_mv": 12
+  },
+  {
+    "id_municipio_tse": 65072,
+    "municipio": "Iguape",
+    "total_eleitores": 23676,
+    "total_votos_validos": 15120,
+    "votos_mv": 2,
+    "pct_mv": 0.01,
+    "ranking_mv": 211
+  },
+  {
+    "id_municipio_tse": 62006,
+    "municipio": "Ilha Comprida",
+    "total_eleitores": 12786,
+    "total_votos_validos": 8016,
+    "votos_mv": 2,
+    "pct_mv": 0.02,
+    "ranking_mv": 179
+  },
+  {
+    "id_municipio_tse": 61204,
+    "municipio": "Ilha Solteira",
+    "total_eleitores": 21606,
+    "total_votos_validos": 13336,
+    "votos_mv": 1,
+    "pct_mv": 0.01,
+    "ranking_mv": 315
+  },
+  {
+    "id_municipio_tse": 65099,
+    "municipio": "Ilhabela",
+    "total_eleitores": 29355,
+    "total_votos_validos": 19765,
+    "votos_mv": 456,
+    "pct_mv": 2.31,
+    "ranking_mv": 12
+  },
+  {
+    "id_municipio_tse": 65110,
+    "municipio": "Indaiatuba",
+    "total_eleitores": 188741,
+    "total_votos_validos": 127145,
+    "votos_mv": 23,
+    "pct_mv": 0.02,
+    "ranking_mv": 197
+  },
+  {
+    "id_municipio_tse": 65137,
+    "municipio": "Indiana",
+    "total_eleitores": 3936,
+    "total_votos_validos": 2948,
+    "votos_mv": 2,
+    "pct_mv": 0.07,
+    "ranking_mv": 90
+  },
+  {
+    "id_municipio_tse": 65153,
+    "municipio": "Indiaporã",
+    "total_eleitores": 2989,
+    "total_votos_validos": 2304,
+    "votos_mv": 1,
+    "pct_mv": 0.04,
+    "ranking_mv": 101
+  },
+  {
+    "id_municipio_tse": 65170,
+    "municipio": "Inúbia Paulista",
+    "total_eleitores": 3031,
+    "total_votos_validos": 2170,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 167
+  },
+  {
+    "id_municipio_tse": 65196,
+    "municipio": "Ipaussu",
+    "total_eleitores": 10747,
+    "total_votos_validos": 7141,
+    "votos_mv": 2,
+    "pct_mv": 0.03,
+    "ranking_mv": 169
+  },
+  {
+    "id_municipio_tse": 65218,
+    "municipio": "Iperó",
+    "total_eleitores": 21405,
+    "total_votos_validos": 14645,
+    "votos_mv": 21,
+    "pct_mv": 0.14,
+    "ranking_mv": 66
+  },
+  {
+    "id_municipio_tse": 65234,
+    "municipio": "Ipeúna",
+    "total_eleitores": 5646,
+    "total_votos_validos": 3873,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 235
+  },
+  {
+    "id_municipio_tse": 62243,
+    "municipio": "Ipiguá",
+    "total_eleitores": 4378,
+    "total_votos_validos": 2982,
+    "votos_mv": 1,
+    "pct_mv": 0.03,
+    "ranking_mv": 129
+  },
+  {
+    "id_municipio_tse": 65250,
+    "municipio": "Iporanga",
+    "total_eleitores": 3438,
+    "total_votos_validos": 2276,
+    "votos_mv": 1,
+    "pct_mv": 0.04,
+    "ranking_mv": 82
+  },
+  {
+    "id_municipio_tse": 65277,
+    "municipio": "Ipuã",
+    "total_eleitores": 11489,
+    "total_votos_validos": 8143,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 254
+  },
+  {
+    "id_municipio_tse": 65293,
+    "municipio": "Iracemápolis",
+    "total_eleitores": 18048,
+    "total_votos_validos": 13099,
+    "votos_mv": 1,
+    "pct_mv": 0.01,
+    "ranking_mv": 238
+  },
+  {
+    "id_municipio_tse": 65315,
+    "municipio": "Irapuã",
+    "total_eleitores": 5690,
+    "total_votos_validos": 3587,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 208
+  },
+  {
+    "id_municipio_tse": 65331,
+    "municipio": "Irapuru",
+    "total_eleitores": 5028,
+    "total_votos_validos": 3150,
+    "votos_mv": 70,
+    "pct_mv": 2.22,
+    "ranking_mv": 11
+  },
+  {
+    "id_municipio_tse": 65358,
+    "municipio": "Itaberá",
+    "total_eleitores": 14312,
+    "total_votos_validos": 9997,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 253
+  },
+  {
+    "id_municipio_tse": 65374,
+    "municipio": "Itaí",
+    "total_eleitores": 17507,
+    "total_votos_validos": 11540,
+    "votos_mv": 3,
+    "pct_mv": 0.03,
+    "ranking_mv": 172
+  },
+  {
+    "id_municipio_tse": 65390,
+    "municipio": "Itajobi",
+    "total_eleitores": 12706,
+    "total_votos_validos": 8586,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 285
+  },
+  {
+    "id_municipio_tse": 65412,
+    "municipio": "Itaju",
+    "total_eleitores": 3174,
+    "total_votos_validos": 2122,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 168
+  },
+  {
+    "id_municipio_tse": 65439,
+    "municipio": "Itanhaém",
+    "total_eleitores": 84735,
+    "total_votos_validos": 53877,
+    "votos_mv": 8,
+    "pct_mv": 0.01,
+    "ranking_mv": 262
+  },
+  {
+    "id_municipio_tse": 61603,
+    "municipio": "Itaóca",
+    "total_eleitores": 3089,
+    "total_votos_validos": 2049,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 133
+  },
+  {
+    "id_municipio_tse": 65455,
+    "municipio": "Itapecerica da Serra",
+    "total_eleitores": 123679,
+    "total_votos_validos": 83016,
+    "votos_mv": 1711,
+    "pct_mv": 2.06,
+    "ranking_mv": 11
+  },
+  {
+    "id_municipio_tse": 65471,
+    "municipio": "Itapetininga",
+    "total_eleitores": 117819,
+    "total_votos_validos": 81538,
+    "votos_mv": 14,
+    "pct_mv": 0.02,
+    "ranking_mv": 181
+  },
+  {
+    "id_municipio_tse": 65498,
+    "municipio": "Itapeva",
+    "total_eleitores": 71937,
+    "total_votos_validos": 47433,
+    "votos_mv": 26,
+    "pct_mv": 0.05,
+    "ranking_mv": 118
+  },
+  {
+    "id_municipio_tse": 65510,
+    "municipio": "Itapevi",
+    "total_eleitores": 163838,
+    "total_votos_validos": 112346,
+    "votos_mv": 37,
+    "pct_mv": 0.03,
+    "ranking_mv": 156
+  },
+  {
+    "id_municipio_tse": 65536,
+    "municipio": "Itapira",
+    "total_eleitores": 57417,
+    "total_votos_validos": 35533,
+    "votos_mv": 7,
+    "pct_mv": 0.02,
+    "ranking_mv": 213
+  },
+  {
+    "id_municipio_tse": 61948,
+    "municipio": "Itapirapuã Paulista",
+    "total_eleitores": 3325,
+    "total_votos_validos": 2239,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 127
+  },
+  {
+    "id_municipio_tse": 65552,
+    "municipio": "Itápolis",
+    "total_eleitores": 31352,
+    "total_votos_validos": 19121,
+    "votos_mv": 2,
+    "pct_mv": 0.01,
+    "ranking_mv": 273
+  },
+  {
+    "id_municipio_tse": 65579,
+    "municipio": "Itaporanga",
+    "total_eleitores": 11619,
+    "total_votos_validos": 7514,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 284
+  },
+  {
+    "id_municipio_tse": 65595,
+    "municipio": "Itapuí",
+    "total_eleitores": 10185,
+    "total_votos_validos": 6902,
+    "votos_mv": 1,
+    "pct_mv": 0.01,
+    "ranking_mv": 169
+  },
+  {
+    "id_municipio_tse": 65617,
+    "municipio": "Itapura",
+    "total_eleitores": 3778,
+    "total_votos_validos": 2338,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 169
+  },
+  {
+    "id_municipio_tse": 65633,
+    "municipio": "Itaquaquecetuba",
+    "total_eleitores": 251242,
+    "total_votos_validos": 162789,
+    "votos_mv": 77,
+    "pct_mv": 0.05,
+    "ranking_mv": 162
+  },
+  {
+    "id_municipio_tse": 65650,
+    "municipio": "Itararé",
+    "total_eleitores": 36467,
+    "total_votos_validos": 23283,
+    "votos_mv": 1,
+    "pct_mv": 0.0,
+    "ranking_mv": 279
+  },
+  {
+    "id_municipio_tse": 65676,
+    "municipio": "Itariri",
+    "total_eleitores": 9764,
+    "total_votos_validos": 6437,
+    "votos_mv": 1,
+    "pct_mv": 0.02,
+    "ranking_mv": 168
+  },
+  {
+    "id_municipio_tse": 65692,
+    "municipio": "Itatiba",
+    "total_eleitores": 85608,
+    "total_votos_validos": 49573,
+    "votos_mv": 17,
+    "pct_mv": 0.03,
+    "ranking_mv": 181
+  },
+  {
+    "id_municipio_tse": 65714,
+    "municipio": "Itatinga",
+    "total_eleitores": 13870,
+    "total_votos_validos": 9140,
+    "votos_mv": 3,
+    "pct_mv": 0.03,
+    "ranking_mv": 154
+  },
+  {
+    "id_municipio_tse": 65730,
+    "municipio": "Itirapina",
+    "total_eleitores": 10159,
+    "total_votos_validos": 6646,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 330
+  },
+  {
+    "id_municipio_tse": 65757,
+    "municipio": "Itirapuã",
+    "total_eleitores": 5088,
+    "total_votos_validos": 3362,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 197
+  },
+  {
+    "id_municipio_tse": 65773,
+    "municipio": "Itobi",
+    "total_eleitores": 6293,
+    "total_votos_validos": 4212,
+    "votos_mv": 2,
+    "pct_mv": 0.05,
+    "ranking_mv": 109
+  },
+  {
+    "id_municipio_tse": 65790,
+    "municipio": "Itu",
+    "total_eleitores": 126932,
+    "total_votos_validos": 85073,
+    "votos_mv": 84,
+    "pct_mv": 0.1,
+    "ranking_mv": 95
+  },
+  {
+    "id_municipio_tse": 65811,
+    "municipio": "Itupeva",
+    "total_eleitores": 45117,
+    "total_votos_validos": 30213,
+    "votos_mv": 9,
+    "pct_mv": 0.03,
+    "ranking_mv": 186
+  },
+  {
+    "id_municipio_tse": 65838,
+    "municipio": "Ituverava",
+    "total_eleitores": 29969,
+    "total_votos_validos": 19301,
+    "votos_mv": 13,
+    "pct_mv": 0.07,
+    "ranking_mv": 106
+  },
+  {
+    "id_municipio_tse": 65854,
+    "municipio": "Jaborandi",
+    "total_eleitores": 5223,
+    "total_votos_validos": 3482,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 192
+  },
+  {
+    "id_municipio_tse": 65870,
+    "municipio": "Jaboticabal",
+    "total_eleitores": 55022,
+    "total_votos_validos": 35848,
+    "votos_mv": 7,
+    "pct_mv": 0.02,
+    "ranking_mv": 209
+  },
+  {
+    "id_municipio_tse": 65897,
+    "municipio": "Jacareí",
+    "total_eleitores": 176773,
+    "total_votos_validos": 121027,
+    "votos_mv": 2158,
+    "pct_mv": 1.78,
+    "ranking_mv": 8
+  },
+  {
+    "id_municipio_tse": 65919,
+    "municipio": "Jaci",
+    "total_eleitores": 5765,
+    "total_votos_validos": 3988,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 218
+  },
+  {
+    "id_municipio_tse": 65935,
+    "municipio": "Jacupiranga",
+    "total_eleitores": 13562,
+    "total_votos_validos": 8859,
+    "votos_mv": 3,
+    "pct_mv": 0.03,
+    "ranking_mv": 141
+  },
+  {
+    "id_municipio_tse": 65951,
+    "municipio": "Jaguariúna",
+    "total_eleitores": 44927,
+    "total_votos_validos": 30418,
+    "votos_mv": 8,
+    "pct_mv": 0.03,
+    "ranking_mv": 183
+  },
+  {
+    "id_municipio_tse": 65978,
+    "municipio": "Jales",
+    "total_eleitores": 38429,
+    "total_votos_validos": 24439,
+    "votos_mv": 4,
+    "pct_mv": 0.02,
+    "ranking_mv": 237
+  },
+  {
+    "id_municipio_tse": 65994,
+    "municipio": "Jambeiro",
+    "total_eleitores": 4961,
+    "total_votos_validos": 3507,
+    "votos_mv": 127,
+    "pct_mv": 3.62,
+    "ranking_mv": 5
+  },
+  {
+    "id_municipio_tse": 66010,
+    "municipio": "Jandira",
+    "total_eleitores": 81069,
+    "total_votos_validos": 54831,
+    "votos_mv": 33,
+    "pct_mv": 0.06,
+    "ranking_mv": 136
+  },
+  {
+    "id_municipio_tse": 66036,
+    "municipio": "Jardinópolis",
+    "total_eleitores": 30537,
+    "total_votos_validos": 18598,
+    "votos_mv": 2,
+    "pct_mv": 0.01,
+    "ranking_mv": 255
+  },
+  {
+    "id_municipio_tse": 66052,
+    "municipio": "Jarinu",
+    "total_eleitores": 26388,
+    "total_votos_validos": 17183,
+    "votos_mv": 10,
+    "pct_mv": 0.06,
+    "ranking_mv": 143
+  },
+  {
+    "id_municipio_tse": 66079,
+    "municipio": "Jaú",
+    "total_eleitores": 104907,
+    "total_votos_validos": 71871,
+    "votos_mv": 17,
+    "pct_mv": 0.02,
+    "ranking_mv": 184
+  },
+  {
+    "id_municipio_tse": 66095,
+    "municipio": "Jeriquara",
+    "total_eleitores": 3041,
+    "total_votos_validos": 2273,
+    "votos_mv": 1,
+    "pct_mv": 0.04,
+    "ranking_mv": 81
+  },
+  {
+    "id_municipio_tse": 66117,
+    "municipio": "Joanópolis",
+    "total_eleitores": 9958,
+    "total_votos_validos": 6655,
+    "votos_mv": 6,
+    "pct_mv": 0.09,
+    "ranking_mv": 94
+  },
+  {
+    "id_municipio_tse": 66133,
+    "municipio": "João Ramalho",
+    "total_eleitores": 3437,
+    "total_votos_validos": 2389,
+    "votos_mv": 4,
+    "pct_mv": 0.17,
+    "ranking_mv": 60
+  },
+  {
+    "id_municipio_tse": 66150,
+    "municipio": "José Bonifácio",
+    "total_eleitores": 28351,
+    "total_votos_validos": 18788,
+    "votos_mv": 2,
+    "pct_mv": 0.01,
+    "ranking_mv": 238
+  },
+  {
+    "id_municipio_tse": 66176,
+    "municipio": "Júlio Mesquita",
+    "total_eleitores": 3791,
+    "total_votos_validos": 2620,
+    "votos_mv": 1,
+    "pct_mv": 0.04,
+    "ranking_mv": 101
+  },
+  {
+    "id_municipio_tse": 62324,
+    "municipio": "Jumirim",
+    "total_eleitores": 2434,
+    "total_votos_validos": 1657,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 135
+  },
+  {
+    "id_municipio_tse": 66192,
+    "municipio": "Jundiaí",
+    "total_eleitores": 331068,
+    "total_votos_validos": 231801,
+    "votos_mv": 409,
+    "pct_mv": 0.18,
+    "ranking_mv": 67
+  },
+  {
+    "id_municipio_tse": 66214,
+    "municipio": "Junqueirópolis",
+    "total_eleitores": 13887,
+    "total_votos_validos": 9466,
+    "votos_mv": 139,
+    "pct_mv": 1.47,
+    "ranking_mv": 12
+  },
+  {
+    "id_municipio_tse": 66230,
+    "municipio": "Juquiá",
+    "total_eleitores": 17105,
+    "total_votos_validos": 10466,
+    "votos_mv": 2,
+    "pct_mv": 0.02,
+    "ranking_mv": 166
+  },
+  {
+    "id_municipio_tse": 66257,
+    "municipio": "Juquitiba",
+    "total_eleitores": 23898,
+    "total_votos_validos": 16210,
+    "votos_mv": 137,
+    "pct_mv": 0.85,
+    "ranking_mv": 22
+  },
+  {
+    "id_municipio_tse": 66273,
+    "municipio": "Lagoinha",
+    "total_eleitores": 5295,
+    "total_votos_validos": 3876,
+    "votos_mv": 6,
+    "pct_mv": 0.15,
+    "ranking_mv": 54
+  },
+  {
+    "id_municipio_tse": 66290,
+    "municipio": "Laranjal Paulista",
+    "total_eleitores": 22067,
+    "total_votos_validos": 14282,
+    "votos_mv": 4,
+    "pct_mv": 0.03,
+    "ranking_mv": 188
+  },
+  {
+    "id_municipio_tse": 66311,
+    "municipio": "Lavínia",
+    "total_eleitores": 3954,
+    "total_votos_validos": 2684,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 173
+  },
+  {
+    "id_municipio_tse": 66338,
+    "municipio": "Lavrinhas",
+    "total_eleitores": 6283,
+    "total_votos_validos": 4521,
+    "votos_mv": 17,
+    "pct_mv": 0.38,
+    "ranking_mv": 40
+  },
+  {
+    "id_municipio_tse": 66354,
+    "municipio": "Leme",
+    "total_eleitores": 75657,
+    "total_votos_validos": 47543,
+    "votos_mv": 10,
+    "pct_mv": 0.02,
+    "ranking_mv": 205
+  },
+  {
+    "id_municipio_tse": 66370,
+    "municipio": "Lençóis Paulista",
+    "total_eleitores": 51350,
+    "total_votos_validos": 34689,
+    "votos_mv": 2,
+    "pct_mv": 0.01,
+    "ranking_mv": 330
+  },
+  {
+    "id_municipio_tse": 66397,
+    "municipio": "Limeira",
+    "total_eleitores": 230253,
+    "total_votos_validos": 154645,
+    "votos_mv": 28,
+    "pct_mv": 0.02,
+    "ranking_mv": 187
+  },
+  {
+    "id_municipio_tse": 66419,
+    "municipio": "Lindóia",
+    "total_eleitores": 5911,
+    "total_votos_validos": 4245,
+    "votos_mv": 2,
+    "pct_mv": 0.05,
+    "ranking_mv": 107
+  },
+  {
+    "id_municipio_tse": 66435,
+    "municipio": "Lins",
+    "total_eleitores": 57956,
+    "total_votos_validos": 36451,
+    "votos_mv": 4,
+    "pct_mv": 0.01,
+    "ranking_mv": 272
+  },
+  {
+    "id_municipio_tse": 66451,
+    "municipio": "Lorena",
+    "total_eleitores": 64984,
+    "total_votos_validos": 44712,
+    "votos_mv": 379,
+    "pct_mv": 0.85,
+    "ranking_mv": 24
+  },
+  {
+    "id_municipio_tse": 62022,
+    "municipio": "Lourdes",
+    "total_eleitores": 1954,
+    "total_votos_validos": 1319,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 121
+  },
+  {
+    "id_municipio_tse": 66478,
+    "municipio": "Louveira",
+    "total_eleitores": 37266,
+    "total_votos_validos": 26038,
+    "votos_mv": 8,
+    "pct_mv": 0.03,
+    "ranking_mv": 179
+  },
+  {
+    "id_municipio_tse": 66494,
+    "municipio": "Lucélia",
+    "total_eleitores": 13546,
+    "total_votos_validos": 8995,
+    "votos_mv": 2,
+    "pct_mv": 0.02,
+    "ranking_mv": 168
+  },
+  {
+    "id_municipio_tse": 66516,
+    "municipio": "Lucianópolis",
+    "total_eleitores": 2126,
+    "total_votos_validos": 1518,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 125
+  },
+  {
+    "id_municipio_tse": 66532,
+    "municipio": "Luís Antônio",
+    "total_eleitores": 10202,
+    "total_votos_validos": 6784,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 276
+  },
+  {
+    "id_municipio_tse": 66559,
+    "municipio": "Luiziânia",
+    "total_eleitores": 3919,
+    "total_votos_validos": 2762,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 182
+  },
+  {
+    "id_municipio_tse": 66575,
+    "municipio": "Lupércio",
+    "total_eleitores": 3468,
+    "total_votos_validos": 2408,
+    "votos_mv": 2,
+    "pct_mv": 0.08,
+    "ranking_mv": 72
+  },
+  {
+    "id_municipio_tse": 66591,
+    "municipio": "Lutécia",
+    "total_eleitores": 2455,
+    "total_votos_validos": 1724,
+    "votos_mv": 8,
+    "pct_mv": 0.46,
+    "ranking_mv": 33
+  },
+  {
+    "id_municipio_tse": 66613,
+    "municipio": "Macatuba",
+    "total_eleitores": 13268,
+    "total_votos_validos": 9023,
+    "votos_mv": 1,
+    "pct_mv": 0.01,
+    "ranking_mv": 211
+  },
+  {
+    "id_municipio_tse": 66630,
+    "municipio": "Macaubal",
+    "total_eleitores": 6157,
+    "total_votos_validos": 4193,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 240
+  },
+  {
+    "id_municipio_tse": 66656,
+    "municipio": "Macedônia",
+    "total_eleitores": 3601,
+    "total_votos_validos": 2557,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 174
+  },
+  {
+    "id_municipio_tse": 66672,
+    "municipio": "Magda",
+    "total_eleitores": 2659,
+    "total_votos_validos": 1920,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 164
+  },
+  {
+    "id_municipio_tse": 66699,
+    "municipio": "Mairinque",
+    "total_eleitores": 40226,
+    "total_votos_validos": 25939,
+    "votos_mv": 12,
+    "pct_mv": 0.05,
+    "ranking_mv": 142
+  },
+  {
+    "id_municipio_tse": 66710,
+    "municipio": "Mairiporã",
+    "total_eleitores": 65763,
+    "total_votos_validos": 44786,
+    "votos_mv": 22,
+    "pct_mv": 0.05,
+    "ranking_mv": 151
+  },
+  {
+    "id_municipio_tse": 66737,
+    "municipio": "Manduri",
+    "total_eleitores": 7445,
+    "total_votos_validos": 5038,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 281
+  },
+  {
+    "id_municipio_tse": 66753,
+    "municipio": "Marabá Paulista",
+    "total_eleitores": 3097,
+    "total_votos_validos": 2132,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 154
+  },
+  {
+    "id_municipio_tse": 66770,
+    "municipio": "Maracaí",
+    "total_eleitores": 10916,
+    "total_votos_validos": 7713,
+    "votos_mv": 38,
+    "pct_mv": 0.49,
+    "ranking_mv": 41
+  },
+  {
+    "id_municipio_tse": 61867,
+    "municipio": "Marapoama",
+    "total_eleitores": 2770,
+    "total_votos_validos": 1922,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 155
+  },
+  {
+    "id_municipio_tse": 66796,
+    "municipio": "Mariápolis",
+    "total_eleitores": 3060,
+    "total_votos_validos": 2110,
+    "votos_mv": 1,
+    "pct_mv": 0.05,
+    "ranking_mv": 98
+  },
+  {
+    "id_municipio_tse": 66818,
+    "municipio": "Marília",
+    "total_eleitores": 181690,
+    "total_votos_validos": 120019,
+    "votos_mv": 27,
+    "pct_mv": 0.02,
+    "ranking_mv": 203
+  },
+  {
+    "id_municipio_tse": 66834,
+    "municipio": "Marinópolis",
+    "total_eleitores": 1798,
+    "total_votos_validos": 1257,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 133
+  },
+  {
+    "id_municipio_tse": 66850,
+    "municipio": "Martinópolis",
+    "total_eleitores": 17919,
+    "total_votos_validos": 13146,
+    "votos_mv": 14,
+    "pct_mv": 0.11,
+    "ranking_mv": 78
+  },
+  {
+    "id_municipio_tse": 66877,
+    "municipio": "Matão",
+    "total_eleitores": 66198,
+    "total_votos_validos": 43388,
+    "votos_mv": 4,
+    "pct_mv": 0.01,
+    "ranking_mv": 281
+  },
+  {
+    "id_municipio_tse": 66893,
+    "municipio": "Mauá",
+    "total_eleitores": 315450,
+    "total_votos_validos": 205413,
+    "votos_mv": 48,
+    "pct_mv": 0.02,
+    "ranking_mv": 216
+  },
+  {
+    "id_municipio_tse": 66915,
+    "municipio": "Mendonça",
+    "total_eleitores": 5041,
+    "total_votos_validos": 3493,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 207
+  },
+  {
+    "id_municipio_tse": 66931,
+    "municipio": "Meridiano",
+    "total_eleitores": 3643,
+    "total_votos_validos": 2557,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 186
+  },
+  {
+    "id_municipio_tse": 61964,
+    "municipio": "Mesópolis",
+    "total_eleitores": 1782,
+    "total_votos_validos": 1258,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 110
+  },
+  {
+    "id_municipio_tse": 66958,
+    "municipio": "Miguelópolis",
+    "total_eleitores": 14751,
+    "total_votos_validos": 10361,
+    "votos_mv": 5,
+    "pct_mv": 0.05,
+    "ranking_mv": 126
+  },
+  {
+    "id_municipio_tse": 66974,
+    "municipio": "Mineiros do Tietê",
+    "total_eleitores": 9347,
+    "total_votos_validos": 6187,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 255
+  },
+  {
+    "id_municipio_tse": 67016,
+    "municipio": "Mira Estrela",
+    "total_eleitores": 2755,
+    "total_votos_validos": 1837,
+    "votos_mv": 1,
+    "pct_mv": 0.05,
+    "ranking_mv": 98
+  },
+  {
+    "id_municipio_tse": 66990,
+    "municipio": "Miracatu",
+    "total_eleitores": 16726,
+    "total_votos_validos": 10509,
+    "votos_mv": 4,
+    "pct_mv": 0.04,
+    "ranking_mv": 126
+  },
+  {
+    "id_municipio_tse": 67032,
+    "municipio": "Mirandópolis",
+    "total_eleitores": 19999,
+    "total_votos_validos": 12362,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 357
+  },
+  {
+    "id_municipio_tse": 67059,
+    "municipio": "Mirante do Paranapanema",
+    "total_eleitores": 13228,
+    "total_votos_validos": 9044,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 310
+  },
+  {
+    "id_municipio_tse": 67075,
+    "municipio": "Mirassol",
+    "total_eleitores": 45077,
+    "total_votos_validos": 29568,
+    "votos_mv": 11,
+    "pct_mv": 0.04,
+    "ranking_mv": 164
+  },
+  {
+    "id_municipio_tse": 67091,
+    "municipio": "Mirassolândia",
+    "total_eleitores": 4084,
+    "total_votos_validos": 2905,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 182
+  },
+  {
+    "id_municipio_tse": 67113,
+    "municipio": "Mococa",
+    "total_eleitores": 53323,
+    "total_votos_validos": 31774,
+    "votos_mv": 15,
+    "pct_mv": 0.05,
+    "ranking_mv": 128
+  },
+  {
+    "id_municipio_tse": 67130,
+    "municipio": "Mogi das Cruzes",
+    "total_eleitores": 332836,
+    "total_votos_validos": 227412,
+    "votos_mv": 209,
+    "pct_mv": 0.09,
+    "ranking_mv": 99
+  },
+  {
+    "id_municipio_tse": 67156,
+    "municipio": "Mogi Guaçu",
+    "total_eleitores": 119989,
+    "total_votos_validos": 78710,
+    "votos_mv": 49,
+    "pct_mv": 0.06,
+    "ranking_mv": 124
+  },
+  {
+    "id_municipio_tse": 67172,
+    "municipio": "Mogi Mirim",
+    "total_eleitores": 71204,
+    "total_votos_validos": 46287,
+    "votos_mv": 10,
+    "pct_mv": 0.02,
+    "ranking_mv": 201
+  },
+  {
+    "id_municipio_tse": 67199,
+    "municipio": "Mombuca",
+    "total_eleitores": 3246,
+    "total_votos_validos": 2238,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 190
+  },
+  {
+    "id_municipio_tse": 67210,
+    "municipio": "Monções",
+    "total_eleitores": 2043,
+    "total_votos_validos": 1372,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 132
+  },
+  {
+    "id_municipio_tse": 67237,
+    "municipio": "Mongaguá",
+    "total_eleitores": 49835,
+    "total_votos_validos": 32010,
+    "votos_mv": 8,
+    "pct_mv": 0.02,
+    "ranking_mv": 192
+  },
+  {
+    "id_municipio_tse": 67253,
+    "municipio": "Monte Alegre do Sul",
+    "total_eleitores": 6585,
+    "total_votos_validos": 4387,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 259
+  },
+  {
+    "id_municipio_tse": 67270,
+    "municipio": "Monte Alto",
+    "total_eleitores": 38209,
+    "total_votos_validos": 24111,
+    "votos_mv": 3,
+    "pct_mv": 0.01,
+    "ranking_mv": 224
+  },
+  {
+    "id_municipio_tse": 67296,
+    "municipio": "Monte Aprazível",
+    "total_eleitores": 17828,
+    "total_votos_validos": 11449,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 393
+  },
+  {
+    "id_municipio_tse": 67318,
+    "municipio": "Monte Azul Paulista",
+    "total_eleitores": 14198,
+    "total_votos_validos": 9741,
+    "votos_mv": 1,
+    "pct_mv": 0.01,
+    "ranking_mv": 224
+  },
+  {
+    "id_municipio_tse": 67334,
+    "municipio": "Monte Castelo",
+    "total_eleitores": 3488,
+    "total_votos_validos": 2546,
+    "votos_mv": 1,
+    "pct_mv": 0.04,
+    "ranking_mv": 126
+  },
+  {
+    "id_municipio_tse": 67377,
+    "municipio": "Monte Mor",
+    "total_eleitores": 47441,
+    "total_votos_validos": 30160,
+    "votos_mv": 11,
+    "pct_mv": 0.04,
+    "ranking_mv": 175
+  },
+  {
+    "id_municipio_tse": 67350,
+    "municipio": "Monteiro Lobato",
+    "total_eleitores": 3959,
+    "total_votos_validos": 2835,
+    "votos_mv": 31,
+    "pct_mv": 1.09,
+    "ranking_mv": 15
+  },
+  {
+    "id_municipio_tse": 67393,
+    "municipio": "Morro Agudo",
+    "total_eleitores": 21173,
+    "total_votos_validos": 14062,
+    "votos_mv": 2,
+    "pct_mv": 0.01,
+    "ranking_mv": 190
+  },
+  {
+    "id_municipio_tse": 67415,
+    "municipio": "Morungaba",
+    "total_eleitores": 10761,
+    "total_votos_validos": 7194,
+    "votos_mv": 1,
+    "pct_mv": 0.01,
+    "ranking_mv": 207
+  },
+  {
+    "id_municipio_tse": 61069,
+    "municipio": "Motuca",
+    "total_eleitores": 3577,
+    "total_votos_validos": 2463,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 193
+  },
+  {
+    "id_municipio_tse": 67431,
+    "municipio": "Murutinga do Sul",
+    "total_eleitores": 3492,
+    "total_votos_validos": 2417,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 169
+  },
+  {
+    "id_municipio_tse": 62340,
+    "municipio": "Nantes",
+    "total_eleitores": 2334,
+    "total_votos_validos": 1632,
+    "votos_mv": 9,
+    "pct_mv": 0.55,
+    "ranking_mv": 25
+  },
+  {
+    "id_municipio_tse": 67458,
+    "municipio": "Narandiba",
+    "total_eleitores": 4462,
+    "total_votos_validos": 3236,
+    "votos_mv": 3,
+    "pct_mv": 0.09,
+    "ranking_mv": 61
+  },
+  {
+    "id_municipio_tse": 67474,
+    "municipio": "Natividade da Serra",
+    "total_eleitores": 5995,
+    "total_votos_validos": 4059,
+    "votos_mv": 149,
+    "pct_mv": 3.67,
+    "ranking_mv": 4
+  },
+  {
+    "id_municipio_tse": 67490,
+    "municipio": "Nazaré Paulista",
+    "total_eleitores": 15044,
+    "total_votos_validos": 9728,
+    "votos_mv": 2,
+    "pct_mv": 0.02,
+    "ranking_mv": 195
+  },
+  {
+    "id_municipio_tse": 67512,
+    "municipio": "Neves Paulista",
+    "total_eleitores": 7684,
+    "total_votos_validos": 4910,
+    "votos_mv": 1,
+    "pct_mv": 0.02,
+    "ranking_mv": 168
+  },
+  {
+    "id_municipio_tse": 67539,
+    "municipio": "Nhandeara",
+    "total_eleitores": 7758,
+    "total_votos_validos": 5566,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 267
+  },
+  {
+    "id_municipio_tse": 67555,
+    "municipio": "Nipoã",
+    "total_eleitores": 3948,
+    "total_votos_validos": 2480,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 202
+  },
+  {
+    "id_municipio_tse": 67571,
+    "municipio": "Nova Aliança",
+    "total_eleitores": 5211,
+    "total_votos_validos": 3639,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 228
+  },
+  {
+    "id_municipio_tse": 61980,
+    "municipio": "Nova Campina",
+    "total_eleitores": 7129,
+    "total_votos_validos": 5139,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 183
+  },
+  {
+    "id_municipio_tse": 61425,
+    "municipio": "Nova Canaã Paulista",
+    "total_eleitores": 2037,
+    "total_votos_validos": 1327,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 123
+  },
+  {
+    "id_municipio_tse": 62367,
+    "municipio": "Nova Castilho",
+    "total_eleitores": 1283,
+    "total_votos_validos": 909,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 110
+  },
+  {
+    "id_municipio_tse": 67598,
+    "municipio": "Nova Europa",
+    "total_eleitores": 7777,
+    "total_votos_validos": 5307,
+    "votos_mv": 1,
+    "pct_mv": 0.02,
+    "ranking_mv": 137
+  },
+  {
+    "id_municipio_tse": 67610,
+    "municipio": "Nova Granada",
+    "total_eleitores": 15933,
+    "total_votos_validos": 10451,
+    "votos_mv": 1,
+    "pct_mv": 0.01,
+    "ranking_mv": 234
+  },
+  {
+    "id_municipio_tse": 67636,
+    "municipio": "Nova Guataporanga",
+    "total_eleitores": 1985,
+    "total_votos_validos": 1302,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 134
+  },
+  {
+    "id_municipio_tse": 67652,
+    "municipio": "Nova Independência",
+    "total_eleitores": 3248,
+    "total_votos_validos": 2291,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 184
+  },
+  {
+    "id_municipio_tse": 67679,
+    "municipio": "Nova Luzitânia",
+    "total_eleitores": 2672,
+    "total_votos_validos": 1948,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 153
+  },
+  {
+    "id_municipio_tse": 67695,
+    "municipio": "Nova Odessa",
+    "total_eleitores": 47848,
+    "total_votos_validos": 33220,
+    "votos_mv": 5,
+    "pct_mv": 0.02,
+    "ranking_mv": 239
+  },
+  {
+    "id_municipio_tse": 61409,
+    "municipio": "Novais",
+    "total_eleitores": 3670,
+    "total_votos_validos": 2605,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 154
+  },
+  {
+    "id_municipio_tse": 67717,
+    "municipio": "Novo Horizonte",
+    "total_eleitores": 30229,
+    "total_votos_validos": 20117,
+    "votos_mv": 6,
+    "pct_mv": 0.03,
+    "ranking_mv": 134
+  },
+  {
+    "id_municipio_tse": 67733,
+    "municipio": "Nuporanga",
+    "total_eleitores": 5941,
+    "total_votos_validos": 4157,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 198
+  },
+  {
+    "id_municipio_tse": 67750,
+    "municipio": "Ocauçu",
+    "total_eleitores": 3292,
+    "total_votos_validos": 2308,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 154
+  },
+  {
+    "id_municipio_tse": 67776,
+    "municipio": "Óleo",
+    "total_eleitores": 2541,
+    "total_votos_validos": 1667,
+    "votos_mv": 1,
+    "pct_mv": 0.06,
+    "ranking_mv": 106
+  },
+  {
+    "id_municipio_tse": 67792,
+    "municipio": "Olímpia",
+    "total_eleitores": 43512,
+    "total_votos_validos": 27835,
+    "votos_mv": 11,
+    "pct_mv": 0.04,
+    "ranking_mv": 147
+  },
+  {
+    "id_municipio_tse": 67814,
+    "municipio": "Onda Verde",
+    "total_eleitores": 4138,
+    "total_votos_validos": 2843,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 195
+  },
+  {
+    "id_municipio_tse": 67830,
+    "municipio": "Oriente",
+    "total_eleitores": 5017,
+    "total_votos_validos": 3653,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 201
+  },
+  {
+    "id_municipio_tse": 67857,
+    "municipio": "Orindiúva",
+    "total_eleitores": 5007,
+    "total_votos_validos": 3519,
+    "votos_mv": 2,
+    "pct_mv": 0.06,
+    "ranking_mv": 94
+  },
+  {
+    "id_municipio_tse": 67873,
+    "municipio": "Orlândia",
+    "total_eleitores": 31689,
+    "total_votos_validos": 20434,
+    "votos_mv": 2,
+    "pct_mv": 0.01,
+    "ranking_mv": 230
+  },
+  {
+    "id_municipio_tse": 67890,
+    "municipio": "Osasco",
+    "total_eleitores": 587680,
+    "total_votos_validos": 400293,
+    "votos_mv": 258,
+    "pct_mv": 0.06,
+    "ranking_mv": 142
+  },
+  {
+    "id_municipio_tse": 67911,
+    "municipio": "Oscar Bressane",
+    "total_eleitores": 2519,
+    "total_votos_validos": 1796,
+    "votos_mv": 1,
+    "pct_mv": 0.06,
+    "ranking_mv": 85
+  },
+  {
+    "id_municipio_tse": 67938,
+    "municipio": "Osvaldo Cruz",
+    "total_eleitores": 24692,
+    "total_votos_validos": 15484,
+    "votos_mv": 69,
+    "pct_mv": 0.45,
+    "ranking_mv": 44
+  },
+  {
+    "id_municipio_tse": 67954,
+    "municipio": "Ourinhos",
+    "total_eleitores": 80865,
+    "total_votos_validos": 54155,
+    "votos_mv": 8,
+    "pct_mv": 0.01,
+    "ranking_mv": 209
+  },
+  {
+    "id_municipio_tse": 67970,
+    "municipio": "Ouro Verde",
+    "total_eleitores": 6147,
+    "total_votos_validos": 4156,
+    "votos_mv": 13,
+    "pct_mv": 0.31,
+    "ranking_mv": 48
+  },
+  {
+    "id_municipio_tse": 62383,
+    "municipio": "Ouroeste",
+    "total_eleitores": 7498,
+    "total_votos_validos": 5256,
+    "votos_mv": 3,
+    "pct_mv": 0.06,
+    "ranking_mv": 109
+  },
+  {
+    "id_municipio_tse": 67997,
+    "municipio": "Pacaembu",
+    "total_eleitores": 8617,
+    "total_votos_validos": 5412,
+    "votos_mv": 4,
+    "pct_mv": 0.07,
+    "ranking_mv": 107
+  },
+  {
+    "id_municipio_tse": 68012,
+    "municipio": "Palestina",
+    "total_eleitores": 9193,
+    "total_votos_validos": 6105,
+    "votos_mv": 1,
+    "pct_mv": 0.02,
+    "ranking_mv": 157
+  },
+  {
+    "id_municipio_tse": 68039,
+    "municipio": "Palmares Paulista",
+    "total_eleitores": 7852,
+    "total_votos_validos": 5384,
+    "votos_mv": 1,
+    "pct_mv": 0.02,
+    "ranking_mv": 143
+  },
+  {
+    "id_municipio_tse": 68055,
+    "municipio": "Palmeira d'Oeste",
+    "total_eleitores": 7937,
+    "total_votos_validos": 4896,
+    "votos_mv": 2,
+    "pct_mv": 0.04,
+    "ranking_mv": 136
+  },
+  {
+    "id_municipio_tse": 68071,
+    "municipio": "Palmital",
+    "total_eleitores": 17259,
+    "total_votos_validos": 11492,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 339
+  },
+  {
+    "id_municipio_tse": 68098,
+    "municipio": "Panorama",
+    "total_eleitores": 10774,
+    "total_votos_validos": 7103,
+    "votos_mv": 2,
+    "pct_mv": 0.03,
+    "ranking_mv": 166
+  },
+  {
+    "id_municipio_tse": 68110,
+    "municipio": "Paraguaçu Paulista",
+    "total_eleitores": 32521,
+    "total_votos_validos": 20388,
+    "votos_mv": 8,
+    "pct_mv": 0.04,
+    "ranking_mv": 159
+  },
+  {
+    "id_municipio_tse": 68136,
+    "municipio": "Paraibuna",
+    "total_eleitores": 14261,
+    "total_votos_validos": 9744,
+    "votos_mv": 319,
+    "pct_mv": 3.27,
+    "ranking_mv": 5
+  },
+  {
+    "id_municipio_tse": 68152,
+    "municipio": "Paraíso",
+    "total_eleitores": 4507,
+    "total_votos_validos": 3067,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 204
+  },
+  {
+    "id_municipio_tse": 68179,
+    "municipio": "Paranapanema",
+    "total_eleitores": 14259,
+    "total_votos_validos": 9745,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 309
+  },
+  {
+    "id_municipio_tse": 68195,
+    "municipio": "Paranapuã",
+    "total_eleitores": 3425,
+    "total_votos_validos": 2489,
+    "votos_mv": 1,
+    "pct_mv": 0.04,
+    "ranking_mv": 115
+  },
+  {
+    "id_municipio_tse": 68217,
+    "municipio": "Parapuã",
+    "total_eleitores": 8260,
+    "total_votos_validos": 5258,
+    "votos_mv": 112,
+    "pct_mv": 2.13,
+    "ranking_mv": 11
+  },
+  {
+    "id_municipio_tse": 68233,
+    "municipio": "Pardinho",
+    "total_eleitores": 5720,
+    "total_votos_validos": 3827,
+    "votos_mv": 5,
+    "pct_mv": 0.13,
+    "ranking_mv": 77
+  },
+  {
+    "id_municipio_tse": 68250,
+    "municipio": "Pariquera-Açu",
+    "total_eleitores": 15597,
+    "total_votos_validos": 10197,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 332
+  },
+  {
+    "id_municipio_tse": 61824,
+    "municipio": "Parisi",
+    "total_eleitores": 2728,
+    "total_votos_validos": 1958,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 145
+  },
+  {
+    "id_municipio_tse": 68276,
+    "municipio": "Patrocínio Paulista",
+    "total_eleitores": 10841,
+    "total_votos_validos": 7367,
+    "votos_mv": 3,
+    "pct_mv": 0.04,
+    "ranking_mv": 133
+  },
+  {
+    "id_municipio_tse": 68292,
+    "municipio": "Paulicéia",
+    "total_eleitores": 5949,
+    "total_votos_validos": 4037,
+    "votos_mv": 33,
+    "pct_mv": 0.82,
+    "ranking_mv": 25
+  },
+  {
+    "id_municipio_tse": 68314,
+    "municipio": "Paulínia",
+    "total_eleitores": 84110,
+    "total_votos_validos": 53434,
+    "votos_mv": 20,
+    "pct_mv": 0.04,
+    "ranking_mv": 183
+  },
+  {
+    "id_municipio_tse": 62405,
+    "municipio": "Paulistânia",
+    "total_eleitores": 1907,
+    "total_votos_validos": 1381,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 99
+  },
+  {
+    "id_municipio_tse": 68330,
+    "municipio": "Paulo de Faria",
+    "total_eleitores": 6423,
+    "total_votos_validos": 4262,
+    "votos_mv": 6,
+    "pct_mv": 0.14,
+    "ranking_mv": 71
+  },
+  {
+    "id_municipio_tse": 68357,
+    "municipio": "Pederneiras",
+    "total_eleitores": 34557,
+    "total_votos_validos": 23346,
+    "votos_mv": 9,
+    "pct_mv": 0.04,
+    "ranking_mv": 143
+  },
+  {
+    "id_municipio_tse": 68373,
+    "municipio": "Pedra Bela",
+    "total_eleitores": 5212,
+    "total_votos_validos": 3484,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 217
+  },
+  {
+    "id_municipio_tse": 68390,
+    "municipio": "Pedranópolis",
+    "total_eleitores": 2332,
+    "total_votos_validos": 1687,
+    "votos_mv": 8,
+    "pct_mv": 0.47,
+    "ranking_mv": 35
+  },
+  {
+    "id_municipio_tse": 68411,
+    "municipio": "Pedregulho",
+    "total_eleitores": 11865,
+    "total_votos_validos": 8355,
+    "votos_mv": 3,
+    "pct_mv": 0.04,
+    "ranking_mv": 117
+  },
+  {
+    "id_municipio_tse": 68438,
+    "municipio": "Pedreira",
+    "total_eleitores": 35306,
+    "total_votos_validos": 23337,
+    "votos_mv": 7,
+    "pct_mv": 0.03,
+    "ranking_mv": 140
+  },
+  {
+    "id_municipio_tse": 61247,
+    "municipio": "Pedrinhas Paulista",
+    "total_eleitores": 2779,
+    "total_votos_validos": 2063,
+    "votos_mv": 1,
+    "pct_mv": 0.05,
+    "ranking_mv": 88
+  },
+  {
+    "id_municipio_tse": 68454,
+    "municipio": "Pedro de Toledo",
+    "total_eleitores": 8427,
+    "total_votos_validos": 5287,
+    "votos_mv": 6,
+    "pct_mv": 0.11,
+    "ranking_mv": 68
+  },
+  {
+    "id_municipio_tse": 68470,
+    "municipio": "Penápolis",
+    "total_eleitores": 47386,
+    "total_votos_validos": 30454,
+    "votos_mv": 6,
+    "pct_mv": 0.02,
+    "ranking_mv": 209
+  },
+  {
+    "id_municipio_tse": 68497,
+    "municipio": "Pereira Barreto",
+    "total_eleitores": 20475,
+    "total_votos_validos": 12875,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 391
+  },
+  {
+    "id_municipio_tse": 68519,
+    "municipio": "Pereiras",
+    "total_eleitores": 6833,
+    "total_votos_validos": 4436,
+    "votos_mv": 4,
+    "pct_mv": 0.09,
+    "ranking_mv": 92
+  },
+  {
+    "id_municipio_tse": 68535,
+    "municipio": "Peruíbe",
+    "total_eleitores": 61566,
+    "total_votos_validos": 39022,
+    "votos_mv": 4,
+    "pct_mv": 0.01,
+    "ranking_mv": 306
+  },
+  {
+    "id_municipio_tse": 68551,
+    "municipio": "Piacatu",
+    "total_eleitores": 4678,
+    "total_votos_validos": 3182,
+    "votos_mv": 1,
+    "pct_mv": 0.03,
+    "ranking_mv": 124
+  },
+  {
+    "id_municipio_tse": 68578,
+    "municipio": "Piedade",
+    "total_eleitores": 43430,
+    "total_votos_validos": 27601,
+    "votos_mv": 4,
+    "pct_mv": 0.01,
+    "ranking_mv": 216
+  },
+  {
+    "id_municipio_tse": 68594,
+    "municipio": "Pilar do Sul",
+    "total_eleitores": 23375,
+    "total_votos_validos": 15634,
+    "votos_mv": 1,
+    "pct_mv": 0.01,
+    "ranking_mv": 263
+  },
+  {
+    "id_municipio_tse": 68616,
+    "municipio": "Pindamonhangaba",
+    "total_eleitores": 122172,
+    "total_votos_validos": 81554,
+    "votos_mv": 1306,
+    "pct_mv": 1.6,
+    "ranking_mv": 13
+  },
+  {
+    "id_municipio_tse": 68632,
+    "municipio": "Pindorama",
+    "total_eleitores": 11407,
+    "total_votos_validos": 7430,
+    "votos_mv": 1,
+    "pct_mv": 0.01,
+    "ranking_mv": 195
+  },
+  {
+    "id_municipio_tse": 68675,
+    "municipio": "Pinhalzinho",
+    "total_eleitores": 11742,
+    "total_votos_validos": 7259,
+    "votos_mv": 6,
+    "pct_mv": 0.08,
+    "ranking_mv": 97
+  },
+  {
+    "id_municipio_tse": 68691,
+    "municipio": "Piquerobi",
+    "total_eleitores": 2966,
+    "total_votos_validos": 2198,
+    "votos_mv": 20,
+    "pct_mv": 0.91,
+    "ranking_mv": 22
+  },
+  {
+    "id_municipio_tse": 68713,
+    "municipio": "Piquete",
+    "total_eleitores": 10064,
+    "total_votos_validos": 7216,
+    "votos_mv": 76,
+    "pct_mv": 1.05,
+    "ranking_mv": 22
+  },
+  {
+    "id_municipio_tse": 68730,
+    "municipio": "Piracaia",
+    "total_eleitores": 22616,
+    "total_votos_validos": 15066,
+    "votos_mv": 11,
+    "pct_mv": 0.07,
+    "ranking_mv": 107
+  },
+  {
+    "id_municipio_tse": 68756,
+    "municipio": "Piracicaba",
+    "total_eleitores": 307397,
+    "total_votos_validos": 206214,
+    "votos_mv": 19,
+    "pct_mv": 0.01,
+    "ranking_mv": 267
+  },
+  {
+    "id_municipio_tse": 68772,
+    "municipio": "Piraju",
+    "total_eleitores": 23939,
+    "total_votos_validos": 14994,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 452
+  },
+  {
+    "id_municipio_tse": 68799,
+    "municipio": "Pirajuí",
+    "total_eleitores": 16217,
+    "total_votos_validos": 10407,
+    "votos_mv": 10,
+    "pct_mv": 0.1,
+    "ranking_mv": 96
+  },
+  {
+    "id_municipio_tse": 68810,
+    "municipio": "Pirangi",
+    "total_eleitores": 8538,
+    "total_votos_validos": 5572,
+    "votos_mv": 1,
+    "pct_mv": 0.02,
+    "ranking_mv": 176
+  },
+  {
+    "id_municipio_tse": 68837,
+    "municipio": "Pirapora do Bom Jesus",
+    "total_eleitores": 13266,
+    "total_votos_validos": 9728,
+    "votos_mv": 2,
+    "pct_mv": 0.02,
+    "ranking_mv": 172
+  },
+  {
+    "id_municipio_tse": 68853,
+    "municipio": "Pirapozinho",
+    "total_eleitores": 21166,
+    "total_votos_validos": 14352,
+    "votos_mv": 30,
+    "pct_mv": 0.21,
+    "ranking_mv": 50
+  },
+  {
+    "id_municipio_tse": 68870,
+    "municipio": "Pirassununga",
+    "total_eleitores": 59126,
+    "total_votos_validos": 39043,
+    "votos_mv": 8,
+    "pct_mv": 0.02,
+    "ranking_mv": 215
+  },
+  {
+    "id_municipio_tse": 68896,
+    "municipio": "Piratininga",
+    "total_eleitores": 9596,
+    "total_votos_validos": 6906,
+    "votos_mv": 26,
+    "pct_mv": 0.38,
+    "ranking_mv": 38
+  },
+  {
+    "id_municipio_tse": 68918,
+    "municipio": "Pitangueiras",
+    "total_eleitores": 26819,
+    "total_votos_validos": 17291,
+    "votos_mv": 2,
+    "pct_mv": 0.01,
+    "ranking_mv": 207
+  },
+  {
+    "id_municipio_tse": 68934,
+    "municipio": "Planalto",
+    "total_eleitores": 4144,
+    "total_votos_validos": 2834,
+    "votos_mv": 1,
+    "pct_mv": 0.04,
+    "ranking_mv": 107
+  },
+  {
+    "id_municipio_tse": 68950,
+    "municipio": "Platina",
+    "total_eleitores": 2712,
+    "total_votos_validos": 1891,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 148
+  },
+  {
+    "id_municipio_tse": 68977,
+    "municipio": "Poá",
+    "total_eleitores": 94809,
+    "total_votos_validos": 64935,
+    "votos_mv": 85,
+    "pct_mv": 0.13,
+    "ranking_mv": 97
+  },
+  {
+    "id_municipio_tse": 68993,
+    "municipio": "Poloni",
+    "total_eleitores": 4542,
+    "total_votos_validos": 2980,
+    "votos_mv": 1,
+    "pct_mv": 0.03,
+    "ranking_mv": 136
+  },
+  {
+    "id_municipio_tse": 69019,
+    "municipio": "Pompéia",
+    "total_eleitores": 16834,
+    "total_votos_validos": 11770,
+    "votos_mv": 2,
+    "pct_mv": 0.02,
+    "ranking_mv": 179
+  },
+  {
+    "id_municipio_tse": 69035,
+    "municipio": "Pongaí",
+    "total_eleitores": 3067,
+    "total_votos_validos": 2209,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 153
+  },
+  {
+    "id_municipio_tse": 69051,
+    "municipio": "Pontal",
+    "total_eleitores": 29981,
+    "total_votos_validos": 19418,
+    "votos_mv": 4,
+    "pct_mv": 0.02,
+    "ranking_mv": 173
+  },
+  {
+    "id_municipio_tse": 61808,
+    "municipio": "Pontalinda",
+    "total_eleitores": 3289,
+    "total_votos_validos": 2149,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 167
+  },
+  {
+    "id_municipio_tse": 69078,
+    "municipio": "Pontes Gestal",
+    "total_eleitores": 2364,
+    "total_votos_validos": 1547,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 160
+  },
+  {
+    "id_municipio_tse": 69094,
+    "municipio": "Populina",
+    "total_eleitores": 3773,
+    "total_votos_validos": 2638,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 165
+  },
+  {
+    "id_municipio_tse": 69116,
+    "municipio": "Porangaba",
+    "total_eleitores": 7420,
+    "total_votos_validos": 4861,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 283
+  },
+  {
+    "id_municipio_tse": 69132,
+    "municipio": "Porto Feliz",
+    "total_eleitores": 42572,
+    "total_votos_validos": 28335,
+    "votos_mv": 13,
+    "pct_mv": 0.05,
+    "ranking_mv": 134
+  },
+  {
+    "id_municipio_tse": 69159,
+    "municipio": "Porto Ferreira",
+    "total_eleitores": 42475,
+    "total_votos_validos": 27469,
+    "votos_mv": 6,
+    "pct_mv": 0.02,
+    "ranking_mv": 190
+  },
+  {
+    "id_municipio_tse": 61565,
+    "municipio": "Potim",
+    "total_eleitores": 13082,
+    "total_votos_validos": 9292,
+    "votos_mv": 169,
+    "pct_mv": 1.82,
+    "ranking_mv": 10
+  },
+  {
+    "id_municipio_tse": 69175,
+    "municipio": "Potirendaba",
+    "total_eleitores": 13674,
+    "total_votos_validos": 9316,
+    "votos_mv": 3,
+    "pct_mv": 0.03,
+    "ranking_mv": 150
+  },
+  {
+    "id_municipio_tse": 62120,
+    "municipio": "Pracinha",
+    "total_eleitores": 1354,
+    "total_votos_validos": 1007,
+    "votos_mv": 7,
+    "pct_mv": 0.7,
+    "ranking_mv": 20
+  },
+  {
+    "id_municipio_tse": 69191,
+    "municipio": "Pradópolis",
+    "total_eleitores": 13883,
+    "total_votos_validos": 9614,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 318
+  },
+  {
+    "id_municipio_tse": 69213,
+    "municipio": "Praia Grande",
+    "total_eleitores": 248856,
+    "total_votos_validos": 173105,
+    "votos_mv": 35,
+    "pct_mv": 0.02,
+    "ranking_mv": 180
+  },
+  {
+    "id_municipio_tse": 62146,
+    "municipio": "Pratânia",
+    "total_eleitores": 4899,
+    "total_votos_validos": 3159,
+    "votos_mv": 4,
+    "pct_mv": 0.13,
+    "ranking_mv": 68
+  },
+  {
+    "id_municipio_tse": 69230,
+    "municipio": "Presidente Alves",
+    "total_eleitores": 3451,
+    "total_votos_validos": 2464,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 166
+  },
+  {
+    "id_municipio_tse": 69256,
+    "municipio": "Presidente Bernardes",
+    "total_eleitores": 11206,
+    "total_votos_validos": 7339,
+    "votos_mv": 14,
+    "pct_mv": 0.19,
+    "ranking_mv": 64
+  },
+  {
+    "id_municipio_tse": 69272,
+    "municipio": "Presidente Epitácio",
+    "total_eleitores": 32005,
+    "total_votos_validos": 20073,
+    "votos_mv": 2,
+    "pct_mv": 0.01,
+    "ranking_mv": 246
+  },
+  {
+    "id_municipio_tse": 69299,
+    "municipio": "Presidente Prudente",
+    "total_eleitores": 180971,
+    "total_votos_validos": 120470,
+    "votos_mv": 199,
+    "pct_mv": 0.17,
+    "ranking_mv": 72
+  },
+  {
+    "id_municipio_tse": 69310,
+    "municipio": "Presidente Venceslau",
+    "total_eleitores": 28920,
+    "total_votos_validos": 18854,
+    "votos_mv": 4,
+    "pct_mv": 0.02,
+    "ranking_mv": 181
+  },
+  {
+    "id_municipio_tse": 69337,
+    "municipio": "Promissão",
+    "total_eleitores": 28435,
+    "total_votos_validos": 17407,
+    "votos_mv": 7,
+    "pct_mv": 0.04,
+    "ranking_mv": 151
+  },
+  {
+    "id_municipio_tse": 62162,
+    "municipio": "Quadra",
+    "total_eleitores": 3805,
+    "total_votos_validos": 2593,
+    "votos_mv": 2,
+    "pct_mv": 0.08,
+    "ranking_mv": 90
+  },
+  {
+    "id_municipio_tse": 69353,
+    "municipio": "Quatá",
+    "total_eleitores": 10124,
+    "total_votos_validos": 6893,
+    "votos_mv": 146,
+    "pct_mv": 2.12,
+    "ranking_mv": 10
+  },
+  {
+    "id_municipio_tse": 69370,
+    "municipio": "Queiroz",
+    "total_eleitores": 3288,
+    "total_votos_validos": 2271,
+    "votos_mv": 1,
+    "pct_mv": 0.04,
+    "ranking_mv": 75
+  },
+  {
+    "id_municipio_tse": 69396,
+    "municipio": "Queluz",
+    "total_eleitores": 7170,
+    "total_votos_validos": 5124,
+    "votos_mv": 11,
+    "pct_mv": 0.21,
+    "ranking_mv": 54
+  },
+  {
+    "id_municipio_tse": 69418,
+    "municipio": "Quintana",
+    "total_eleitores": 5470,
+    "total_votos_validos": 3798,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 200
+  },
+  {
+    "id_municipio_tse": 69434,
+    "municipio": "Rafard",
+    "total_eleitores": 7412,
+    "total_votos_validos": 5281,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 250
+  },
+  {
+    "id_municipio_tse": 69450,
+    "municipio": "Rancharia",
+    "total_eleitores": 24482,
+    "total_votos_validos": 15997,
+    "votos_mv": 36,
+    "pct_mv": 0.23,
+    "ranking_mv": 58
+  },
+  {
+    "id_municipio_tse": 69477,
+    "municipio": "Redenção da Serra",
+    "total_eleitores": 4236,
+    "total_votos_validos": 2912,
+    "votos_mv": 18,
+    "pct_mv": 0.62,
+    "ranking_mv": 14
+  },
+  {
+    "id_municipio_tse": 69493,
+    "municipio": "Regente Feijó",
+    "total_eleitores": 15239,
+    "total_votos_validos": 10960,
+    "votos_mv": 47,
+    "pct_mv": 0.43,
+    "ranking_mv": 34
+  },
+  {
+    "id_municipio_tse": 69515,
+    "municipio": "Reginópolis",
+    "total_eleitores": 4972,
+    "total_votos_validos": 3407,
+    "votos_mv": 1,
+    "pct_mv": 0.03,
+    "ranking_mv": 142
+  },
+  {
+    "id_municipio_tse": 69531,
+    "municipio": "Registro",
+    "total_eleitores": 48223,
+    "total_votos_validos": 31961,
+    "votos_mv": 6,
+    "pct_mv": 0.02,
+    "ranking_mv": 167
+  },
+  {
+    "id_municipio_tse": 69558,
+    "municipio": "Restinga",
+    "total_eleitores": 6736,
+    "total_votos_validos": 4669,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 207
+  },
+  {
+    "id_municipio_tse": 69574,
+    "municipio": "Ribeira",
+    "total_eleitores": 3027,
+    "total_votos_validos": 2180,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 133
+  },
+  {
+    "id_municipio_tse": 69590,
+    "municipio": "Ribeirão Bonito",
+    "total_eleitores": 9210,
+    "total_votos_validos": 5541,
+    "votos_mv": 1,
+    "pct_mv": 0.02,
+    "ranking_mv": 216
+  },
+  {
+    "id_municipio_tse": 69612,
+    "municipio": "Ribeirão Branco",
+    "total_eleitores": 15076,
+    "total_votos_validos": 10378,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 267
+  },
+  {
+    "id_municipio_tse": 69639,
+    "municipio": "Ribeirão Corrente",
+    "total_eleitores": 4288,
+    "total_votos_validos": 3018,
+    "votos_mv": 3,
+    "pct_mv": 0.1,
+    "ranking_mv": 68
+  },
+  {
+    "id_municipio_tse": 69655,
+    "municipio": "Ribeirão do Sul",
+    "total_eleitores": 3804,
+    "total_votos_validos": 2855,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 181
+  },
+  {
+    "id_municipio_tse": 62421,
+    "municipio": "Ribeirão dos Índios",
+    "total_eleitores": 1880,
+    "total_votos_validos": 1351,
+    "votos_mv": 3,
+    "pct_mv": 0.22,
+    "ranking_mv": 43
+  },
+  {
+    "id_municipio_tse": 61700,
+    "municipio": "Ribeirão Grande",
+    "total_eleitores": 6704,
+    "total_votos_validos": 4663,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 198
+  },
+  {
+    "id_municipio_tse": 69671,
+    "municipio": "Ribeirão Pires",
+    "total_eleitores": 90818,
+    "total_votos_validos": 57242,
+    "votos_mv": 18,
+    "pct_mv": 0.03,
+    "ranking_mv": 195
+  },
+  {
+    "id_municipio_tse": 69698,
+    "municipio": "Ribeirão Preto",
+    "total_eleitores": 468225,
+    "total_votos_validos": 310175,
+    "votos_mv": 73,
+    "pct_mv": 0.02,
+    "ranking_mv": 198
+  },
+  {
+    "id_municipio_tse": 69736,
+    "municipio": "Rifaina",
+    "total_eleitores": 4506,
+    "total_votos_validos": 3182,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 164
+  },
+  {
+    "id_municipio_tse": 69752,
+    "municipio": "Rincão",
+    "total_eleitores": 7697,
+    "total_votos_validos": 4979,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 246
+  },
+  {
+    "id_municipio_tse": 69779,
+    "municipio": "Rinópolis",
+    "total_eleitores": 7700,
+    "total_votos_validos": 4974,
+    "votos_mv": 9,
+    "pct_mv": 0.18,
+    "ranking_mv": 60
+  },
+  {
+    "id_municipio_tse": 69795,
+    "municipio": "Rio Claro",
+    "total_eleitores": 156413,
+    "total_votos_validos": 101928,
+    "votos_mv": 13,
+    "pct_mv": 0.01,
+    "ranking_mv": 265
+  },
+  {
+    "id_municipio_tse": 69817,
+    "municipio": "Rio das Pedras",
+    "total_eleitores": 25075,
+    "total_votos_validos": 16898,
+    "votos_mv": 2,
+    "pct_mv": 0.01,
+    "ranking_mv": 252
+  },
+  {
+    "id_municipio_tse": 69833,
+    "municipio": "Rio Grande da Serra",
+    "total_eleitores": 35718,
+    "total_votos_validos": 22531,
+    "votos_mv": 3,
+    "pct_mv": 0.01,
+    "ranking_mv": 254
+  },
+  {
+    "id_municipio_tse": 69850,
+    "municipio": "Riolândia",
+    "total_eleitores": 7318,
+    "total_votos_validos": 4991,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 240
+  },
+  {
+    "id_municipio_tse": 69710,
+    "municipio": "Riversul",
+    "total_eleitores": 4634,
+    "total_votos_validos": 3171,
+    "votos_mv": 3,
+    "pct_mv": 0.09,
+    "ranking_mv": 70
+  },
+  {
+    "id_municipio_tse": 61166,
+    "municipio": "Rosana",
+    "total_eleitores": 15322,
+    "total_votos_validos": 9183,
+    "votos_mv": 12,
+    "pct_mv": 0.13,
+    "ranking_mv": 87
+  },
+  {
+    "id_municipio_tse": 69876,
+    "municipio": "Roseira",
+    "total_eleitores": 8564,
+    "total_votos_validos": 6192,
+    "votos_mv": 86,
+    "pct_mv": 1.39,
+    "ranking_mv": 14
+  },
+  {
+    "id_municipio_tse": 69892,
+    "municipio": "Rubiácea",
+    "total_eleitores": 2282,
+    "total_votos_validos": 1709,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 132
+  },
+  {
+    "id_municipio_tse": 69914,
+    "municipio": "Rubinéia",
+    "total_eleitores": 3266,
+    "total_votos_validos": 2150,
+    "votos_mv": 3,
+    "pct_mv": 0.14,
+    "ranking_mv": 78
+  },
+  {
+    "id_municipio_tse": 69930,
+    "municipio": "Sabino",
+    "total_eleitores": 4609,
+    "total_votos_validos": 2882,
+    "votos_mv": 1,
+    "pct_mv": 0.03,
+    "ranking_mv": 121
+  },
+  {
+    "id_municipio_tse": 69957,
+    "municipio": "Sagres",
+    "total_eleitores": 2094,
+    "total_votos_validos": 1446,
+    "votos_mv": 26,
+    "pct_mv": 1.8,
+    "ranking_mv": 17
+  },
+  {
+    "id_municipio_tse": 69973,
+    "municipio": "Sales",
+    "total_eleitores": 5140,
+    "total_votos_validos": 3570,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 224
+  },
+  {
+    "id_municipio_tse": 69990,
+    "municipio": "Sales Oliveira",
+    "total_eleitores": 8322,
+    "total_votos_validos": 6062,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 236
+  },
+  {
+    "id_municipio_tse": 70017,
+    "municipio": "Salesópolis",
+    "total_eleitores": 15403,
+    "total_votos_validos": 10679,
+    "votos_mv": 9,
+    "pct_mv": 0.08,
+    "ranking_mv": 88
+  },
+  {
+    "id_municipio_tse": 70033,
+    "municipio": "Salmourão",
+    "total_eleitores": 4043,
+    "total_votos_validos": 2697,
+    "votos_mv": 27,
+    "pct_mv": 1.0,
+    "ranking_mv": 21
+  },
+  {
+    "id_municipio_tse": 61441,
+    "municipio": "Saltinho",
+    "total_eleitores": 6863,
+    "total_votos_validos": 5068,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 263
+  },
+  {
+    "id_municipio_tse": 70050,
+    "municipio": "Salto",
+    "total_eleitores": 97008,
+    "total_votos_validos": 65290,
+    "votos_mv": 21,
+    "pct_mv": 0.03,
+    "ranking_mv": 164
+  },
+  {
+    "id_municipio_tse": 70076,
+    "municipio": "Salto de Pirapora",
+    "total_eleitores": 30702,
+    "total_votos_validos": 20552,
+    "votos_mv": 10,
+    "pct_mv": 0.05,
+    "ranking_mv": 117
+  },
+  {
+    "id_municipio_tse": 70092,
+    "municipio": "Salto Grande",
+    "total_eleitores": 6364,
+    "total_votos_validos": 4569,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 211
+  },
+  {
+    "id_municipio_tse": 70114,
+    "municipio": "Sandovalina",
+    "total_eleitores": 3495,
+    "total_votos_validos": 2498,
+    "votos_mv": 86,
+    "pct_mv": 3.44,
+    "ranking_mv": 6
+  },
+  {
+    "id_municipio_tse": 70130,
+    "municipio": "Santa Adélia",
+    "total_eleitores": 11753,
+    "total_votos_validos": 8000,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 234
+  },
+  {
+    "id_municipio_tse": 70157,
+    "municipio": "Santa Albertina",
+    "total_eleitores": 5211,
+    "total_votos_validos": 3505,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 228
+  },
+  {
+    "id_municipio_tse": 70173,
+    "municipio": "Santa Bárbara d'Oeste",
+    "total_eleitores": 146178,
+    "total_votos_validos": 103170,
+    "votos_mv": 12,
+    "pct_mv": 0.01,
+    "ranking_mv": 225
+  },
+  {
+    "id_municipio_tse": 70211,
+    "municipio": "Santa Branca",
+    "total_eleitores": 12356,
+    "total_votos_validos": 8357,
+    "votos_mv": 83,
+    "pct_mv": 0.99,
+    "ranking_mv": 18
+  },
+  {
+    "id_municipio_tse": 70238,
+    "municipio": "Santa Clara d'Oeste",
+    "total_eleitores": 2376,
+    "total_votos_validos": 1584,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 139
+  },
+  {
+    "id_municipio_tse": 70254,
+    "municipio": "Santa Cruz da Conceição",
+    "total_eleitores": 4076,
+    "total_votos_validos": 2863,
+    "votos_mv": 1,
+    "pct_mv": 0.03,
+    "ranking_mv": 131
+  },
+  {
+    "id_municipio_tse": 62189,
+    "municipio": "Santa Cruz da Esperança",
+    "total_eleitores": 2189,
+    "total_votos_validos": 1489,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 133
+  },
+  {
+    "id_municipio_tse": 70270,
+    "municipio": "Santa Cruz das Palmeiras",
+    "total_eleitores": 21218,
+    "total_votos_validos": 13971,
+    "votos_mv": 3,
+    "pct_mv": 0.02,
+    "ranking_mv": 175
+  },
+  {
+    "id_municipio_tse": 70297,
+    "municipio": "Santa Cruz do Rio Pardo",
+    "total_eleitores": 35844,
+    "total_votos_validos": 23029,
+    "votos_mv": 4,
+    "pct_mv": 0.02,
+    "ranking_mv": 216
+  },
+  {
+    "id_municipio_tse": 70319,
+    "municipio": "Santa Ernestina",
+    "total_eleitores": 5013,
+    "total_votos_validos": 3601,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 202
+  },
+  {
+    "id_municipio_tse": 70335,
+    "municipio": "Santa Fé do Sul",
+    "total_eleitores": 27029,
+    "total_votos_validos": 17360,
+    "votos_mv": 3,
+    "pct_mv": 0.02,
+    "ranking_mv": 197
+  },
+  {
+    "id_municipio_tse": 70351,
+    "municipio": "Santa Gertrudes",
+    "total_eleitores": 18853,
+    "total_votos_validos": 13317,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 349
+  },
+  {
+    "id_municipio_tse": 70378,
+    "municipio": "Santa Isabel",
+    "total_eleitores": 43162,
+    "total_votos_validos": 28765,
+    "votos_mv": 93,
+    "pct_mv": 0.32,
+    "ranking_mv": 45
+  },
+  {
+    "id_municipio_tse": 70394,
+    "municipio": "Santa Lúcia",
+    "total_eleitores": 6813,
+    "total_votos_validos": 4315,
+    "votos_mv": 1,
+    "pct_mv": 0.02,
+    "ranking_mv": 163
+  },
+  {
+    "id_municipio_tse": 70416,
+    "municipio": "Santa Maria da Serra",
+    "total_eleitores": 4309,
+    "total_votos_validos": 2792,
+    "votos_mv": 1,
+    "pct_mv": 0.04,
+    "ranking_mv": 124
+  },
+  {
+    "id_municipio_tse": 70432,
+    "municipio": "Santa Mercedes",
+    "total_eleitores": 2743,
+    "total_votos_validos": 1825,
+    "votos_mv": 1,
+    "pct_mv": 0.05,
+    "ranking_mv": 95
+  },
+  {
+    "id_municipio_tse": 70491,
+    "municipio": "Santa Rita d'Oeste",
+    "total_eleitores": 2482,
+    "total_votos_validos": 1674,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 147
+  },
+  {
+    "id_municipio_tse": 70513,
+    "municipio": "Santa Rita do Passa Quatro",
+    "total_eleitores": 19995,
+    "total_votos_validos": 13745,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 370
+  },
+  {
+    "id_municipio_tse": 70530,
+    "municipio": "Santa Rosa de Viterbo",
+    "total_eleitores": 19797,
+    "total_votos_validos": 12408,
+    "votos_mv": 3,
+    "pct_mv": 0.02,
+    "ranking_mv": 176
+  },
+  {
+    "id_municipio_tse": 62200,
+    "municipio": "Santa Salete",
+    "total_eleitores": 1717,
+    "total_votos_validos": 1272,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 119
+  },
+  {
+    "id_municipio_tse": 70459,
+    "municipio": "Santana da Ponte Pensa",
+    "total_eleitores": 1595,
+    "total_votos_validos": 1077,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 122
+  },
+  {
+    "id_municipio_tse": 70475,
+    "municipio": "Santana de Parnaíba",
+    "total_eleitores": 100387,
+    "total_votos_validos": 73427,
+    "votos_mv": 43,
+    "pct_mv": 0.06,
+    "ranking_mv": 123
+  },
+  {
+    "id_municipio_tse": 70556,
+    "municipio": "Santo Anastácio",
+    "total_eleitores": 15266,
+    "total_votos_validos": 10300,
+    "votos_mv": 85,
+    "pct_mv": 0.83,
+    "ranking_mv": 25
+  },
+  {
+    "id_municipio_tse": 70572,
+    "municipio": "Santo André",
+    "total_eleitores": 582584,
+    "total_votos_validos": 401027,
+    "votos_mv": 131,
+    "pct_mv": 0.03,
+    "ranking_mv": 186
+  },
+  {
+    "id_municipio_tse": 70599,
+    "municipio": "Santo Antônio da Alegria",
+    "total_eleitores": 5366,
+    "total_votos_validos": 3979,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 187
+  },
+  {
+    "id_municipio_tse": 70610,
+    "municipio": "Santo Antônio de Posse",
+    "total_eleitores": 17066,
+    "total_votos_validos": 11094,
+    "votos_mv": 3,
+    "pct_mv": 0.03,
+    "ranking_mv": 163
+  },
+  {
+    "id_municipio_tse": 61328,
+    "municipio": "Santo Antônio do Aracanguá",
+    "total_eleitores": 7001,
+    "total_votos_validos": 5298,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 228
+  },
+  {
+    "id_municipio_tse": 70637,
+    "municipio": "Santo Antônio do Jardim",
+    "total_eleitores": 5441,
+    "total_votos_validos": 3527,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 184
+  },
+  {
+    "id_municipio_tse": 70653,
+    "municipio": "Santo Antônio do Pinhal",
+    "total_eleitores": 6380,
+    "total_votos_validos": 4280,
+    "votos_mv": 31,
+    "pct_mv": 0.72,
+    "ranking_mv": 27
+  },
+  {
+    "id_municipio_tse": 70670,
+    "municipio": "Santo Expedito",
+    "total_eleitores": 2761,
+    "total_votos_validos": 1933,
+    "votos_mv": 2,
+    "pct_mv": 0.1,
+    "ranking_mv": 73
+  },
+  {
+    "id_municipio_tse": 70696,
+    "municipio": "Santópolis do Aguapeí",
+    "total_eleitores": 3241,
+    "total_votos_validos": 2164,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 149
+  },
+  {
+    "id_municipio_tse": 70718,
+    "municipio": "Santos",
+    "total_eleitores": 352667,
+    "total_votos_validos": 250469,
+    "votos_mv": 39,
+    "pct_mv": 0.02,
+    "ranking_mv": 213
+  },
+  {
+    "id_municipio_tse": 70734,
+    "municipio": "São Bento do Sapucaí",
+    "total_eleitores": 9533,
+    "total_votos_validos": 6318,
+    "votos_mv": 42,
+    "pct_mv": 0.66,
+    "ranking_mv": 26
+  },
+  {
+    "id_municipio_tse": 70750,
+    "municipio": "São Bernardo do Campo",
+    "total_eleitores": 639045,
+    "total_votos_validos": 451853,
+    "votos_mv": 383,
+    "pct_mv": 0.08,
+    "ranking_mv": 101
+  },
+  {
+    "id_municipio_tse": 70777,
+    "municipio": "São Caetano do Sul",
+    "total_eleitores": 146153,
+    "total_votos_validos": 107573,
+    "votos_mv": 37,
+    "pct_mv": 0.03,
+    "ranking_mv": 189
+  },
+  {
+    "id_municipio_tse": 70793,
+    "municipio": "São Carlos",
+    "total_eleitores": 194223,
+    "total_votos_validos": 123401,
+    "votos_mv": 11,
+    "pct_mv": 0.01,
+    "ranking_mv": 335
+  },
+  {
+    "id_municipio_tse": 70815,
+    "municipio": "São Francisco",
+    "total_eleitores": 2527,
+    "total_votos_validos": 1581,
+    "votos_mv": 1,
+    "pct_mv": 0.06,
+    "ranking_mv": 92
+  },
+  {
+    "id_municipio_tse": 70831,
+    "municipio": "São João da Boa Vista",
+    "total_eleitores": 71386,
+    "total_votos_validos": 46456,
+    "votos_mv": 19,
+    "pct_mv": 0.04,
+    "ranking_mv": 144
+  },
+  {
+    "id_municipio_tse": 70858,
+    "municipio": "São João das Duas Pontes",
+    "total_eleitores": 2273,
+    "total_votos_validos": 1515,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 141
+  },
+  {
+    "id_municipio_tse": 61883,
+    "municipio": "São João de Iracema",
+    "total_eleitores": 1720,
+    "total_votos_validos": 1249,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 106
+  },
+  {
+    "id_municipio_tse": 70874,
+    "municipio": "São João do Pau d'Alho",
+    "total_eleitores": 2021,
+    "total_votos_validos": 1529,
+    "votos_mv": 7,
+    "pct_mv": 0.46,
+    "ranking_mv": 21
+  },
+  {
+    "id_municipio_tse": 70890,
+    "municipio": "São Joaquim da Barra",
+    "total_eleitores": 38026,
+    "total_votos_validos": 24469,
+    "votos_mv": 1,
+    "pct_mv": 0.0,
+    "ranking_mv": 325
+  },
+  {
+    "id_municipio_tse": 70912,
+    "municipio": "São José da Bela Vista",
+    "total_eleitores": 6950,
+    "total_votos_validos": 4251,
+    "votos_mv": 4,
+    "pct_mv": 0.09,
+    "ranking_mv": 74
+  },
+  {
+    "id_municipio_tse": 70939,
+    "municipio": "São José do Barreiro",
+    "total_eleitores": 3796,
+    "total_votos_validos": 2793,
+    "votos_mv": 2,
+    "pct_mv": 0.07,
+    "ranking_mv": 69
+  },
+  {
+    "id_municipio_tse": 70955,
+    "municipio": "São José do Rio Pardo",
+    "total_eleitores": 42621,
+    "total_votos_validos": 26124,
+    "votos_mv": 7,
+    "pct_mv": 0.03,
+    "ranking_mv": 174
+  },
+  {
+    "id_municipio_tse": 70971,
+    "municipio": "São José do Rio Preto",
+    "total_eleitores": 345050,
+    "total_votos_validos": 233313,
+    "votos_mv": 39,
+    "pct_mv": 0.02,
+    "ranking_mv": 249
+  },
+  {
+    "id_municipio_tse": 70998,
+    "municipio": "São José dos Campos",
+    "total_eleitores": 557556,
+    "total_votos_validos": 398027,
+    "votos_mv": 9663,
+    "pct_mv": 2.43,
+    "ranking_mv": 7
+  },
+  {
+    "id_municipio_tse": 61905,
+    "municipio": "São Lourenço da Serra",
+    "total_eleitores": 12457,
+    "total_votos_validos": 7912,
+    "votos_mv": 163,
+    "pct_mv": 2.06,
+    "ranking_mv": 13
+  },
+  {
+    "id_municipio_tse": 71013,
+    "municipio": "São Luís do Paraitinga",
+    "total_eleitores": 9970,
+    "total_votos_validos": 7102,
+    "votos_mv": 44,
+    "pct_mv": 0.62,
+    "ranking_mv": 26
+  },
+  {
+    "id_municipio_tse": 71030,
+    "municipio": "São Manuel",
+    "total_eleitores": 31088,
+    "total_votos_validos": 20232,
+    "votos_mv": 3,
+    "pct_mv": 0.01,
+    "ranking_mv": 201
+  },
+  {
+    "id_municipio_tse": 71056,
+    "municipio": "São Miguel Arcanjo",
+    "total_eleitores": 25654,
+    "total_votos_validos": 17686,
+    "votos_mv": 8,
+    "pct_mv": 0.05,
+    "ranking_mv": 109
+  },
+  {
+    "id_municipio_tse": 71072,
+    "municipio": "São Paulo",
+    "total_eleitores": 9301013,
+    "total_votos_validos": 6293393,
+    "votos_mv": 47445,
+    "pct_mv": 0.75,
+    "ranking_mv": 29
+  },
+  {
+    "id_municipio_tse": 71099,
+    "municipio": "São Pedro",
+    "total_eleitores": 27195,
+    "total_votos_validos": 18126,
+    "votos_mv": 2,
+    "pct_mv": 0.01,
+    "ranking_mv": 260
+  },
+  {
+    "id_municipio_tse": 71110,
+    "municipio": "São Pedro do Turvo",
+    "total_eleitores": 5735,
+    "total_votos_validos": 4036,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 195
+  },
+  {
+    "id_municipio_tse": 71137,
+    "municipio": "São Roque",
+    "total_eleitores": 63506,
+    "total_votos_validos": 40456,
+    "votos_mv": 21,
+    "pct_mv": 0.05,
+    "ranking_mv": 152
+  },
+  {
+    "id_municipio_tse": 71153,
+    "municipio": "São Sebastião",
+    "total_eleitores": 66364,
+    "total_votos_validos": 45559,
+    "votos_mv": 571,
+    "pct_mv": 1.25,
+    "ranking_mv": 20
+  },
+  {
+    "id_municipio_tse": 71170,
+    "municipio": "São Sebastião da Grama",
+    "total_eleitores": 8530,
+    "total_votos_validos": 5880,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 235
+  },
+  {
+    "id_municipio_tse": 71196,
+    "municipio": "São Simão",
+    "total_eleitores": 12088,
+    "total_votos_validos": 8045,
+    "votos_mv": 1,
+    "pct_mv": 0.01,
+    "ranking_mv": 193
+  },
+  {
+    "id_municipio_tse": 71218,
+    "municipio": "São Vicente",
+    "total_eleitores": 258871,
+    "total_votos_validos": 180705,
+    "votos_mv": 208,
+    "pct_mv": 0.12,
+    "ranking_mv": 79
+  },
+  {
+    "id_municipio_tse": 71234,
+    "municipio": "Sarapuí",
+    "total_eleitores": 7602,
+    "total_votos_validos": 5403,
+    "votos_mv": 1,
+    "pct_mv": 0.02,
+    "ranking_mv": 143
+  },
+  {
+    "id_municipio_tse": 71250,
+    "municipio": "Sarutaiá",
+    "total_eleitores": 3168,
+    "total_votos_validos": 2190,
+    "votos_mv": 2,
+    "pct_mv": 0.09,
+    "ranking_mv": 73
+  },
+  {
+    "id_municipio_tse": 71277,
+    "municipio": "Sebastianópolis do Sul",
+    "total_eleitores": 3019,
+    "total_votos_validos": 2101,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 156
+  },
+  {
+    "id_municipio_tse": 71293,
+    "municipio": "Serra Azul",
+    "total_eleitores": 7933,
+    "total_votos_validos": 5257,
+    "votos_mv": 2,
+    "pct_mv": 0.04,
+    "ranking_mv": 121
+  },
+  {
+    "id_municipio_tse": 71331,
+    "municipio": "Serra Negra",
+    "total_eleitores": 23361,
+    "total_votos_validos": 15520,
+    "votos_mv": 1,
+    "pct_mv": 0.01,
+    "ranking_mv": 280
+  },
+  {
+    "id_municipio_tse": 71315,
+    "municipio": "Serrana",
+    "total_eleitores": 34745,
+    "total_votos_validos": 23556,
+    "votos_mv": 3,
+    "pct_mv": 0.01,
+    "ranking_mv": 199
+  },
+  {
+    "id_municipio_tse": 71358,
+    "municipio": "Sertãozinho",
+    "total_eleitores": 96924,
+    "total_votos_validos": 63285,
+    "votos_mv": 8,
+    "pct_mv": 0.01,
+    "ranking_mv": 243
+  },
+  {
+    "id_municipio_tse": 71374,
+    "municipio": "Sete Barras",
+    "total_eleitores": 11283,
+    "total_votos_validos": 7148,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 252
+  },
+  {
+    "id_municipio_tse": 71390,
+    "municipio": "Severínia",
+    "total_eleitores": 12276,
+    "total_votos_validos": 8223,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 314
+  },
+  {
+    "id_municipio_tse": 71412,
+    "municipio": "Silveiras",
+    "total_eleitores": 5406,
+    "total_votos_validos": 3802,
+    "votos_mv": 27,
+    "pct_mv": 0.71,
+    "ranking_mv": 19
+  },
+  {
+    "id_municipio_tse": 71439,
+    "municipio": "Socorro",
+    "total_eleitores": 31322,
+    "total_votos_validos": 20834,
+    "votos_mv": 9,
+    "pct_mv": 0.04,
+    "ranking_mv": 138
+  },
+  {
+    "id_municipio_tse": 71455,
+    "municipio": "Sorocaba",
+    "total_eleitores": 514310,
+    "total_votos_validos": 361538,
+    "votos_mv": 1395,
+    "pct_mv": 0.39,
+    "ranking_mv": 41
+  },
+  {
+    "id_municipio_tse": 71471,
+    "municipio": "Sud Mennucci",
+    "total_eleitores": 6307,
+    "total_votos_validos": 4333,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 199
+  },
+  {
+    "id_municipio_tse": 71498,
+    "municipio": "Sumaré",
+    "total_eleitores": 198479,
+    "total_votos_validos": 133348,
+    "votos_mv": 37,
+    "pct_mv": 0.03,
+    "ranking_mv": 174
+  },
+  {
+    "id_municipio_tse": 61301,
+    "municipio": "Suzanápolis",
+    "total_eleitores": 2946,
+    "total_votos_validos": 2038,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 163
+  },
+  {
+    "id_municipio_tse": 71510,
+    "municipio": "Suzano",
+    "total_eleitores": 228645,
+    "total_votos_validos": 153952,
+    "votos_mv": 73,
+    "pct_mv": 0.05,
+    "ranking_mv": 164
+  },
+  {
+    "id_municipio_tse": 71536,
+    "municipio": "Tabapuã",
+    "total_eleitores": 9265,
+    "total_votos_validos": 6312,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 267
+  },
+  {
+    "id_municipio_tse": 71552,
+    "municipio": "Tabatinga",
+    "total_eleitores": 11613,
+    "total_votos_validos": 7332,
+    "votos_mv": 1,
+    "pct_mv": 0.01,
+    "ranking_mv": 208
+  },
+  {
+    "id_municipio_tse": 71579,
+    "municipio": "Taboão da Serra",
+    "total_eleitores": 223611,
+    "total_votos_validos": 143643,
+    "votos_mv": 3703,
+    "pct_mv": 2.58,
+    "ranking_mv": 6
+  },
+  {
+    "id_municipio_tse": 71595,
+    "municipio": "Taciba",
+    "total_eleitores": 4941,
+    "total_votos_validos": 3882,
+    "votos_mv": 2,
+    "pct_mv": 0.05,
+    "ranking_mv": 79
+  },
+  {
+    "id_municipio_tse": 71617,
+    "municipio": "Taguaí",
+    "total_eleitores": 9229,
+    "total_votos_validos": 6604,
+    "votos_mv": 1,
+    "pct_mv": 0.02,
+    "ranking_mv": 153
+  },
+  {
+    "id_municipio_tse": 71633,
+    "municipio": "Taiaçu",
+    "total_eleitores": 4819,
+    "total_votos_validos": 3250,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 178
+  },
+  {
+    "id_municipio_tse": 71650,
+    "municipio": "Taiúva",
+    "total_eleitores": 4752,
+    "total_votos_validos": 3195,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 218
+  },
+  {
+    "id_municipio_tse": 71676,
+    "municipio": "Tambaú",
+    "total_eleitores": 15922,
+    "total_votos_validos": 10949,
+    "votos_mv": 4,
+    "pct_mv": 0.04,
+    "ranking_mv": 140
+  },
+  {
+    "id_municipio_tse": 71692,
+    "municipio": "Tanabi",
+    "total_eleitores": 20631,
+    "total_votos_validos": 14101,
+    "votos_mv": 1,
+    "pct_mv": 0.01,
+    "ranking_mv": 279
+  },
+  {
+    "id_municipio_tse": 71714,
+    "municipio": "Tapiraí",
+    "total_eleitores": 6538,
+    "total_votos_validos": 4147,
+    "votos_mv": 4,
+    "pct_mv": 0.1,
+    "ranking_mv": 70
+  },
+  {
+    "id_municipio_tse": 71730,
+    "municipio": "Tapiratiba",
+    "total_eleitores": 10468,
+    "total_votos_validos": 6875,
+    "votos_mv": 2,
+    "pct_mv": 0.03,
+    "ranking_mv": 140
+  },
+  {
+    "id_municipio_tse": 62260,
+    "municipio": "Taquaral",
+    "total_eleitores": 2298,
+    "total_votos_validos": 1614,
+    "votos_mv": 1,
+    "pct_mv": 0.06,
+    "ranking_mv": 84
+  },
+  {
+    "id_municipio_tse": 71757,
+    "municipio": "Taquaritinga",
+    "total_eleitores": 40729,
+    "total_votos_validos": 26159,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 462
+  },
+  {
+    "id_municipio_tse": 71773,
+    "municipio": "Taquarituba",
+    "total_eleitores": 17365,
+    "total_votos_validos": 12166,
+    "votos_mv": 1,
+    "pct_mv": 0.01,
+    "ranking_mv": 232
+  },
+  {
+    "id_municipio_tse": 61840,
+    "municipio": "Taquarivaí",
+    "total_eleitores": 5031,
+    "total_votos_validos": 3460,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 162
+  },
+  {
+    "id_municipio_tse": 71790,
+    "municipio": "Tarabai",
+    "total_eleitores": 5602,
+    "total_votos_validos": 3867,
+    "votos_mv": 4,
+    "pct_mv": 0.1,
+    "ranking_mv": 70
+  },
+  {
+    "id_municipio_tse": 61042,
+    "municipio": "Tarumã",
+    "total_eleitores": 11706,
+    "total_votos_validos": 8366,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 248
+  },
+  {
+    "id_municipio_tse": 71811,
+    "municipio": "Tatuí",
+    "total_eleitores": 92492,
+    "total_votos_validos": 59642,
+    "votos_mv": 114,
+    "pct_mv": 0.19,
+    "ranking_mv": 50
+  },
+  {
+    "id_municipio_tse": 71838,
+    "municipio": "Taubaté",
+    "total_eleitores": 238627,
+    "total_votos_validos": 162658,
+    "votos_mv": 3603,
+    "pct_mv": 2.22,
+    "ranking_mv": 9
+  },
+  {
+    "id_municipio_tse": 71854,
+    "municipio": "Tejupá",
+    "total_eleitores": 3745,
+    "total_votos_validos": 2561,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 182
+  },
+  {
+    "id_municipio_tse": 71870,
+    "municipio": "Teodoro Sampaio",
+    "total_eleitores": 18314,
+    "total_votos_validos": 12144,
+    "votos_mv": 4,
+    "pct_mv": 0.03,
+    "ranking_mv": 146
+  },
+  {
+    "id_municipio_tse": 71897,
+    "municipio": "Terra Roxa",
+    "total_eleitores": 6049,
+    "total_votos_validos": 4278,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 229
+  },
+  {
+    "id_municipio_tse": 71919,
+    "municipio": "Tietê",
+    "total_eleitores": 30729,
+    "total_votos_validos": 19526,
+    "votos_mv": 2,
+    "pct_mv": 0.01,
+    "ranking_mv": 279
+  },
+  {
+    "id_municipio_tse": 71935,
+    "municipio": "Timburi",
+    "total_eleitores": 2411,
+    "total_votos_validos": 1658,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 151
+  },
+  {
+    "id_municipio_tse": 62049,
+    "municipio": "Torre de Pedra",
+    "total_eleitores": 2586,
+    "total_votos_validos": 1798,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 154
+  },
+  {
+    "id_municipio_tse": 71951,
+    "municipio": "Torrinha",
+    "total_eleitores": 7367,
+    "total_votos_validos": 5005,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 250
+  },
+  {
+    "id_municipio_tse": 62448,
+    "municipio": "Trabiju",
+    "total_eleitores": 1585,
+    "total_votos_validos": 1181,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 113
+  },
+  {
+    "id_municipio_tse": 71978,
+    "municipio": "Tremembé",
+    "total_eleitores": 30319,
+    "total_votos_validos": 21226,
+    "votos_mv": 394,
+    "pct_mv": 1.86,
+    "ranking_mv": 11
+  },
+  {
+    "id_municipio_tse": 71994,
+    "municipio": "Três Fronteiras",
+    "total_eleitores": 5142,
+    "total_votos_validos": 3346,
+    "votos_mv": 2,
+    "pct_mv": 0.06,
+    "ranking_mv": 104
+  },
+  {
+    "id_municipio_tse": 61620,
+    "municipio": "Tuiuti",
+    "total_eleitores": 5506,
+    "total_votos_validos": 3634,
+    "votos_mv": 7,
+    "pct_mv": 0.19,
+    "ranking_mv": 64
+  },
+  {
+    "id_municipio_tse": 72010,
+    "municipio": "Tupã",
+    "total_eleitores": 50476,
+    "total_votos_validos": 33278,
+    "votos_mv": 4,
+    "pct_mv": 0.01,
+    "ranking_mv": 230
+  },
+  {
+    "id_municipio_tse": 72036,
+    "municipio": "Tupi Paulista",
+    "total_eleitores": 11448,
+    "total_votos_validos": 7804,
+    "votos_mv": 5,
+    "pct_mv": 0.06,
+    "ranking_mv": 114
+  },
+  {
+    "id_municipio_tse": 72052,
+    "municipio": "Turiúba",
+    "total_eleitores": 1685,
+    "total_votos_validos": 1210,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 141
+  },
+  {
+    "id_municipio_tse": 72079,
+    "municipio": "Turmalina",
+    "total_eleitores": 1868,
+    "total_votos_validos": 1235,
+    "votos_mv": 1,
+    "pct_mv": 0.08,
+    "ranking_mv": 85
+  },
+  {
+    "id_municipio_tse": 61468,
+    "municipio": "Ubarana",
+    "total_eleitores": 4636,
+    "total_votos_validos": 3071,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 183
+  },
+  {
+    "id_municipio_tse": 72095,
+    "municipio": "Ubatuba",
+    "total_eleitores": 75890,
+    "total_votos_validos": 50083,
+    "votos_mv": 1064,
+    "pct_mv": 2.12,
+    "ranking_mv": 10
+  },
+  {
+    "id_municipio_tse": 72117,
+    "municipio": "Ubirajara",
+    "total_eleitores": 4188,
+    "total_votos_validos": 2869,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 190
+  },
+  {
+    "id_municipio_tse": 72133,
+    "municipio": "Uchoa",
+    "total_eleitores": 8079,
+    "total_votos_validos": 5435,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 263
+  },
+  {
+    "id_municipio_tse": 72150,
+    "municipio": "União Paulista",
+    "total_eleitores": 1614,
+    "total_votos_validos": 1125,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 113
+  },
+  {
+    "id_municipio_tse": 72176,
+    "municipio": "Urânia",
+    "total_eleitores": 6889,
+    "total_votos_validos": 4547,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 266
+  },
+  {
+    "id_municipio_tse": 72192,
+    "municipio": "Uru",
+    "total_eleitores": 1509,
+    "total_votos_validos": 1111,
+    "votos_mv": 1,
+    "pct_mv": 0.09,
+    "ranking_mv": 83
+  },
+  {
+    "id_municipio_tse": 72214,
+    "municipio": "Urupês",
+    "total_eleitores": 11166,
+    "total_votos_validos": 7444,
+    "votos_mv": 4,
+    "pct_mv": 0.05,
+    "ranking_mv": 106
+  },
+  {
+    "id_municipio_tse": 72230,
+    "municipio": "Valentim Gentil",
+    "total_eleitores": 10223,
+    "total_votos_validos": 6764,
+    "votos_mv": 2,
+    "pct_mv": 0.03,
+    "ranking_mv": 172
+  },
+  {
+    "id_municipio_tse": 72257,
+    "municipio": "Valinhos",
+    "total_eleitores": 96226,
+    "total_votos_validos": 64593,
+    "votos_mv": 28,
+    "pct_mv": 0.04,
+    "ranking_mv": 160
+  },
+  {
+    "id_municipio_tse": 72273,
+    "municipio": "Valparaíso",
+    "total_eleitores": 16852,
+    "total_votos_validos": 10983,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 333
+  },
+  {
+    "id_municipio_tse": 61549,
+    "municipio": "Vargem",
+    "total_eleitores": 6933,
+    "total_votos_validos": 4025,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 260
+  },
+  {
+    "id_municipio_tse": 72311,
+    "municipio": "Vargem Grande do Sul",
+    "total_eleitores": 32076,
+    "total_votos_validos": 20664,
+    "votos_mv": 6,
+    "pct_mv": 0.03,
+    "ranking_mv": 147
+  },
+  {
+    "id_municipio_tse": 72737,
+    "municipio": "Vargem Grande Paulista",
+    "total_eleitores": 40793,
+    "total_votos_validos": 28406,
+    "votos_mv": 16,
+    "pct_mv": 0.06,
+    "ranking_mv": 137
+  },
+  {
+    "id_municipio_tse": 72338,
+    "municipio": "Várzea Paulista",
+    "total_eleitores": 83451,
+    "total_votos_validos": 56011,
+    "votos_mv": 47,
+    "pct_mv": 0.08,
+    "ranking_mv": 119
+  },
+  {
+    "id_municipio_tse": 72354,
+    "municipio": "Vera Cruz",
+    "total_eleitores": 7774,
+    "total_votos_validos": 5594,
+    "votos_mv": 19,
+    "pct_mv": 0.34,
+    "ranking_mv": 51
+  },
+  {
+    "id_municipio_tse": 72370,
+    "municipio": "Vinhedo",
+    "total_eleitores": 62931,
+    "total_votos_validos": 43838,
+    "votos_mv": 13,
+    "pct_mv": 0.03,
+    "ranking_mv": 200
+  },
+  {
+    "id_municipio_tse": 72397,
+    "municipio": "Viradouro",
+    "total_eleitores": 12907,
+    "total_votos_validos": 9284,
+    "votos_mv": 1,
+    "pct_mv": 0.01,
+    "ranking_mv": 193
+  },
+  {
+    "id_municipio_tse": 72419,
+    "municipio": "Vista Alegre do Alto",
+    "total_eleitores": 6135,
+    "total_votos_validos": 4136,
+    "votos_mv": 1,
+    "pct_mv": 0.02,
+    "ranking_mv": 134
+  },
+  {
+    "id_municipio_tse": 62227,
+    "municipio": "Vitória Brasil",
+    "total_eleitores": 1627,
+    "total_votos_validos": 1163,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 126
+  },
+  {
+    "id_municipio_tse": 72435,
+    "municipio": "Votorantim",
+    "total_eleitores": 90770,
+    "total_votos_validos": 62594,
+    "votos_mv": 118,
+    "pct_mv": 0.19,
+    "ranking_mv": 61
+  },
+  {
+    "id_municipio_tse": 72451,
+    "municipio": "Votuporanga",
+    "total_eleitores": 72557,
+    "total_votos_validos": 47401,
+    "votos_mv": 3,
+    "pct_mv": 0.01,
+    "ranking_mv": 324
+  },
+  {
+    "id_municipio_tse": 61921,
+    "municipio": "Zacarias",
+    "total_eleitores": 2459,
+    "total_votos_validos": 1697,
+    "votos_mv": 0,
+    "pct_mv": 0.0,
+    "ranking_mv": 147
+  }
+]

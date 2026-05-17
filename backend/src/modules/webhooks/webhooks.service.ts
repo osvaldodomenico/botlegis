@@ -195,6 +195,7 @@ export class WebhooksService {
         eleitores_22: true,
         votos_validos_22: true,
         percentual_mv: true,
+        ranking_mv: true,
         projecao_apoio_iurd: true,
         candidato_nome: true,
         candidato_cargo: true,
@@ -233,7 +234,10 @@ export class WebhooksService {
     if (mun.coordenacao) linhas.push(`• Coordenação: ${mun.coordenacao}`);
     if (mun.votos_22) linhas.push(`• Votos em 2022: ${mun.votos_22.toLocaleString('pt-BR')}`);
     if (mun.eleitores_22) linhas.push(`• Eleitores em 2022: ${mun.eleitores_22.toLocaleString('pt-BR')}`);
-    if (mun.percentual_mv) linhas.push(`• Percentual MV 2022: ${mun.percentual_mv.toFixed(2)}%`);
+    if (mun.votos_validos_22) linhas.push(`• Votos válidos 2022: ${mun.votos_validos_22.toLocaleString('pt-BR')}`);
+    if (mun.percentual_mv) linhas.push(`• % dos votos válidos 2022: ${(mun.percentual_mv * 100).toFixed(2)}%`);
+    if (mun.ranking_mv) linhas.push(`• Ranking entre deputados federais 2022: ${mun.ranking_mv}º lugar`);
+    if (mun.projecao_apoio_iurd) linhas.push(`• Projeção apoio IURD: ${mun.projecao_apoio_iurd.toLocaleString('pt-BR')}`);
     if (mun.candidato_nome) linhas.push(`• Candidato vinculado: ${mun.candidato_nome} (${mun.candidato_cargo || ''})`);
     return linhas.join('\n');
   }
@@ -422,8 +426,8 @@ export class WebhooksService {
                 id: true, nome: true, mesorregiao: true, rm_ra: true, regiao: true,
                 projecao_votos: true, projecao_base: true, lideranca: true,
                 coordenacao: true, votos_22: true, eleitores_22: true,
-                votos_validos_22: true, percentual_mv: true, projecao_apoio_iurd: true,
-                candidato_nome: true, candidato_cargo: true,
+                votos_validos_22: true, percentual_mv: true, ranking_mv: true,
+                projecao_apoio_iurd: true, candidato_nome: true, candidato_cargo: true,
               },
             });
             if (mun) extraContexto = this.contextoMunicipio(mun);
