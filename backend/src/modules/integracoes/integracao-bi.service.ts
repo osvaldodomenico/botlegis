@@ -33,10 +33,17 @@ export class IntegracaoBIService implements OnModuleInit {
 
   async onModuleInit() {
     try {
+      const jaPopulados = await this.prisma.municipio.count({
+        where: { uf: 'SP', eleitores_22: { gt: 0 } },
+      });
+      if (jaPopulados > 100) {
+        this.logger.log(`BI sync: ${jaPopulados} municípios já populados — ignorando.`);
+        return;
+      }
       const result = await this.syncMunicipios();
-      this.logger.log(`BI sync startup: ${result.updated} municípios atualizados`);
+      this.logger.log(`BI sync inicial: ${result.updated} municípios atualizados`);
     } catch (e: any) {
-      this.logger.warn(`BI sync startup ignorado (BI não configurado?): ${e?.message}`);
+      this.logger.warn(`BI sync ignorado: ${e?.message}`);
     }
   }
 
