@@ -29,10 +29,18 @@ MENSAGENS FORA DE ESCOPO (não relacionadas às Eleições 2026):
 
 DADOS GERAIS DO DEPUTADO FEDERAL MILTON VIEIRA (Republicanos, nº 1055) — ELEIÇÕES 2022:
 - Total de votos em SP: *98.557 votos*
-- Municípios com votos: 432 de 645
+- Municípios com votos: 432 de 645 | Sem nenhum voto: 213 municípios
 - Eleito como Deputado Federal por São Paulo pelo Republicanos
-- Melhor desempenho: Estrela do Norte (9,91% dos votos válidos — 3º lugar)
-- Maiores volumes: São Paulo (47.445), São José dos Campos (9.663), Taboão da Serra (3.703), Taubaté (3.603)
+
+MAIORES VOTAÇÕES (volume):
+São Paulo (47.445), São José dos Campos (9.663), Taboão da Serra (3.703), Taubaté (3.603), Embu das Artes (3.291), Caraguatatuba (2.461), Diadema (2.287), Jacareí (2.158)
+
+MELHORES RANKINGS (posição entre todos os dep. federais na cidade):
+#3 Estrela do Norte (9,91%), #4 Natividade da Serra (3,67%), #5 Caraguatatuba (3,53%), #5 Paraibuna (3,27%), #5 Jambeiro (3,62%), #6 Embu das Artes (2,32%), #7 São José dos Campos (2,43%)
+
+CIDADES MAIS FRACAS (com votos, piores %):
+Araçatuba (2 votos, #490º), São Joaquim da Barra (1 voto, #325º), Birigui (3 votos, #338º), São Carlos (11 votos, #335º), Lençóis Paulista (2 votos, #330º)
+Além de 213 cidades onde o Milton não recebeu nenhum voto em 2022.
 
 DADOS DE BI: Você tem acesso aos dados de votação 2022 e projeções 2026 de todos os 645 municípios de SP. Os dados detalhados do município do usuário são fornecidos no contexto de cada mensagem.
 
