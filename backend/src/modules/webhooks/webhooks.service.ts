@@ -375,6 +375,55 @@ export class WebhooksService {
     return linhas.join('\n');
   }
 
+  // ── Busca por nome de liderança/coordenador ───────────────────────────────
+
+  private extrairNomesProprios(texto: string): string[] {
+    const norm = this.normalizarNome(texto);
+    // Remove stopwords comuns para não poluir a busca
+    const stopwords = new Set(['QUANTOS','VOTOS','PROMETEU','NOSSA','BASE','QUAL','QUEM','SAO','SÃO','DOS','DAS','PARA','COM','NAO','NAO','TEM','BOT','BOT','NOSSA','NOSSO','ESTA','ESTAO']);
+    return norm.split(/\s+/).filter(p => p.length > 3 && !stopwords.has(p));
+  }
+
+  private async buscarPorLideranca(texto: string): Promise<any[]> {
+    const palavras = this.extrairNomesProprios(texto);
+    if (palavras.length === 0) return [];
+
+    const todos = await this.municipios().findMany({
+      where: { uf: 'SP' },
+      select: {
+        id: true, nome: true, mesorregiao: true, rm_ra: true, regiao: true,
+        projecao_votos: true, projecao_base: true, projecao_2: true, projecao_apoio_iurd: true,
+        lideranca: true, coordenacao: true, funcao_cargo: true,
+        coord_lideranca_2: true, funcao_cargo_2: true,
+        votos_22: true, eleitores_22: true, votos_validos_22: true,
+        percentual_mv: true, ranking_mv: true,
+      },
+    });
+
+    return todos.filter(m => {
+      const campos = [m.lideranca, m.coordenacao, m.coord_lideranca_2]
+        .filter(Boolean)
+        .map((c: string) => this.normalizarNome(c));
+      return palavras.some(p => campos.some((c: string) => c.includes(p)));
+    });
+  }
+
+  private contextoLideranca(cidades: any[], termoBusca: string): string {
+    if (cidades.length === 1) return this.contextoMunicipio(cidades[0]);
+
+    const linhas: string[] = [`📊 Lideranças encontradas para "${termoBusca}":`];
+    for (const c of cidades) {
+      const contrib = [c.projecao_votos, c.projecao_base, c.projecao_2, c.projecao_apoio_iurd].filter(Boolean).reduce((a: number, b: number) => a + b, 0);
+      const meta = (c.votos_22 || 0) + contrib;
+      linhas.push(`\n🏙️ ${c.nome} (${c.mesorregiao || ''})`);
+      linhas.push(`  Liderança: ${c.lideranca || '-'} | Coord.: ${c.coordenacao || '-'}`);
+      if (c.coord_lideranca_2) linhas.push(`  Liderança 2: ${c.coord_lideranca_2}`);
+      linhas.push(`  2022: ${(c.votos_22 || 0).toLocaleString('pt-BR')} votos | #${c.ranking_mv || '?'}º`);
+      if (contrib > 0) linhas.push(`  Projeções: +${contrib.toLocaleString('pt-BR')} | META MÍNIMA: ${meta.toLocaleString('pt-BR')}`);
+    }
+    return linhas.join('\n');
+  }
+
   // ── Contexto de município para a IA ──────────────────────────────────────
 
   private contextoMunicipio(mun: any): string {
@@ -604,7 +653,7 @@ export class WebhooksService {
           }
         }
 
-        // Verifica se usuário está perguntando sobre outra cidade ou região
+        // Verifica se usuário está perguntando sobre outra cidade, região ou liderança
         const outraMunicipio = await this.buscarMunicipio(textoUsuario);
         if (outraMunicipio && outraMunicipio.id !== contato.municipio_id) {
           extraContexto = this.contextoMunicipio(outraMunicipio);
@@ -613,6 +662,9 @@ export class WebhooksService {
           if (regiao) {
             const cidades = await this.buscarMunicipiosPorRegiao(regiao.campo, regiao.valor);
             if (cidades.length > 0) extraContexto = this.contextoRegiao(cidades, regiao.valor);
+          } else {
+            const porLider = await this.buscarPorLideranca(textoUsuario);
+            if (porLider.length > 0) extraContexto = this.contextoLideranca(porLider, textoUsuario);
           }
         }
 
@@ -686,7 +738,7 @@ export class WebhooksService {
       }
     }
 
-    // Verifica se a mensagem menciona outra cidade ou região
+    // Verifica se a mensagem menciona outra cidade, região ou liderança
     const mun = await this.buscarMunicipio(textoUsuario);
     if (mun && (!contato.municipio_id || String(mun.id) !== String(contato.municipio_id))) {
       extraContexto = this.contextoMunicipio(mun);
@@ -695,6 +747,9 @@ export class WebhooksService {
       if (regiao) {
         const cidades = await this.buscarMunicipiosPorRegiao(regiao.campo, regiao.valor);
         if (cidades.length > 0) extraContexto = this.contextoRegiao(cidades, regiao.valor);
+      } else {
+        const porLider = await this.buscarPorLideranca(textoUsuario);
+        if (porLider.length > 0) extraContexto = this.contextoLideranca(porLider, textoUsuario);
       }
     }
 
