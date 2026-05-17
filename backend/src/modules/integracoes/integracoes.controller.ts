@@ -85,6 +85,11 @@ export class IntegracoesController {
     return this.bi.testarConexao();
   }
 
+  @Post('bi/sync-municipios')
+  syncMunicipios() {
+    return this.bi.syncMunicipios();
+  }
+
   @Get('bi/milton-2022')
   async relatorioMilton2022(@Query('page') page?: string, @Query('limit') limit?: string, @Query('nome') nome?: string) {
     const all = await this.bi.buscarMiltonPorMunicipio();

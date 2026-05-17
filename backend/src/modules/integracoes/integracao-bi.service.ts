@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { IntegracoesService } from './integracoes.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import mysql from 'mysql2/promise';
 
 type BiConfig = {
@@ -27,7 +28,7 @@ type BiConfig = {
 export class IntegracaoBIService {
   private namespace = 'bi';
 
-  constructor(private config: IntegracoesService) {}
+  constructor(private config: IntegracoesService, private prisma: PrismaService) {}
 
   private toInt(v: any, fallback: number) {
     const n = Number(v);
@@ -203,5 +204,54 @@ export class IntegracaoBIService {
     } finally {
       await conn.end();
     }
+  }
+
+  // ── Sync BI electoral data → municipios table ────────────────────────────
+
+  async syncMunicipios(): Promise<{ updated: number; notFound: string[] }> {
+    const biRows = await this.buscarMiltonPorMunicipio();
+
+    const municipios = await this.prisma.municipio.findMany({
+      where: { uf: 'SP' },
+      select: { id: true, nome: true },
+    });
+
+    const normalizar = (s: string) =>
+      s.toUpperCase().normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^A-Z0-9\s]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+    const nameMap = new Map<string, bigint>();
+    for (const m of municipios) {
+      nameMap.set(normalizar(m.nome), m.id);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const updates: any[] = [];
+    const notFound: string[] = [];
+
+    for (const row of biRows) {
+      const id = nameMap.get(normalizar(row.municipio));
+      if (!id) { notFound.push(row.municipio); continue; }
+      const percentual_mv = row.validos_22 > 0 ? row.votos_22 / row.validos_22 : 0;
+      updates.push(
+        this.prisma.municipio.update({
+          where: { id },
+          data: {
+            votos_22: row.votos_22,
+            eleitores_22: row.eleitores_22,
+            votos_validos_22: row.validos_22,
+            percentual_mv,
+            ranking_mv: row.posicao,
+          },
+          select: { id: true },
+        }),
+      );
+    }
+
+    await this.prisma.$transaction(updates);
+    return { updated: updates.length, notFound };
   }
 }
