@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { MunicipiosModule } from './modules/municipios/municipios.module';
@@ -13,6 +15,10 @@ import { WebhooksModule } from './modules/webhooks/webhooks.module';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'stickers'),
+      serveRoot: '/stickers',
+    }),
     PrismaModule,
     AuthModule,
     MunicipiosModule,

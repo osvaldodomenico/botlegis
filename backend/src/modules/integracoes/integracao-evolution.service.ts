@@ -152,4 +152,38 @@ export class IntegracaoEvolutionService {
       clearTimeout(t);
     }
   }
+
+  async sendSticker(input: { number: string; stickerUrl: string }) {
+    const baseUrl = this.normalizeBaseUrl(await this.config.getPlain(this.namespace, 'baseUrl'));
+    const instanceName = (await this.config.getPlain(this.namespace, 'instanceName')).trim();
+    const apiKey = (await this.config.getPlain(this.namespace, 'apiKey')).trim();
+
+    if (!baseUrl) throw new BadRequestException('Base URL do Evolution não configurada');
+    if (!instanceName) throw new BadRequestException('Instance Name do Evolution não configurado');
+    if (!apiKey) throw new BadRequestException('API Key do Evolution não configurada');
+
+    const url = `${baseUrl}/message/sendSticker/${encodeURIComponent(instanceName)}`;
+    const ac = new AbortController();
+    const t = setTimeout(() => ac.abort(), 15000);
+
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', apikey: apiKey },
+        body: JSON.stringify({ number: input.number, sticker: input.stickerUrl }),
+        signal: ac.signal,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        console.error(`Erro ao enviar sticker: ${data?.message || `Status ${res.status}`}`);
+        return { success: false, error: data?.message || `Erro ao enviar sticker (${res.status})` };
+      }
+      return data;
+    } catch (error) {
+      console.error('Erro na requisição de sticker:', error);
+      return { success: false, error: 'Falha ao enviar sticker' };
+    } finally {
+      clearTimeout(t);
+    }
+  }
 }

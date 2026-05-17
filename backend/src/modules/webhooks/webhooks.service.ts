@@ -3,6 +3,8 @@ import { IntegracaoEvolutionService } from '../integracoes/integracao-evolution.
 import { IntegracoesService } from '../integracoes/integracoes.service';
 import { PrismaService } from '../../prisma/prisma.service';
 import * as crypto from 'crypto';
+import * as fs from 'fs';
+import * as path from 'path';
 
 // ─── System Prompt ────────────────────────────────────────────────────────────
 
@@ -285,6 +287,32 @@ export class WebhooksService {
 
   // ── Envio de mensagem ─────────────────────────────────────────────────────
 
+  // ── Stickers ──────────────────────────────────────────────────────────────
+
+  private escolherSticker(categoria: string): string | null {
+    try {
+      const dir = path.join(process.cwd(), 'stickers', categoria);
+      if (!fs.existsSync(dir)) return null;
+      const files = fs.readdirSync(dir).filter(f => f.endsWith('.webp'));
+      if (files.length === 0) return null;
+      const file = files[Math.floor(Math.random() * files.length)];
+      const backendUrl = (process.env.BACKEND_URL || 'http://localhost:8000').replace(/\/$/, '');
+      return `${backendUrl}/stickers/${categoria}/${file}`;
+    } catch {
+      return null;
+    }
+  }
+
+  private async enviarSticker(number: string, categoria: string): Promise<void> {
+    const stickerUrl = this.escolherSticker(categoria);
+    if (!stickerUrl) return;
+    try {
+      await this.evolution.sendSticker({ number, stickerUrl });
+    } catch {
+      // sticker failure is non-fatal
+    }
+  }
+
   private async enviar(number: string, text: string, contatoId?: bigint) {
     await this.evolution.sendText({ number, text });
     if (contatoId) await this.salvarMensagem(contatoId, 'BOT', text);
@@ -419,6 +447,28 @@ export class WebhooksService {
     }
 
     await this.enviar(telefone, resposta, contato.id);
+
+    // Sticker
+    let stickerCategoria: string | null = null;
+    if (contato.estado === 'NOVO') {
+      stickerCategoria = 'saudacao';
+    } else if (contato.estado === 'AGUARDANDO_NOME') {
+      stickerCategoria = 'saudacao';
+    } else if (contato.estado === 'ATIVO' || (!['NOVO', 'AGUARDANDO_NOME', 'AGUARDANDO_CIDADE'].includes(contato.estado as string))) {
+      const respostaLower = resposta.toLowerCase();
+      const textLower = textoUsuario.toLowerCase();
+      if (/bora ganhar/i.test(respostaLower)) {
+        stickerCategoria = 'comemoracao';
+      } else if (/\b(tchau|até logo|até mais|obrigado|obrigada|valeu|flw)\b/i.test(textLower)) {
+        stickerCategoria = 'despedida';
+      } else if (Math.random() < 0.3) {
+        stickerCategoria = 'aprovacao';
+      }
+    }
+    if (stickerCategoria) {
+      await this.enviarSticker(telefone, stickerCategoria);
+    }
+
     return { ok: true };
   }
 
@@ -446,6 +496,19 @@ export class WebhooksService {
       `Recebi, *${nome}*. Em que posso ajudar com as *Eleições 2026*? 🏛️`;
 
     await this.salvarMensagem(contato.id, 'BOT', resposta);
-    return { response: resposta };
+
+    // Sticker preview for simulation
+    let stickerUrl: string | null = null;
+    const respostaLower = resposta.toLowerCase();
+    const textLower = textoUsuario.toLowerCase();
+    if (/bora ganhar/i.test(respostaLower)) {
+      stickerUrl = this.escolherSticker('comemoracao');
+    } else if (/\b(tchau|até logo|até mais|obrigado|obrigada|valeu|flw)\b/i.test(textLower)) {
+      stickerUrl = this.escolherSticker('despedida');
+    } else if (Math.random() < 0.3) {
+      stickerUrl = this.escolherSticker('aprovacao');
+    }
+
+    return { response: resposta, stickerUrl };
   }
 }
