@@ -10,6 +10,7 @@ import { BotIntentService } from './services/bot-intent.service';
 import { BotGreetingService } from './services/bot-greeting.service';
 import { BotMemoryService } from './services/bot-memory.service';
 import { BotAudioService } from './services/bot-audio.service';
+import { BotValidatorService } from './services/bot-validator.service';
 
 @Module({
   imports: [IntegracoesModule],
@@ -24,6 +25,7 @@ import { BotAudioService } from './services/bot-audio.service';
     BotGreetingService,
     BotMemoryService,
     BotAudioService,
+    BotValidatorService,
   ],
 })
 export class WebhooksModule {}
