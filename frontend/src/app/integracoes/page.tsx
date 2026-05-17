@@ -133,7 +133,9 @@ export default function IntegracoesPage() {
     setWebhookOk(null);
     setErro('');
     try {
-      await api.post('/integracoes/evolution/configurar-webhook');
+      await api.post('/integracoes/evolution/configurar-webhook', {
+        webhookUrl: evolutionWebhookUrl || undefined,
+      });
       setWebhookOk('Webhook configurado com sucesso na Evolution!');
     } catch (e: any) {
       setErro(e?.response?.data?.message || 'Erro ao configurar webhook');

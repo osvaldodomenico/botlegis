@@ -34,8 +34,8 @@ export class IntegracoesController {
   }
 
   @Post('evolution/configurar-webhook')
-  configurarWebhookEvolution() {
-    return this.evolution.configurarWebhook();
+  configurarWebhookEvolution(@Body() body: any) {
+    return this.evolution.configurarWebhook(body?.webhookUrl);
   }
 
   @Get('openai')

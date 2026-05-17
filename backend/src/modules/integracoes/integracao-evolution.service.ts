@@ -80,16 +80,23 @@ export class IntegracaoEvolutionService {
     }
   }
 
-  async configurarWebhook() {
+  async configurarWebhook(webhookUrlOverride?: string) {
     const baseUrl = this.normalizeBaseUrl(await this.config.getPlain(this.namespace, 'baseUrl'));
     const instanceName = (await this.config.getPlain(this.namespace, 'instanceName')).trim();
     const apiKey = (await this.config.getPlain(this.namespace, 'apiKey')).trim();
-    const webhookUrl = (await this.config.getPlain(this.namespace, 'webhookUrl')).trim();
+
+    // Usa override se fornecido, senão lê do banco
+    let webhookUrl = webhookUrlOverride?.trim() || (await this.config.getPlain(this.namespace, 'webhookUrl')).trim();
+
+    // Se veio override, persiste no banco
+    if (webhookUrlOverride?.trim()) {
+      await this.config.upsert(this.namespace, 'webhookUrl', webhookUrlOverride.trim(), false);
+    }
 
     if (!baseUrl) throw new BadRequestException('Base URL do Evolution não configurada');
     if (!instanceName) throw new BadRequestException('Instance Name do Evolution não configurado');
     if (!apiKey) throw new BadRequestException('API Key do Evolution não configurada');
-    if (!webhookUrl) throw new BadRequestException('Webhook URL não configurada');
+    if (!webhookUrl) throw new BadRequestException('Webhook URL não configurada — preencha o campo e tente novamente');
 
     const url = `${baseUrl}/webhook/set/${encodeURIComponent(instanceName)}`;
     const ac = new AbortController();
