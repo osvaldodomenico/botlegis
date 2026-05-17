@@ -98,7 +98,20 @@ export class BotValidatorService {
       issues.push('truncated_to_4000');
     }
 
-    // 3. Check for hallucinated numbers (only if context is provided)
+    // 3. Check "não recebeu votos" hallucination — context may have votos_22 > 0
+    if (context) {
+      const votosMatch = context.match(/Votos MV em 2022:\s*([\d.]+)/);
+      if (votosMatch) {
+        const votosNo = parseFloat(votosMatch[1].replace(/\./g, '').replace(',', '.'));
+        if (votosNo > 0 && /não recebeu votos|sem votos|nenhum voto/i.test(result)) {
+          this.logger.warn(`Hallucination: context has ${votosNo} votes but response says "não recebeu votos"`);
+          issues.push('possible_hallucination:zero_votes_lie');
+          return { valid: false, response: result, issues };
+        }
+      }
+    }
+
+    // 4. Check for hallucinated numbers (only if context is provided)
     if (context && context.length > 0) {
       const responseNumbers = this.extractNumbers(result);
       const contextNumbers = this.extractNumbers(context);
