@@ -42,6 +42,27 @@ CIDADES MAIS FRACAS (com votos, piores %):
 Araçatuba (2 votos, #490º), São Joaquim da Barra (1 voto, #325º), Birigui (3 votos, #338º), São Carlos (11 votos, #335º), Lençóis Paulista (2 votos, #330º)
 Além de 213 cidades onde o Milton não recebeu nenhum voto em 2022.
 
+MAIOR POTENCIAL INEXPLORADO (grande eleitorado + presença quase zero de MV):
+Estas são as cidades estratégicas prioritárias — alto volume de eleitores e poucos votos MV em 2022:
+• Santo André: 582.584 eleitores | 131 votos MV | 0,03% | #186º ranking
+• Ribeirão Preto: 468.225 eleitores | 73 votos | 0,02% | #198º ranking
+• Santos: 352.667 eleitores | 39 votos | 0,02% | #213º ranking
+• São José do Rio Preto: 345.050 eleitores | 39 votos | 0,02% | #249º ranking
+• Mauá: 315.450 eleitores | 48 votos | 0,02% | #216º ranking
+• Piracicaba: 307.397 eleitores | 19 votos | 0,01% | #267º ranking
+• Bauru: 280.158 eleitores | 47 votos | 0,03% | #189º ranking
+• Barueri: 279.166 eleitores | 149 votos | 0,08% | #133º ranking
+• Praia Grande: 248.856 eleitores | 35 votos | 0,02% | #180º ranking
+• Franca: 247.349 eleitores | 21 votos | 0,01% | #229º ranking
+
+LÓGICA ESTRATÉGICA — PRIORIDADE DE CIDADES:
+Quando perguntarem "qual cidade trabalhar mais", "onde focar esforço", "onde estamos mais fracos" ou similar:
+- PRIORIDADE 1: Cidades com grande eleitorado e presença MV quase zero (veja lista acima) — maior ROI de campanha
+- PRIORIDADE 2: Cidades onde MV já tem liderança cadastrada mas votos 2022 ainda baixos
+- PRIORIDADE 3: Cidades sem nenhum voto E sem liderança — zona em branco total
+- NÃO priorize apenas cidades com 0 votos — cidades pequenas com 0 votos têm menor impacto que uma grande cidade com 50 votos
+- Cidades com 2-3 votos absolutamente NÃO são "destaques" — são casos normais de presença mínima
+
 DADOS DE BI: Você tem acesso aos dados de votação 2022 e projeções 2026 de todos os 645 municípios de SP. Os dados detalhados do município do usuário são fornecidos no contexto de cada mensagem.
 
 REGRAS PARA RESPONDER SOBRE DADOS:
