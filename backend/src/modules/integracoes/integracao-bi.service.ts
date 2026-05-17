@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { IntegracoesService } from './integracoes.service';
 import { PrismaService } from '../../prisma/prisma.service';
 import mysql from 'mysql2/promise';
@@ -25,10 +25,20 @@ type BiConfig = {
 };
 
 @Injectable()
-export class IntegracaoBIService {
+export class IntegracaoBIService implements OnModuleInit {
   private namespace = 'bi';
+  private readonly logger = new Logger(IntegracaoBIService.name);
 
   constructor(private config: IntegracoesService, private prisma: PrismaService) {}
+
+  async onModuleInit() {
+    try {
+      const result = await this.syncMunicipios();
+      this.logger.log(`BI sync startup: ${result.updated} municípios atualizados`);
+    } catch (e: any) {
+      this.logger.warn(`BI sync startup ignorado (BI não configurado?): ${e?.message}`);
+    }
+  }
 
   private toInt(v: any, fallback: number) {
     const n = Number(v);
