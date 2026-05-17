@@ -10,5 +10,6 @@ import { IntegracaoBIService } from './integracao-bi.service';
   imports: [PrismaModule],
   controllers: [IntegracoesController],
   providers: [IntegracoesService, IntegracaoEvolutionService, IntegracaoOpenAIService, IntegracaoBIService],
+  exports: [IntegracaoEvolutionService, IntegracoesService],
 })
 export class IntegracoesModule {}
