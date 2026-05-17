@@ -6,6 +6,9 @@ import { BotSearchService } from './services/bot-search.service';
 import { BotContextService } from './services/bot-context.service';
 import { BotLLMService } from './services/bot-llm.service';
 import { BotSecurityService } from './services/bot-security.service';
+import { BotIntentService } from './services/bot-intent.service';
+import { BotGreetingService } from './services/bot-greeting.service';
+import { BotMemoryService } from './services/bot-memory.service';
 
 @Module({
   imports: [IntegracoesModule],
@@ -16,6 +19,9 @@ import { BotSecurityService } from './services/bot-security.service';
     BotContextService,
     BotLLMService,
     BotSecurityService,
+    BotIntentService,
+    BotGreetingService,
+    BotMemoryService,
   ],
 })
 export class WebhooksModule {}

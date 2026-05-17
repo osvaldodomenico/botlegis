@@ -6,10 +6,16 @@ import { BotSearchService } from './services/bot-search.service';
 import { BotContextService } from './services/bot-context.service';
 import { BotLLMService } from './services/bot-llm.service';
 import { BotSecurityService } from './services/bot-security.service';
+import { BotIntentService } from './services/bot-intent.service';
+import { BotGreetingService } from './services/bot-greeting.service';
+import { BotMemoryService } from './services/bot-memory.service';
 import { EvolutionWebhookInput, ParsedMessage } from './bot.types';
 import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
+
+// Ambiguous referential words that may need memory context
+const AMBIGUOUS_WORDS = /\b(lá|la|aí|ai|ali|essa|esse|aquela|aquele|essa cidade|esse lugar)\b/i;
 
 @Injectable()
 export class WebhooksService {
@@ -24,6 +30,9 @@ export class WebhooksService {
     private botContext: BotContextService,
     private botLLM: BotLLMService,
     private botSecurity: BotSecurityService,
+    private botIntent: BotIntentService,
+    private botGreeting: BotGreetingService,
+    private botMemory: BotMemoryService,
   ) {}
 
   // ── Prisma helpers ────────────────────────────────────────────────────────
@@ -40,7 +49,7 @@ export class WebhooksService {
     }
   }
 
-  // ── Greeting by time of day ───────────────────────────────────────────────
+  // ── Greeting by time of day (kept for LLM system prompt injection) ────────
 
   private saudacao(): string {
     const now = new Date();
@@ -158,6 +167,7 @@ export class WebhooksService {
     nome: string,
     contatoId: bigint,
     municipioId?: bigint,
+    contextHint?: string,
   ): Promise<string> {
     // Load user's registered municipality as base context
     let extraContexto: string | undefined;
@@ -185,7 +195,26 @@ export class WebhooksService {
     // Run unified 5-step search chain
     const searchResult = await this.botSearch.searchContext(textoUsuario, municipioId);
     const searchContext = this.botContext.buildContextFromSearch(searchResult);
-    if (searchContext) extraContexto = searchContext;
+    if (searchContext) {
+      extraContexto = searchContext;
+    } else if (searchResult.type === 'none' && contextHint) {
+      // Ambiguous query: try resolving context hint as a city name for extra context
+      try {
+        const hintMun = await this.botSearch.buscarMunicipio(contextHint);
+        if (hintMun) {
+          extraContexto = this.botContext.contextoMunicipio(hintMun);
+        }
+      } catch (e) {
+        this.logger.warn(`Erro ao resolver contextHint "${contextHint}": ${e}`);
+      }
+    }
+
+    // Update memory based on what we found
+    await this.botMemory.updateFromSearchResult(
+      contatoId,
+      searchResult.type,
+      searchResult.municipio?.nome ?? searchResult.regiaoNome ?? searchResult.subdivisaoValor,
+    );
 
     return (
       await this.botLLM.gerarResposta(textoUsuario, nome, contatoId, extraContexto) ||
@@ -222,7 +251,6 @@ export class WebhooksService {
     const telefone = parsed.number;
     const rawTexto = (parsed.text || '').trim();
     const contato = await this.getOrCreateContato(telefone);
-    const saudacao = this.saudacao();
 
     if (rawTexto) {
       await this.salvarMensagem(contato.id, 'USUARIO', rawTexto);
@@ -238,12 +266,16 @@ export class WebhooksService {
     }
 
     let resposta: string;
+    let stickerCategoria: string | null = null;
 
     if (contato.estado === 'NOVO') {
+      // Use BotGreetingService for varied greeting label in the NOVO welcome message
+      const saudacaoLabel = this.botGreeting.getSaudacaoLabel();
       resposta =
-        `${saudacao}! 🏛️ Bem-vindo ao *Legisboat*, a inteligência artificial da estrutura *Grupo Milton Vieira – Eleições 2026*, desenvolvida pela *ShiftWorks*.\n\n` +
+        `${saudacaoLabel}! 🏛️ Bem-vindo ao *Legisboat*, a inteligência artificial da estrutura *Grupo Milton Vieira – Eleições 2026*, desenvolvida pela *ShiftWorks*.\n\n` +
         `Para começarmos, qual é o seu nome?`;
       await this.contatos().update({ where: { telefone }, data: { estado: 'AGUARDANDO_NOME' } });
+      stickerCategoria = 'saudacao';
 
     } else if (contato.estado === 'AGUARDANDO_NOME') {
       const nomeBruto = textoUsuario || '';
@@ -278,6 +310,8 @@ export class WebhooksService {
             ctx,
           ) ||
           `*${municipio.nome}* registrada, *${nome}*! 🚀\n\nProjeção: *${municipio.projecao_votos?.toLocaleString('pt-BR') || '—'}* votos. Temos trabalho a fazer! Em que posso ajudar?`;
+        // Update memory: user's city was just confirmed
+        await this.botMemory.updateFromSearchResult(contato.id, 'municipio', municipio.nome);
       } else {
         resposta =
           `Hmm, *${nome}*, não encontrei "${textoUsuario}" na nossa base de municípios de SP. 🏛️\n\n` +
@@ -285,18 +319,57 @@ export class WebhooksService {
       }
 
     } else {
-      // ATIVO state
+      // ATIVO state — classify intent first
       const nome = contato.nome || '';
+
       if (!textoUsuario) {
         resposta = nome ? `Pois não, *${nome}*? Em que posso ajudar? 🚀` : 'Em que posso ajudar? 🚀';
       } else {
-        resposta = await this.buildContextAndRespond(textoUsuario, nome, contato.id, contato.municipio_id);
+        const intent = this.botIntent.classify(textoUsuario);
+
+        if (this.botIntent.isSaudacao(intent)) {
+          // Respond with a varied greeting — skip full search chain
+          resposta = this.botGreeting.getGreeting(telefone);
+          if (nome) resposta = `${resposta} ${nome ? `*${nome}*! ` : ''}Em que posso ajudar? 🏛️`;
+          await this.salvarMensagem(contato.id, 'BOT', resposta);
+          await this.enviarSticker(telefone, 'saudacao');
+          return { ok: true };
+
+        } else if (this.botIntent.isDespedida(intent)) {
+          // Respond with a farewell — skip full search chain
+          resposta = nome
+            ? `Até logo, *${nome}*! Qualquer dúvida, é só chamar. 🏛️`
+            : 'Até logo! Qualquer dúvida, é só chamar. 🏛️';
+          await this.salvarMensagem(contato.id, 'BOT', resposta);
+          await this.enviarSticker(telefone, 'despedida');
+          return { ok: true };
+
+        } else {
+          // CONSULTA_* or DESCONHECIDO — full pipeline with optional memory context hint
+          let contextHint: string | undefined;
+          if (textoUsuario.length < 15 && AMBIGUOUS_WORDS.test(textoUsuario)) {
+            const hint = await this.botMemory.getContextHint(contato.id);
+            if (hint) contextHint = hint;
+          }
+
+          resposta = await this.buildContextAndRespond(
+            textoUsuario,
+            nome,
+            contato.id,
+            contato.municipio_id,
+            contextHint,
+          );
+        }
       }
+
+      await this.enviar(telefone, resposta, contato.id);
+      stickerCategoria = this.selectStickerCategoria(contato.estado as string, resposta, textoUsuario);
+      if (stickerCategoria) await this.enviarSticker(telefone, stickerCategoria);
+      return { ok: true };
     }
 
     await this.enviar(telefone, resposta, contato.id);
-
-    const stickerCategoria = this.selectStickerCategoria(contato.estado as string, resposta, textoUsuario);
+    stickerCategoria = this.selectStickerCategoria(contato.estado as string, resposta, textoUsuario);
     if (stickerCategoria) await this.enviarSticker(telefone, stickerCategoria);
 
     return { ok: true };
@@ -326,7 +399,41 @@ export class WebhooksService {
       return { response: resposta, stickerUrl: null };
     }
 
-    const resposta = await this.buildContextAndRespond(textoUsuario, nome, contato.id, contato.municipio_id);
+    // Intent classification (same as production ATIVO path)
+    const intent = this.botIntent.classify(textoUsuario);
+
+    let resposta: string;
+
+    if (this.botIntent.isSaudacao(intent)) {
+      const greeting = this.botGreeting.getGreeting(telefone);
+      resposta = `${greeting} ${nome ? `*${nome}*! ` : ''}Em que posso ajudar? 🏛️`;
+      await this.salvarMensagem(contato.id, 'BOT', resposta);
+      return { response: resposta, stickerUrl: this.escolherSticker('saudacao') };
+
+    } else if (this.botIntent.isDespedida(intent)) {
+      resposta = nome
+        ? `Até logo, *${nome}*! Qualquer dúvida, é só chamar. 🏛️`
+        : 'Até logo! Qualquer dúvida, é só chamar. 🏛️';
+      await this.salvarMensagem(contato.id, 'BOT', resposta);
+      return { response: resposta, stickerUrl: this.escolherSticker('despedida') };
+
+    } else {
+      // Full pipeline with optional memory context hint
+      let contextHint: string | undefined;
+      if (textoUsuario.length < 15 && AMBIGUOUS_WORDS.test(textoUsuario)) {
+        const hint = await this.botMemory.getContextHint(contato.id);
+        if (hint) contextHint = hint;
+      }
+
+      resposta = await this.buildContextAndRespond(
+        textoUsuario,
+        nome,
+        contato.id,
+        contato.municipio_id,
+        contextHint,
+      );
+    }
+
     await this.salvarMensagem(contato.id, 'BOT', resposta);
 
     const respostaLower = resposta.toLowerCase();
