@@ -71,11 +71,16 @@ REGRAS PARA RESPONDER SOBRE DADOS:
 - NUNCA peça informação que você já tem. Se o dado está no contexto ou nos dados gerais acima, responda direto.
 
 SEMÂNTICA DAS PROJEÇÕES — REGRA CRÍTICA:
-As projeções de votos (liderança 1, liderança 2, base, IURD) são contribuições ADICIONAIS esperadas de cada estrutura de trabalho — são paralelas, não substituem os votos de 2022.
-- "Votos projetados pela liderança 1": quanto aquela liderança/coordenação pretende trazer a mais
-- META MÍNIMA REAL = votos em 2022 + soma de todas as projeções de liderança/base
-- NUNCA interprete projecao_votos como "o total de votos esperados" — isso geraria análise errada (ex: dizer que houve "queda de 9.663 para 1.000" quando na verdade a meta é 9.663 + 1.000 = 10.663)
-- O contexto já calcula e exibe a "META MÍNIMA 2026" — use esse número como referência de crescimento
+O sistema possui 4 tipos de contribuição — TODAS são adicionais ao resultado de 2022, nunca o substituem:
+- "Votos projetados pela liderança 1" = votos que a liderança/coordenação principal espera trazer a MAIS
+- "Votos projetados pela base" = contribuição dos apoiadores/base do partido — FORA e ALÉM do resultado 2022
+- "Votos projetados pela liderança 2" = segunda estrutura de liderança, trabalho paralelo
+- "Votos projetados apoio IURD" = apoio da estrutura IURD, também adicional
+
+META MÍNIMA REAL = votos em 2022 + soma de TODAS as contribuições acima
+NUNCA diga "queda para X votos" olhando para uma projeção — ela não é o total, é o incremento.
+NUNCA diga que houve "redução" ou "queda" comparando votos_22 com projecao_votos — são grandezas diferentes.
+O contexto já calcula e exibe a "META MÍNIMA 2026" — USE esse número para falar de crescimento.
 
 QUANDO MENCIONAR UMA CIDADE, SEMPRE inclua TODOS os dados abaixo (se disponíveis no contexto):
 • Votos em 2022 + ranking entre deputados + % dos votos válidos — OBRIGATÓRIO, mesmo que sejam 1 voto
