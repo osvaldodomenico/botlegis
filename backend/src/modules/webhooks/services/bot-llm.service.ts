@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { IntegracoesService } from '../../integracoes/integracoes.service';
 import { BotContextService } from './bot-context.service';
+import { BotValidatorService } from './bot-validator.service';
 import { SYSTEM_PROMPT } from '../prompts/system-prompt';
 
 @Injectable()
@@ -12,6 +13,7 @@ export class BotLLMService {
     private prisma: PrismaService,
     private integracoes: IntegracoesService,
     private botContext: BotContextService,
+    private botValidator: BotValidatorService,
   ) {}
 
   private mensagens() {
@@ -85,28 +87,62 @@ export class BotLLMService {
       { role: 'user', content: userText },
     ];
 
-    const ac = new AbortController();
-    const t = setTimeout(() => ac.abort(), 25000);
+    const callOpenAI = async (msgs: Array<{ role: string; content: string }>): Promise<string | null> => {
+      const ac = new AbortController();
+      const t = setTimeout(() => ac.abort(), 25000);
+      try {
+        const res = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
+          body: JSON.stringify({
+            model: modelName,
+            temperature: 0.5,
+            messages: msgs,
+          }),
+          signal: ac.signal,
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data?.error?.message || `Erro OpenAI (${res.status})`);
+        const out = data?.choices?.[0]?.message?.content;
+        return typeof out === 'string' && out.trim() ? out.trim() : null;
+      } catch (e) {
+        this.logger.error(`Erro OpenAI: ${e}`);
+        return null;
+      } finally {
+        clearTimeout(t);
+      }
+    };
+
     try {
-      const res = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
-        body: JSON.stringify({
-          model: modelName,
-          temperature: 0.5,
-          messages,
-        }),
-        signal: ac.signal,
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data?.error?.message || `Erro OpenAI (${res.status})`);
-      const out = data?.choices?.[0]?.message?.content;
-      return typeof out === 'string' && out.trim() ? out.trim() : null;
+      const firstOut = await callOpenAI(messages);
+      if (!firstOut) return null;
+
+      const firstValidation = this.botValidator.validate(firstOut, extraContexto);
+
+      if (!firstValidation.valid && firstValidation.issues.some(i => i.startsWith('possible_hallucination'))) {
+        this.logger.warn('Hallucination detected — retrying with stricter instruction');
+        const retryMessages = [
+          ...messages,
+          { role: 'assistant', content: firstOut },
+          {
+            role: 'user',
+            content:
+              'INSTRUÇÃO: Use APENAS os números que aparecem explicitamente no contexto fornecido. Não some, não estime, não invente. Reescreva a resposta anterior.',
+          },
+        ];
+        const retryOut = await callOpenAI(retryMessages);
+        if (retryOut) {
+          const retryValidation = this.botValidator.validate(retryOut, extraContexto);
+          return retryValidation.response;
+        }
+        // Retry failed entirely — fall back to first result (filtered)
+        return firstValidation.response;
+      }
+
+      return firstValidation.response;
     } catch (e) {
-      this.logger.error(`Erro OpenAI: ${e}`);
+      this.logger.error(`Erro gerarResposta: ${e}`);
       return null;
-    } finally {
-      clearTimeout(t);
     }
   }
 }

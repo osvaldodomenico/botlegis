@@ -9,6 +9,7 @@ import { BotSecurityService } from './services/bot-security.service';
 import { BotIntentService } from './services/bot-intent.service';
 import { BotGreetingService } from './services/bot-greeting.service';
 import { BotMemoryService } from './services/bot-memory.service';
+import { BotAudioService } from './services/bot-audio.service';
 import { EvolutionWebhookInput, ParsedMessage } from './bot.types';
 import * as crypto from 'crypto';
 import * as fs from 'fs';
@@ -33,6 +34,7 @@ export class WebhooksService {
     private botIntent: BotIntentService,
     private botGreeting: BotGreetingService,
     private botMemory: BotMemoryService,
+    private botAudio: BotAudioService,
   ) {}
 
   // ── Prisma helpers ────────────────────────────────────────────────────────
@@ -253,15 +255,22 @@ export class WebhooksService {
     this.dedup.set(dedupKey, Date.now());
 
     const telefone = parsed.number;
-    const rawTexto = (parsed.text || '').trim();
+    let textoRaw = (parsed.text || '').trim();
     const contato = await this.getOrCreateContato(telefone);
 
-    if (rawTexto) {
-      await this.salvarMensagem(contato.id, 'USUARIO', rawTexto);
+    // If audio message, transcribe before processing
+    if (parsed.audioUrl && !textoRaw) {
+      const transcribed = await this.botAudio.transcribe(parsed.audioUrl);
+      if (transcribed) {
+        textoRaw = this.botAudio.normalizeTranscription(transcribed);
+        await this.salvarMensagem(contato.id, 'USUARIO', `[áudio transcrito] ${textoRaw}`);
+      }
+    } else if (textoRaw) {
+      await this.salvarMensagem(contato.id, 'USUARIO', textoRaw);
     }
 
     // Security check
-    const security = this.botSecurity.check(rawTexto);
+    const security = this.botSecurity.check(textoRaw);
     const textoUsuario = security.sanitized;
     if (!security.safe) {
       const resposta = this.botSecurity.neutralResponse(contato.nome || undefined);
