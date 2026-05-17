@@ -9,4 +9,9 @@ export class WebhooksController {
   evolution(@Body() body: any, @Headers() headers: any, @Query('token') token?: string) {
     return this.service.handleEvolutionWebhook({ body, headers, token });
   }
+
+  @Post('simulate')
+  simulate(@Body() body: { phone?: string; name?: string; message: string }) {
+    return this.service.simulateMessage(body);
+  }
 }

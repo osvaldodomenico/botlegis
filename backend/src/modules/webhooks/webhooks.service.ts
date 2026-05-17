@@ -421,4 +421,31 @@ export class WebhooksService {
     await this.enviar(telefone, resposta, contato.id);
     return { ok: true };
   }
+
+  // ── Simulação (sem Evolution) ─────────────────────────────────────────────
+
+  async simulateMessage(input: { phone?: string; name?: string; message: string }) {
+    const telefone = (input.phone || '5500000000000').replace(/\D/g, '');
+    const nome = input.name || 'Simulação';
+    const textoUsuario = input.message?.trim();
+    if (!textoUsuario) return { response: '' };
+
+    const contato = await this.getOrCreateContato(telefone);
+    if (nome && !contato.nome) {
+      await this.contatos().update({ where: { id: contato.id }, data: { nome } });
+    }
+
+    await this.salvarMensagem(contato.id, 'USUARIO', textoUsuario);
+
+    let extraContexto: string | undefined;
+    const mun = await this.buscarMunicipio(textoUsuario);
+    if (mun) extraContexto = this.contextoMunicipio(mun);
+
+    const resposta =
+      (await this.gerarRespostaIA(textoUsuario, nome, extraContexto)) ||
+      `Recebi, *${nome}*. Em que posso ajudar com as *Eleições 2026*? 🏛️`;
+
+    await this.salvarMensagem(contato.id, 'BOT', resposta);
+    return { response: resposta };
+  }
 }

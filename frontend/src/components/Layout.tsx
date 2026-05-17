@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { isAuthenticated, getUser, clearAuth } from '@/lib/auth';
-import { BarChart2, MapPin, LogOut, Menu, X, Search, Map, GitMerge, Settings } from 'lucide-react';
+import { BarChart2, MapPin, LogOut, Menu, X, Search, Map, GitMerge, Settings, MessageCircle } from 'lucide-react';
 
 const navItems = [
   { href: '/', label: 'Dashboard', icon: BarChart2 },
@@ -11,6 +11,7 @@ const navItems = [
   { href: '/territorios', label: 'Territórios', icon: Map },
   { href: '/dobradas', label: 'Dobradas', icon: GitMerge },
   { href: '/consultas', label: 'Consultas', icon: Search },
+  { href: '/simular', label: 'Simular Bot', icon: MessageCircle },
   { href: '/integracoes', label: 'Integrações', icon: Settings },
 ];
 
