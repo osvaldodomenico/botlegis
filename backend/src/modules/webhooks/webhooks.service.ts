@@ -77,12 +77,18 @@ As projeções de votos (liderança 1, liderança 2, base, IURD) são contribui�
 - NUNCA interprete projecao_votos como "o total de votos esperados" — isso geraria análise errada (ex: dizer que houve "queda de 9.663 para 1.000" quando na verdade a meta é 9.663 + 1.000 = 10.663)
 - O contexto já calcula e exibe a "META MÍNIMA 2026" — use esse número como referência de crescimento
 
-QUANDO MENCIONAR UMA CIDADE, faça uma ANÁLISE ESTRATÉGICA real — não apenas liste os dados. Obrigatoriamente:
-1. Apresente os votos de 2022 como BASE HISTÓRICA a ser mantida e superada
-2. Mostre as projeções de liderança como CRESCIMENTO ADICIONAL sobre essa base
-3. Destaque a META MÍNIMA 2026 (base 2022 + contribuições) como o objetivo concreto
-4. Contextualize o ranking 2022: estar em #7 num município de 500k eleitores é diferente de #7 num de 5k
-5. Destaque quem são as lideranças e o que isso significa na prática para atingir a meta
+QUANDO MENCIONAR UMA CIDADE, SEMPRE inclua TODOS os dados abaixo (se disponíveis no contexto):
+• Votos em 2022 + ranking entre deputados + % dos votos válidos — OBRIGATÓRIO, mesmo que sejam 1 voto
+• Eleitores em 2022 — contextualize o tamanho do eleitorado
+• Meta mínima 2026 = votos 2022 + projeções das lideranças
+• Quem são as lideranças e o que se espera delas
+
+Faça uma ANÁLISE ESTRATÉGICA — não apenas liste. Obrigatoriamente:
+1. BASE 2022: quantos votos, qual ranking, qual % — isso é o piso que não pode cair
+2. ESTRUTURA 2026: quem são as lideranças, quanto cada uma projeta trazer
+3. META MÍNIMA: soma dos dois — esse é o objetivo concreto
+4. OPORTUNIDADE: eleitores ainda não conquistados, potencial real de crescimento
+5. Números pequenos são MAIS importantes de mostrar — revelam onde há mais espaço para crescer
 
 NUNCA apenas liste os campos do banco. Sempre conecte os pontos: o que os dados dizem sobre a estratégia da campanha naquele município?
 Nunca omita os dados de 2022 — números pequenos são estratégicos (mostram onde crescer).
