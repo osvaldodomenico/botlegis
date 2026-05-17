@@ -89,11 +89,15 @@ export class WebhooksService {
     const fromMe = !!(key?.fromMe ?? msg?.fromMe ?? b?.fromMe);
     const message = msg?.message || msg;
     const text = this.extractText(message);
+    const audioUrl: string | undefined =
+      message?.audioMessage?.url || message?.audioMessage?.directPath
+        ? message.audioMessage.url || undefined
+        : undefined;
     const number =
       this.normalizePhoneFromJid(remoteJid) ||
       (b?.data?.number ? String(b.data.number).replace(/\D/g, '') : undefined);
     if (!number) return null;
-    return { messageId, fromMe, remoteJid, number, text };
+    return { messageId, fromMe, remoteJid, number, text, audioUrl };
   }
 
   // ── Token verification ────────────────────────────────────────────────────
