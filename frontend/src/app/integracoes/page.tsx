@@ -20,7 +20,9 @@ type OpenAICfg = {
 export default function IntegracoesPage() {
   const [loading, setLoading] = useState(true);
   const [savingEvolution, setSavingEvolution] = useState(false);
+  const [evolutionSaveOk, setEvolutionSaveOk] = useState(false);
   const [savingOpenAI, setSavingOpenAI] = useState(false);
+  const [openAISaveOk, setOpenAISaveOk] = useState(false);
   const [erro, setErro] = useState('');
 
   const [evolutionBaseUrl, setEvolutionBaseUrl] = useState('');
@@ -97,6 +99,8 @@ export default function IntegracoesPage() {
       setEvolutionApiKey('');
       setEvolutionWebhookTokenSet(!!ev.data?.webhookTokenSet);
       setEvolutionWebhookToken('');
+      setEvolutionSaveOk(true);
+      setTimeout(() => setEvolutionSaveOk(false), 3000);
     } catch (e: any) {
       setErro(e?.response?.data?.message || 'Erro ao salvar Evolution');
     } finally {
@@ -114,6 +118,8 @@ export default function IntegracoesPage() {
       });
       setOpenAiApiKeySet(!!oa.data?.apiKeySet);
       setOpenAiApiKey('');
+      setOpenAISaveOk(true);
+      setTimeout(() => setOpenAISaveOk(false), 3000);
     } catch (e: any) {
       setErro(e?.response?.data?.message || 'Erro ao salvar OpenAI');
     } finally {
@@ -212,6 +218,7 @@ export default function IntegracoesPage() {
                 {configuringWebhook ? 'Configurando...' : 'Configurar Webhook'}
               </button>
             </div>
+            {evolutionSaveOk && <p className="text-[13px] text-green-600">Salvo com sucesso — chaves protegidas no banco.</p>}
             {webhookOk && <p className="text-[13px] text-green-600">{webhookOk}</p>}
 
             {(qrSrc || pairingCode || qrRaw) && (
@@ -254,9 +261,12 @@ export default function IntegracoesPage() {
               </div>
             </div>
 
-            <button onClick={salvarOpenAI} disabled={loading || savingOpenAI} className="btn-primary self-start">
-              {savingOpenAI ? 'Salvando...' : 'Salvar'}
-            </button>
+            <div className="flex items-center gap-3">
+              <button onClick={salvarOpenAI} disabled={loading || savingOpenAI} className="btn-primary">
+                {savingOpenAI ? 'Salvando...' : 'Salvar'}
+              </button>
+              {openAISaveOk && <span className="text-[13px] text-green-600">Salvo com sucesso.</span>}
+            </div>
           </div>
         </div>
 
