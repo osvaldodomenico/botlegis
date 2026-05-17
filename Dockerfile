@@ -17,4 +17,4 @@ COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/stickers ./stickers
 RUN mkdir -p /app/uploads /app/stickers
 EXPOSE 8000
-CMD ["sh", "-c", "npx prisma migrate resolve --applied 20260514030000_add_dobradas 2>/dev/null || true; npx prisma migrate deploy; node dist/main"]
+CMD ["sh", "-c", "npx prisma migrate resolve --applied 20260514030000_add_dobradas 2>/dev/null || true; npx prisma migrate resolve --rolled-back 20260518010000_add_bot_memory_fields 2>/dev/null || true; npx prisma migrate deploy && node dist/main"]

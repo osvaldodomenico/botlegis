@@ -42,6 +42,9 @@ export class WebhooksService {
   private contatos() { return (this.prisma as any).botContato; }
   private mensagens() { return (this.prisma as any).botMensagem; }
 
+  // Only select columns that are guaranteed to exist (pre-migration safety)
+  private readonly CONTATO_SELECT = { id: true, telefone: true, nome: true, estado: true, municipio_id: true };
+
   // ── Dedup ─────────────────────────────────────────────────────────────────
 
   private cleanDedup() {
@@ -120,9 +123,9 @@ export class WebhooksService {
   // ── Persistence ───────────────────────────────────────────────────────────
 
   private async getOrCreateContato(telefone: string) {
-    let contato = await this.contatos().findUnique({ where: { telefone } });
+    let contato = await this.contatos().findUnique({ where: { telefone }, select: this.CONTATO_SELECT });
     if (!contato) {
-      contato = await this.contatos().create({ data: { telefone, estado: 'NOVO' } });
+      contato = await this.contatos().create({ data: { telefone, estado: 'NOVO' }, select: this.CONTATO_SELECT });
     }
     return contato;
   }
@@ -287,7 +290,7 @@ export class WebhooksService {
       resposta =
         `${saudacaoLabel}! 🏛️ Bem-vindo ao *Legisboat*, a inteligência artificial da estrutura *Grupo Milton Vieira – Eleições 2026*, desenvolvida pela *ShiftWorks*.\n\n` +
         `Para começarmos, qual é o seu nome?`;
-      await this.contatos().update({ where: { telefone }, data: { estado: 'AGUARDANDO_NOME' } });
+      await this.contatos().update({ where: { telefone }, data: { estado: 'AGUARDANDO_NOME' }, select: { id: true } });
       stickerCategoria = 'saudacao';
 
     } else if (contato.estado === 'AGUARDANDO_NOME') {
@@ -296,7 +299,7 @@ export class WebhooksService {
         nomeBruto.length > 0 && nomeBruto.length <= 80
           ? nomeBruto.split(' ').slice(0, 2).map((w: string) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ')
           : 'Cidadão';
-      await this.contatos().update({ where: { telefone }, data: { nome, estado: 'AGUARDANDO_CIDADE' } });
+      await this.contatos().update({ where: { telefone }, data: { nome, estado: 'AGUARDANDO_CIDADE' }, select: { id: true } });
       resposta =
         await this.botLLM.gerarResposta(
           `O usuário informou o nome "${nome}". Cumprimente-o brevemente pelo nome, confirme que foi registrado, e pergunte em qual cidade ele atua na campanha das Eleições 2026 do Grupo Milton Vieira.`,
@@ -313,6 +316,7 @@ export class WebhooksService {
         await this.contatos().update({
           where: { telefone },
           data: { municipio_id: municipio.id, estado: 'ATIVO' },
+          select: { id: true },
         });
         const ctx = this.botContext.contextoMunicipio(municipio);
         resposta =
@@ -408,7 +412,7 @@ export class WebhooksService {
 
     const contato = await this.getOrCreateContato(telefone);
     if (nome && !contato.nome) {
-      await this.contatos().update({ where: { id: contato.id }, data: { nome } });
+      await this.contatos().update({ where: { id: contato.id }, data: { nome }, select: { id: true } });
     }
 
     await this.salvarMensagem(contato.id, 'USUARIO', textoRaw);
