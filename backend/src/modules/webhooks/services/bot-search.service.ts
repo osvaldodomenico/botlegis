@@ -17,6 +17,8 @@ export class BotSearchService {
       .toUpperCase()
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^A-Z0-9\s]/g, '')  // strip punctuation (!, ?, ., etc.)
+      .replace(/\s+/g, ' ')
       .trim();
   }
 
@@ -33,7 +35,7 @@ export class BotSearchService {
     return norm.split(/\s+/).filter(p => p.length > 3 && !this.STOPWORDS.has(p));
   }
 
-  // ── 1. Busca por município (fuzzy) ────────────────────────────────────────
+  // ── 1. Busca por município (fuzzy + prefix) ───────────────────────────────
 
   async buscarMunicipio(texto: string): Promise<MunicipioData | null> {
     const candidatos: MunicipioData[] = await this.municipios().findMany({
@@ -42,22 +44,36 @@ export class BotSearchService {
     });
 
     const textoNorm = this.normalizarNome(texto);
-    const palavras = textoNorm.split(/\s+/).filter(p => p.length > 2);
+    const palavras = textoNorm.split(/\s+/).filter(p => p.length > 2 && !this.STOPWORDS.has(p));
+
+    if (palavras.length === 0) return null;
 
     let melhor: MunicipioData | null = null;
     let melhorScore = 0;
 
     for (const m of candidatos) {
       const nomeNorm = this.normalizarNome(m.nome);
-      if (nomeNorm === textoNorm) return m; // exact match
-      const score = palavras.filter(p => nomeNorm.includes(p)).length;
+      if (nomeNorm === textoNorm) return m; // exact full match
+
+      // Full-word score (each query word found inside city name)
+      let score = palavras.filter(p => nomeNorm.includes(p)).length;
+
+      // Prefix fuzzy: query word shares 6-char prefix with a city-name word (handles typos like campinhas→campinas)
+      if (score === 0) {
+        const nomeWords = nomeNorm.split(/\s+/);
+        const prefixHit = palavras.some(p =>
+          p.length >= 5 && nomeWords.some(nw => nw.length >= 5 && p.slice(0, 6) === nw.slice(0, 6)),
+        );
+        if (prefixHit) score = 0.6;
+      }
+
       if (score > melhorScore) {
         melhorScore = score;
         melhor = m;
       }
     }
 
-    return melhorScore >= 1 ? melhor : null;
+    return melhorScore >= 0.6 ? melhor : null;
   }
 
   // ── 2. Busca regional (mesorregião / região) ──────────────────────────────
@@ -86,6 +102,13 @@ export class BotSearchService {
     const norm = this.normalizarNome(texto);
     for (const [chave, cfg] of Object.entries(this.REGIOES_MAP)) {
       if (norm.includes(chave)) return cfg;
+      // Prefix fuzzy: handles typos like "campinhas" → "campinas"
+      const textoWords = norm.split(/\s+/).filter(w => w.length >= 5);
+      const chaveWords = chave.split(/\s+/);
+      const prefixHit = textoWords.some(tw =>
+        chaveWords.some(cw => cw.length >= 5 && tw.slice(0, 6) === cw.slice(0, 6)),
+      );
+      if (prefixHit) return cfg;
     }
     return null;
   }
@@ -178,13 +201,27 @@ export class BotSearchService {
   // currentMunicipioId: skip if matched city is same as user's registered city.
 
   async searchContext(texto: string, currentMunicipioId?: bigint): Promise<SearchResult> {
+    const textoNorm = this.normalizarNome(texto);
+    const isRegiaoQuery = /\bREGIAO\b|\bMESORREGIAO\b|\bMICRORREGIAO\b|\bCIDADES\b|\bMUNICIPIOS\b/.test(textoNorm);
+
+    // If query explicitly mentions "regiao", try region search before city
+    if (isRegiaoQuery) {
+      const regiao = this.detectarRegiao(texto);
+      if (regiao) {
+        const cidades = await this.buscarMunicipiosPorRegiao(regiao.campo, regiao.valor);
+        if (cidades.length > 0) {
+          return { type: 'regiao', cidades, regiaoNome: regiao.valor, termoBusca: texto };
+        }
+      }
+    }
+
     // 1. City search
     const municipio = await this.buscarMunicipio(texto);
     if (municipio && String(municipio.id) !== String(currentMunicipioId ?? '')) {
       return { type: 'municipio', municipio };
     }
 
-    // 2. Region search
+    // 2. Region search (fallback if city not found or not an explicit region query)
     const regiao = this.detectarRegiao(texto);
     if (regiao) {
       const cidades = await this.buscarMunicipiosPorRegiao(regiao.campo, regiao.valor);
