@@ -289,26 +289,24 @@ export default function IntegracoesPage() {
         </div>
 
         {/* ── BI Sync ─────────────────────────────────────────────────── */}
-        <div className="card">
-          <div className="card-body space-y-4">
-            <div>
-              <h2 className="text-[17px] font-semibold text-ink">Dados Eleitorais — BI</h2>
-              <p className="text-[13px] text-ink-muted mt-1">
-                Sincroniza votos 2022, eleitores, votos válidos, % e ranking de todos os municípios com o banco de dados do BI.
-              </p>
-            </div>
-            <div className="flex items-center gap-3">
-              <button onClick={syncBI} disabled={syncingBI} className="btn-primary">
-                {syncingBI ? 'Sincronizando...' : '⟳ Sincronizar Municípios com BI'}
-              </button>
-            </div>
-            {syncBIResult && (
-              <p className="text-[13px] text-green-600">
-                ✓ {syncBIResult.updated} municípios atualizados.
-                {syncBIResult.notFound.length > 0 && ` Não encontrados: ${syncBIResult.notFound.slice(0, 5).join(', ')}${syncBIResult.notFound.length > 5 ? '...' : ''}`}
-              </p>
-            )}
+        <div className="card space-y-4">
+          <div>
+            <h2 className="text-[17px] font-semibold text-ink">Dados Eleitorais — BI</h2>
+            <p className="text-[13px] text-ink-muted mt-1">
+              Sincroniza votos 2022, eleitores, votos válidos, % e ranking de todos os municípios com o banco do BI.
+            </p>
           </div>
+          <div className="flex items-center gap-3">
+            <button onClick={syncBI} disabled={syncingBI} className="btn-primary">
+              {syncingBI ? 'Sincronizando...' : '⟳ Sincronizar Municípios com BI'}
+            </button>
+          </div>
+          {syncBIResult && (
+            <p className="text-[13px] text-green-600">
+              ✓ {syncBIResult.updated} municípios atualizados.
+              {syncBIResult.notFound.length > 0 && ` Não encontrados: ${syncBIResult.notFound.slice(0, 5).join(', ')}${syncBIResult.notFound.length > 5 ? '...' : ''}`}
+            </p>
+          )}
         </div>
 
       </div>
