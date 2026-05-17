@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { IntegracaoEvolutionService } from '../integracoes/integracao-evolution.service';
 import { IntegracoesService } from '../integracoes/integracoes.service';
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 
 type EvolutionWebhookInput = {
   body: any;

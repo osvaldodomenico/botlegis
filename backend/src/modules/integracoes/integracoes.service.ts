@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 
 type Row = {
   id: bigint;
