@@ -297,6 +297,8 @@ export class WebhooksService {
     if (!modelName || !apiKey) return null;
 
     let systemContent = SYSTEM_PROMPT;
+    const saudacaoAtual = this.saudacao();
+    systemContent += `\n\nHORÁRIO ATUAL (Brasil): ${new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit' })}h. Saudação correta agora: "${saudacaoAtual}". SEMPRE use esta saudação — NUNCA espelhe a saudação que o usuário enviou.`;
     if (nome) {
       systemContent += `\n\nNOME DO USUÁRIO: *${nome}*. Use o nome em TODAS as respostas.`;
     }
