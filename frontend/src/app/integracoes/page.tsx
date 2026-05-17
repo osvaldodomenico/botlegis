@@ -49,7 +49,9 @@ type MiltonRow = {
 export default function IntegracoesPage() {
   const PAGE_SIZE = 25;
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
+  const [savingEvolution, setSavingEvolution] = useState(false);
+  const [savingOpenAI, setSavingOpenAI] = useState(false);
+  const [savingBI, setSavingBI] = useState(false);
   const [erro, setErro] = useState('');
 
   const [evolutionBaseUrl, setEvolutionBaseUrl] = useState('');
@@ -163,56 +165,75 @@ export default function IntegracoesPage() {
 
   useEffect(() => { load(); }, []);
 
-  const salvar = async () => {
-    setSaving(true);
+  const salvarEvolution = async () => {
+    setSavingEvolution(true);
     setErro('');
     try {
-      const [ev, oa, bi] = await Promise.all([
-        api.put('/integracoes/evolution', {
-          baseUrl: evolutionBaseUrl,
-          instanceName: evolutionInstanceName,
-          apiKey: evolutionApiKey || undefined,
-          webhookToken: evolutionWebhookToken || undefined,
-          webhookUrl: evolutionWebhookUrl,
-        }),
-        api.put('/integracoes/openai', {
-          model: openAiModel,
-          apiKey: openAiApiKey || undefined,
-        }),
-        api.put('/integracoes/bi', {
-          host: biHost,
-          port: biPort,
-          database: biDatabase,
-          user: biUser,
-          password: biPassword || undefined,
-          table: biTable,
-          colMunicipio: biColMunicipio,
-          colCandidato: biColCandidato,
-          colVotos: biColVotos,
-          colEleitores: biColEleitores,
-          colValidos: biColValidos,
-          colCargo: biColCargo,
-          colUf: biColUf,
-          colAno: biColAno,
-          candidatoNome: biCandidatoNome,
-          cargo: biCargo,
-          uf: biUf,
-          ano: biAno,
-        }),
-      ]);
-
+      const ev = await api.put('/integracoes/evolution', {
+        baseUrl: evolutionBaseUrl,
+        instanceName: evolutionInstanceName,
+        apiKey: evolutionApiKey || undefined,
+        webhookToken: evolutionWebhookToken || undefined,
+        webhookUrl: evolutionWebhookUrl,
+      });
       setEvolutionApiKeySet(!!ev.data?.apiKeySet);
       setEvolutionApiKey('');
       setEvolutionWebhookTokenSet(!!ev.data?.webhookTokenSet);
       setEvolutionWebhookToken('');
+    } catch (e: any) {
+      setErro(e?.response?.data?.message || 'Erro ao salvar Evolution');
+    } finally {
+      setSavingEvolution(false);
+    }
+  };
+
+  const salvarOpenAI = async () => {
+    setSavingOpenAI(true);
+    setErro('');
+    try {
+      const oa = await api.put('/integracoes/openai', {
+        model: openAiModel,
+        apiKey: openAiApiKey || undefined,
+      });
       setOpenAiApiKeySet(!!oa.data?.apiKeySet);
       setOpenAiApiKey('');
+    } catch (e: any) {
+      setErro(e?.response?.data?.message || 'Erro ao salvar OpenAI');
+    } finally {
+      setSavingOpenAI(false);
+    }
+  };
+
+  const salvarBI = async () => {
+    setSavingBI(true);
+    setErro('');
+    try {
+      const bi = await api.put('/integracoes/bi', {
+        host: biHost,
+        port: biPort,
+        database: biDatabase,
+        user: biUser,
+        password: biPassword || undefined,
+        table: biTable,
+        colMunicipio: biColMunicipio,
+        colCandidato: biColCandidato,
+        colVotos: biColVotos,
+        colEleitores: biColEleitores,
+        colValidos: biColValidos,
+        colCargo: biColCargo,
+        colUf: biColUf,
+        colAno: biColAno,
+        candidatoNome: biCandidatoNome,
+        cargo: biCargo,
+        uf: biUf,
+        ano: biAno,
+      });
       setBiPasswordSet(!!bi.data?.passwordSet);
       setBiPassword('');
     } catch (e: any) {
-      setErro(e?.response?.data?.message || 'Erro ao salvar integrações');
+      setErro(e?.response?.data?.message || 'Erro ao salvar BI');
     } finally {
-      setSaving(false);
+      setSavingBI(false);
     }
   };
 
@@ -285,14 +306,9 @@ export default function IntegracoesPage() {
   return (
     <Layout>
       <div className="space-y-6">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h1 className="text-[28px] font-semibold text-ink">Integrações</h1>
-            <p className="text-[15px] text-ink-muted mt-1">Configuração do WhatsApp (Evolution) e IA (ChatGPT)</p>
-          </div>
-          <button onClick={salvar} disabled={loading || saving} className="btn-primary">
-            {saving ? 'Salvando...' : 'Salvar'}
-          </button>
+        <div>
+          <h1 className="text-[28px] font-semibold text-ink">Integrações</h1>
+          <p className="text-[15px] text-ink-muted mt-1">Configuração do WhatsApp (Evolution) e IA (ChatGPT)</p>
         </div>
 
         {erro && (
@@ -334,13 +350,15 @@ export default function IntegracoesPage() {
             </div>
 
             <div className="flex flex-wrap gap-3 items-center">
-              <button onClick={conectar} disabled={loading || connecting} className="btn-primary">
+              <button onClick={salvarEvolution} disabled={loading || savingEvolution} className="btn-primary">
+                {savingEvolution ? 'Salvando...' : 'Salvar'}
+              </button>
+              <button onClick={conectar} disabled={loading || connecting} className="btn-secondary">
                 {connecting ? 'Gerando...' : 'Gerar QR Code'}
               </button>
               <button onClick={configurarWebhook} disabled={loading || configuringWebhook} className="btn-secondary">
                 {configuringWebhook ? 'Configurando...' : 'Configurar Webhook'}
               </button>
-              <button onClick={load} disabled={loading} className="btn-secondary">Recarregar</button>
             </div>
             {webhookOk && <p className="text-[13px] text-green-600">{webhookOk}</p>}
 
@@ -384,9 +402,9 @@ export default function IntegracoesPage() {
               </div>
             </div>
 
-            <div className="text-[12px] text-ink-muted">
-              {loading ? 'Carregando...' : 'Pronto para integrar o bot com IA na próxima etapa.'}
-            </div>
+            <button onClick={salvarOpenAI} disabled={loading || savingOpenAI} className="btn-primary self-start">
+              {savingOpenAI ? 'Salvando...' : 'Salvar'}
+            </button>
           </div>
         </div>
 
@@ -485,6 +503,9 @@ export default function IntegracoesPage() {
             </div>
 
             <div className="flex flex-wrap gap-3 items-center">
+              <button onClick={salvarBI} disabled={loading || savingBI} className="btn-primary">
+                {savingBI ? 'Salvando...' : 'Salvar'}
+              </button>
               <button onClick={testarBI} disabled={loading || biTesting} className="btn-secondary">
                 {biTesting ? 'Testando...' : 'Testar Conexão'}
               </button>
