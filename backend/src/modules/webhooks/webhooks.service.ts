@@ -27,7 +27,14 @@ MENSAGENS FORA DE ESCOPO (não relacionadas às Eleições 2026):
 - Não dê sermões nem repita que o foco é a eleição — o usuário já sabe.
 - Se puder ajudar com algo da campanha, ofereça de forma simples: "Posso ajudar com dados da campanha. O que precisar, é só falar!"
 
-DADOS DE BI: Em breve o Legisboat terá acesso completo ao banco de dados da campanha. Por enquanto, utilize os dados fornecidos no contexto de cada mensagem quando disponíveis.
+DADOS GERAIS DO DEPUTADO FEDERAL MILTON VIEIRA (Republicanos, nº 1055) — ELEIÇÕES 2022:
+- Total de votos em SP: *98.557 votos*
+- Municípios com votos: 432 de 645
+- Eleito como Deputado Federal por São Paulo pelo Republicanos
+- Melhor desempenho: Estrela do Norte (9,91% dos votos válidos — 3º lugar)
+- Maiores volumes: São Paulo (47.445), São José dos Campos (9.663), Taboão da Serra (3.703), Taubaté (3.603)
+
+DADOS DE BI: Você tem acesso aos dados de votação 2022 e projeções 2026 de todos os 645 municípios de SP. Os dados detalhados do município do usuário são fornecidos no contexto de cada mensagem. Para perguntas sobre uma cidade específica sem contexto disponível, pergunte em qual município o usuário atua.
 
 FORMATAÇÃO (WhatsApp):
 - Mensagens curtas — parágrafos de no máximo 3 linhas
@@ -492,8 +499,31 @@ export class WebhooksService {
     await this.salvarMensagem(contato.id, 'USUARIO', textoUsuario);
 
     let extraContexto: string | undefined;
+
+    // Carrega contexto do município cadastrado do contato
+    if (contato.municipio_id) {
+      try {
+        const munContato = await this.municipios().findUnique({
+          where: { id: contato.municipio_id },
+          select: {
+            id: true, nome: true, mesorregiao: true, rm_ra: true, regiao: true,
+            projecao_votos: true, projecao_base: true, lideranca: true,
+            coordenacao: true, votos_22: true, eleitores_22: true,
+            votos_validos_22: true, percentual_mv: true, ranking_mv: true,
+            projecao_apoio_iurd: true, candidato_nome: true, candidato_cargo: true,
+          },
+        });
+        if (munContato) extraContexto = this.contextoMunicipio(munContato);
+      } catch (e) {
+        this.logger.warn(`Erro ao carregar município do contato (simulate): ${e}`);
+      }
+    }
+
+    // Verifica se a mensagem menciona outra cidade
     const mun = await this.buscarMunicipio(textoUsuario);
-    if (mun) extraContexto = this.contextoMunicipio(mun);
+    if (mun && (!contato.municipio_id || String(mun.id) !== String(contato.municipio_id))) {
+      extraContexto = this.contextoMunicipio(mun);
+    }
 
     const resposta =
       (await this.gerarRespostaIA(textoUsuario, nome, extraContexto)) ||
