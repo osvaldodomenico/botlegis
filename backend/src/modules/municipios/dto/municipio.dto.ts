@@ -38,6 +38,7 @@ export class UpdateMunicipioDto extends CreateMunicipioDto {}
 
 export class ListMunicipiosDto {
   @IsOptional() @IsString() nome?: string;
+  @IsOptional() @IsString() tipo_cadastro?: string;
   @IsOptional() @IsString() regiao?: string;
   @IsOptional() @IsString() bloco?: string;
   @IsOptional() @IsString() rm_ra?: string;

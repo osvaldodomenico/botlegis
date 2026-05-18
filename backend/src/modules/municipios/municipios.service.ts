@@ -8,7 +8,7 @@ export class MunicipiosService {
 
   async findAll(query: ListMunicipiosDto) {
     const {
-      nome, regiao, bloco, rm_ra, mesorregiao, microrregiao,
+      nome, tipo_cadastro, regiao, bloco, rm_ra, mesorregiao, microrregiao,
       coordenacao, projecao_min, projecao_max,
       page = 1, limit = 25, orderBy = 'nome', order = 'asc'
     } = query;
@@ -18,6 +18,7 @@ export class MunicipiosService {
 
     const where: any = {};
     if (nome) where.nome = { contains: nome };
+    if (tipo_cadastro) where.tipo_cadastro = String(tipo_cadastro).trim().toUpperCase();
     if (regiao) where.regiao = regiao;
     if (bloco) where.bloco = bloco;
     if (rm_ra) where.rm_ra = rm_ra;

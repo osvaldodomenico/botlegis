@@ -23,7 +23,8 @@ interface Municipio {
 interface Meta { total: number; page: number; limit: number; pages: number; }
 interface Opcoes { regioes: string[]; blocos: string[]; rm_ras: string[]; mesorregioes: string[]; microrregioes: string[]; }
 
-const EMPTY_FILTERS = { nome: '', regiao: '', bloco: '', rm_ra: '', mesorregiao: '', microrregiao: '', coordenacao: '', projecao_min: '', projecao_max: '' };
+const TIPO_CADASTRO_OPCOES = ['EXTERNO', 'BASE - INSTITUIÇÃO', 'BASE APOIADORES'];
+const EMPTY_FILTERS = { nome: '', tipo_cadastro: '', regiao: '', bloco: '', rm_ra: '', mesorregiao: '', microrregiao: '', coordenacao: '', projecao_min: '', projecao_max: '' };
 
 export default function MunicipiosPage() {
   const PAGE_SIZE = 25;
@@ -88,6 +89,7 @@ export default function MunicipiosPage() {
     try {
       const params: any = { page: p, limit: PAGE_SIZE, orderBy: ob, order: o };
       if (f.nome) params.nome = f.nome;
+      if (f.tipo_cadastro) params.tipo_cadastro = f.tipo_cadastro;
       if (f.regiao) params.regiao = f.regiao;
       if (f.bloco) params.bloco = f.bloco;
       if (f.rm_ra) params.rm_ra = f.rm_ra;
@@ -221,6 +223,10 @@ export default function MunicipiosPage() {
                 onChange={e => setFilter('nome', e.target.value)}
               />
             </div>
+            <select className="input w-56 text-[15px]" value={filters.tipo_cadastro} onChange={e => setFilter('tipo_cadastro', e.target.value)}>
+              <option value="">Tipo</option>
+              {TIPO_CADASTRO_OPCOES.map(t => <option key={t} value={t}>{t}</option>)}
+            </select>
             <select className="input w-48 text-[15px]" value={filters.bloco} onChange={e => setFilter('bloco', e.target.value)}>
               <option value="">Bloco</option>
               {opcoes.blocos.map(b => <option key={b} value={b}>{b}</option>)}
@@ -241,6 +247,13 @@ export default function MunicipiosPage() {
           {/* Row 2: filtros avançados */}
           {showAdvanced && (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 pt-3 border-t border-hairline">
+              <div>
+                <label className="label text-[12px]">Tipo</label>
+                <select className="input text-[14px]" value={filters.tipo_cadastro} onChange={e => setFilter('tipo_cadastro', e.target.value)}>
+                  <option value="">Todos</option>
+                  {TIPO_CADASTRO_OPCOES.map(t => <option key={t} value={t}>{t}</option>)}
+                </select>
+              </div>
               <div>
                 <label className="label text-[12px]">RM/RA</label>
                 <select className="input text-[14px]" value={filters.rm_ra} onChange={e => setFilter('rm_ra', e.target.value)}>
