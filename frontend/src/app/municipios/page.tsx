@@ -137,7 +137,8 @@ export default function MunicipiosPage() {
     const newOrder = orderBy === field && order === 'asc' ? 'desc' : 'asc';
     setOrderBy(field);
     setOrder(newOrder);
-    load(filters, page, field, newOrder);
+    setPage(1);
+    load(filters, 1, field, newOrder);
   };
 
   const SortHeader = ({ field, label }: { field: string; label: string }) => (
