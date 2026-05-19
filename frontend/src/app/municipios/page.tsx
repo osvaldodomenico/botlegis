@@ -141,8 +141,8 @@ export default function MunicipiosPage() {
     load(filters, 1, field, newOrder);
   };
 
-  const SortHeader = ({ field, label }: { field: string; label: string }) => (
-    <th className="table-th cursor-pointer select-none" onClick={() => sortBy(field)}>
+  const SortHeader = ({ field, label, className }: { field: string; label: string; className?: string }) => (
+    <th className={`table-th cursor-pointer select-none ${className || ''}`} onClick={() => sortBy(field)}>
       <span className="flex items-center gap-1">
         {label}
         {orderBy === field && <span className="text-primary">{order === 'asc' ? '↑' : '↓'}</span>}
@@ -318,12 +318,12 @@ export default function MunicipiosPage() {
             <table className="w-full border-collapse">
               <thead className="bg-parchment border-b border-hairline">
                 <tr>
-                  <th className="table-th">Tipo</th>
+                  <SortHeader field="tipo_cadastro" label="Tipo" />
                   <SortHeader field="nome" label="Município" />
-                  <th className="table-th hidden md:table-cell">Bloco</th>
-                  <th className="table-th hidden lg:table-cell">Coordenador</th>
-                  <th className="table-th hidden lg:table-cell">Função</th>
-                  <th className="table-th hidden xl:table-cell">Liderança</th>
+                  <SortHeader field="bloco" label="Bloco" className="hidden md:table-cell" />
+                  <SortHeader field="coordenacao" label="Coordenador" className="hidden lg:table-cell" />
+                  <SortHeader field="funcao" label="Função" className="hidden lg:table-cell" />
+                  <SortHeader field="lideranca" label="Liderança" className="hidden xl:table-cell" />
                   <th className="table-th hidden xl:table-cell">Dobrada</th>
                   <SortHeader field="projecao_votos" label="Projeção" />
                   <th className="table-th w-20"></th>
@@ -374,12 +374,12 @@ export default function MunicipiosPage() {
                 Mostrando {((page - 1) * meta.limit) + 1}–{Math.min(page * meta.limit, meta.total)} de {meta.total.toLocaleString('pt-BR')}
               </p>
               <div className="flex items-center gap-2">
-                <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
+                <button onClick={() => { const np = Math.max(1, page - 1); setPage(np); load(filters, np, orderBy, order); }} disabled={page === 1}
                   className="p-2 rounded-[8px] text-ink-muted hover:bg-white disabled:opacity-30 border border-hairline transition-colors">
                   <ChevronLeft size={15} />
                 </button>
                 <span className="text-[13px] text-ink px-2">Pág {page} / {meta.pages}</span>
-                <button onClick={() => setPage(p => Math.min(meta.pages, p + 1))} disabled={page === meta.pages}
+                <button onClick={() => { const np = Math.min(meta.pages, page + 1); setPage(np); load(filters, np, orderBy, order); }} disabled={page === meta.pages}
                   className="p-2 rounded-[8px] text-ink-muted hover:bg-white disabled:opacity-30 border border-hairline transition-colors">
                   <ChevronRight size={15} />
                 </button>

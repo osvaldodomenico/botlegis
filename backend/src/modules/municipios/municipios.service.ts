@@ -37,7 +37,7 @@ export class MunicipiosService {
       if (projecao_max !== undefined) where.projecao_votos.lte = Number(projecao_max);
     }
 
-    const allowedSort = ['nome', 'regiao', 'bloco', 'projecao_votos', 'created_at', 'mesorregiao', 'microrregiao'];
+    const allowedSort = ['nome', 'regiao', 'bloco', 'tipo_cadastro', 'coordenacao', 'funcao', 'lideranca', 'projecao_votos', 'created_at', 'mesorregiao', 'microrregiao'];
     const sortField = allowedSort.includes(orderBy) ? orderBy : 'nome';
 
     const [data, total] = await Promise.all([
