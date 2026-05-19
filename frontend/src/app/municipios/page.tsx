@@ -223,13 +223,13 @@ export default function MunicipiosPage() {
                 onChange={e => setFilter('nome', e.target.value)}
               />
             </div>
-            <select className="input w-56 text-[15px]" value={filters.tipo_cadastro} onChange={e => setFilter('tipo_cadastro', e.target.value)}>
-              <option value="">Tipo</option>
-              {TIPO_CADASTRO_OPCOES.map(t => <option key={t} value={t}>{t}</option>)}
-            </select>
             <select className="input w-48 text-[15px]" value={filters.bloco} onChange={e => setFilter('bloco', e.target.value)}>
               <option value="">Bloco</option>
               {opcoes.blocos.map(b => <option key={b} value={b}>{b}</option>)}
+            </select>
+            <select className="input w-56 text-[15px]" value={filters.tipo_cadastro} onChange={e => setFilter('tipo_cadastro', e.target.value)}>
+              <option value="">Tipo</option>
+              {TIPO_CADASTRO_OPCOES.map(t => <option key={t} value={t}>{t}</option>)}
             </select>
             <button
               onClick={() => setShowAdvanced(!showAdvanced)}
