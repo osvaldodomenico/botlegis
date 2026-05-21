@@ -16,7 +16,7 @@ export class DashboardService {
         orderBy: { _sum: { projecao_votos: 'desc' } },
       }),
       this.prisma.municipio.findMany({
-        select: { id: true, nome: true, regiao: true, bloco: true, projecao_votos: true },
+        select: { id: true, nome: true, regiao: true, bloco: true, projecao_votos: true, votos_22: true, projecao_base: true, projecao_2: true, projecao_apoio_iurd: true },
         orderBy: { projecao_votos: 'desc' },
         take: 10,
       }),
@@ -40,7 +40,11 @@ export class DashboardService {
         total_projecao: r._sum.projecao_votos || 0,
         total_municipios: r._count.id,
       })),
-      top10_projecao: top10.map(m => ({ ...m, id: m.id.toString() })),
+      top10_projecao: top10.map(m => ({
+        ...m,
+        id: m.id.toString(),
+        total_votos: (m.votos_22 || 0) + (m.projecao_votos || 0) + (m.projecao_base || 0) + (m.projecao_2 || 0) + (m.projecao_apoio_iurd || 0),
+      })),
     };
   }
 

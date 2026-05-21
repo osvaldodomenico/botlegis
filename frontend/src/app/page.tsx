@@ -10,7 +10,7 @@ interface DashboardData {
   total_projecao: number;
   por_tipo: { tipo: string; total_projecao: number; total_registros: number }[];
   por_rm_ra: { rm_ra: string; total_projecao: number; total_municipios: number }[];
-  top10_projecao: { id: string; nome: string; regiao: string; projecao_votos: number }[];
+  top10_projecao: { id: string; nome: string; regiao: string; projecao_votos: number; total_votos: number }[];
 }
 
 const CHART_COLORS = ['#0066cc', '#0071e3', '#2997ff', '#5ac8fa', '#34c759', '#ff9f0a', '#ff3b30', '#af52de', '#1d1d1f', '#7a7a7a'];
@@ -156,9 +156,10 @@ export default function DashboardPage() {
                     <p className="text-[15px] font-semibold text-ink truncate">{m.nome}</p>
                     <p className="text-[12px] text-ink-muted">{m.regiao}</p>
                   </div>
-                  <span className="text-[15px] font-semibold text-primary flex-shrink-0">
-                    {m.projecao_votos.toLocaleString('pt-BR')}
-                  </span>
+                  <div className="text-right flex-shrink-0">
+                    <p className="text-[15px] font-semibold text-primary">{(m.total_votos ?? m.projecao_votos).toLocaleString('pt-BR')}</p>
+                    <p className="text-[11px] text-ink-muted">+{m.projecao_votos.toLocaleString('pt-BR')} proj.</p>
+                  </div>
                 </div>
               ))}
               {(!data?.top10_projecao?.length) && (
