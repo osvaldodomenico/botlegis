@@ -100,6 +100,16 @@ export class BotIntentService {
       ],
     },
     {
+      intent: 'CONSULTA_BASE',
+      patterns: [
+        /\b(externo|externa|por fora|fora da igreja|fora da iurd)\b/i,
+        /\b(base institui[çc][aã]o|iurd|igreja|universal|dentro da igreja|de dentro)\b/i,
+        /\b(base apoiadores?|apoio externo|apoio interno)\b/i,
+        /\b(quantos votos.*(externo|igreja|iurd|apoiador))\b/i,
+        /\b((externo|igreja|iurd|apoiador).*quantos votos)\b/i,
+      ],
+    },
+    {
       intent: 'FORA_ESCOPO',
       patterns: [
         /\b(bola|futebol|jogo|receita|culinária|culinaria|clima|tempo|notícia|noticia|música|musica|filme|serie|netflix)\b/i,

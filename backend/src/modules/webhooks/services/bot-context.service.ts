@@ -16,13 +16,14 @@ export class BotContextService {
     if (mun.votos_validos_22 != null) linhas.push(`• Votos válidos 2022: ${mun.votos_validos_22.toLocaleString('pt-BR')}`);
     if (mun.percentual_mv != null) linhas.push(`• % dos votos válidos 2022: ${(mun.percentual_mv * 100).toFixed(2)}%`);
     if (mun.ranking_mv != null) linhas.push(`• Ranking entre deputados federais 2022: ${mun.ranking_mv}º lugar`);
+    if (mun.tipo_cadastro) linhas.push(`• Tipo de Base: ${mun.tipo_cadastro}`);
     if (mun.lideranca) linhas.push(`• Liderança 1: ${mun.lideranca}${mun.funcao_cargo ? ` (${mun.funcao_cargo})` : ''}`);
     if (mun.coordenacao) linhas.push(`• Coordenação 1: ${mun.coordenacao}`);
-    if (mun.projecao_votos != null) linhas.push(`• Votos projetados pela liderança 1 (2026): ${mun.projecao_votos.toLocaleString('pt-BR')}`);
-    if (mun.projecao_base != null) linhas.push(`• Votos projetados pela base (2026): ${mun.projecao_base.toLocaleString('pt-BR')}`);
+    if (mun.projecao_votos != null) linhas.push(`• Projeção Base Apoiadores (2026): ${mun.projecao_votos.toLocaleString('pt-BR')}`);
+    if (mun.projecao_base != null && mun.projecao_base > 0) linhas.push(`• Projeção Base Instituição (2026): ${mun.projecao_base.toLocaleString('pt-BR')}`);
     if (mun.coord_lideranca_2) linhas.push(`• Liderança 2: ${mun.coord_lideranca_2}${mun.funcao_cargo_2 ? ` (${mun.funcao_cargo_2})` : ''}`);
-    if (mun.projecao_2 != null) linhas.push(`• Votos projetados pela liderança 2 (2026): ${mun.projecao_2.toLocaleString('pt-BR')}`);
-    if (mun.projecao_apoio_iurd != null) linhas.push(`• Votos projetados apoio IURD (2026): ${mun.projecao_apoio_iurd.toLocaleString('pt-BR')}`);
+    if (mun.projecao_2 != null) linhas.push(`• Projeção Liderança 2 (2026): ${mun.projecao_2.toLocaleString('pt-BR')}`);
+    if (mun.projecao_apoio_iurd != null && mun.projecao_apoio_iurd > 0) linhas.push(`• Projeção Apoio IURD (2026): ${mun.projecao_apoio_iurd.toLocaleString('pt-BR')}`);
     const contribuicoes = [mun.projecao_votos, mun.projecao_base, mun.projecao_2, mun.projecao_apoio_iurd].filter(Boolean) as number[];
     const totalContribuicoes = contribuicoes.reduce((s, v) => s + v, 0);
     if (mun.votos_22 && totalContribuicoes > 0) {
@@ -49,29 +50,48 @@ export class BotContextService {
     if (base.percentual_mv != null) linhas.push(`• % dos votos válidos 2022: ${(base.percentual_mv * 100).toFixed(2)}%`);
     if (base.ranking_mv != null) linhas.push(`• Ranking entre deputados federais 2022: ${base.ranking_mv}º lugar`);
 
-    // Aggregate all leaders from all rows
-    linhas.push('');
-    linhas.push(`👥 LIDERANÇAS (${registros.length} registros):`);
-    let totalProjecao = 0;
+    // Group records by tipo_cadastro
+    const grupos: Record<string, MunicipioData[]> = {};
     for (const r of registros) {
-      const projLid1 = r.projecao_votos || 0;
-      const projBase = r.projecao_base || 0;
-      const projLid2 = r.projecao_2 || 0;
-      const projIurd = r.projecao_apoio_iurd || 0;
-      const contrib = projLid1 + projBase + projLid2 + projIurd;
-      totalProjecao += contrib;
+      const tipo = r.tipo_cadastro || 'SEM TIPO';
+      if (!grupos[tipo]) grupos[tipo] = [];
+      grupos[tipo].push(r);
+    }
 
-      if (r.lideranca) {
-        linhas.push(`• ${r.lideranca}${r.funcao_cargo ? ` (${r.funcao_cargo})` : ''} — projeção: ${projLid1.toLocaleString('pt-BR')} votos`);
+    let totalProjecao = 0;
+    const tipoLabels: Record<string, string> = {
+      'EXTERNO': '🌐 EXTERNO (fora da igreja)',
+      'BASE - INSTITUIÇÃO': '⛪ BASE INSTITUIÇÃO (IURD)',
+      'BASE APOIADORES': '🤝 BASE APOIADORES',
+      'SEM TIPO': '📋 OUTROS',
+    };
+
+    for (const [tipo, regs] of Object.entries(grupos)) {
+      linhas.push('');
+      linhas.push(`${tipoLabels[tipo] || tipo} (${regs.length} registros):`);
+      let subtotal = 0;
+      for (const r of regs) {
+        const projLid1 = r.projecao_votos || 0;
+        const projBase = r.projecao_base || 0;
+        const projLid2 = r.projecao_2 || 0;
+        const projIurd = r.projecao_apoio_iurd || 0;
+        const contrib = projLid1 + projBase + projLid2 + projIurd;
+        subtotal += contrib;
+        totalProjecao += contrib;
+
+        if (r.lideranca) {
+          linhas.push(`• ${r.lideranca}${r.funcao_cargo ? ` (${r.funcao_cargo})` : ''} — projeção: ${projLid1.toLocaleString('pt-BR')} votos`);
+        }
+        if (r.coordenacao && r.coordenacao !== r.lideranca) {
+          linhas.push(`  Coordenação: ${r.coordenacao}`);
+        }
+        if (r.coord_lideranca_2) {
+          linhas.push(`• ${r.coord_lideranca_2}${r.funcao_cargo_2 ? ` (${r.funcao_cargo_2})` : ''} — projeção 2: ${projLid2.toLocaleString('pt-BR')} votos`);
+        }
+        if (projBase > 0) linhas.push(`  Base Instituição: +${projBase.toLocaleString('pt-BR')}`);
+        if (projIurd > 0) linhas.push(`  Apoio IURD: +${projIurd.toLocaleString('pt-BR')}`);
       }
-      if (r.coordenacao && r.coordenacao !== r.lideranca) {
-        linhas.push(`  Coordenação: ${r.coordenacao}`);
-      }
-      if (r.coord_lideranca_2) {
-        linhas.push(`• ${r.coord_lideranca_2}${r.funcao_cargo_2 ? ` (${r.funcao_cargo_2})` : ''} — projeção 2: ${projLid2.toLocaleString('pt-BR')} votos`);
-      }
-      if (projBase > 0) linhas.push(`  Base: +${projBase.toLocaleString('pt-BR')}`);
-      if (projIurd > 0) linhas.push(`  IURD: +${projIurd.toLocaleString('pt-BR')}`);
+      linhas.push(`  Subtotal ${tipo}: +${subtotal.toLocaleString('pt-BR')} votos`);
     }
 
     linhas.push('');

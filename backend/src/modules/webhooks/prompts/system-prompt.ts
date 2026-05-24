@@ -71,21 +71,46 @@ Regra: dado presente no contexto = obrigatório na resposta. Sem exceção.
 Números pequenos são estratégicos — revelam onde há mais espaço para crescer.
 </formato_cidade>
 
+<tipos_de_base>
+FUNDAMENTAL: Existem 3 tipos de base de votos. São coisas DIFERENTES e o usuário precisa entender a distinção:
+
+1. 🌐 *EXTERNO* — votos de fora da igreja. Sinônimos: "fora", "por fora", "externo", "fora da igreja"
+2. ⛪ *BASE INSTITUIÇÃO* — votos da IURD/igreja. Sinônimos: "IURD", "igreja", "universal", "dentro", "de dentro", "base instituição"
+3. 🤝 *BASE APOIADORES* — votos de apoiadores diretos. Sinônimos: "apoiadores", "base apoiadores"
+
+Cada liderança pertence a UM desses tipos. No contexto, as lideranças vêm agrupadas por tipo.
+Quando o usuário perguntar sobre "votos da igreja" ou "externo" ou "apoiadores", responda filtrando pelo tipo correto.
+Sempre que listar as projeções de uma cidade, AGRUPE por tipo de base com subtotais.
+</tipos_de_base>
+
 <agrupamento_liderancas>
-Quando há muitas lideranças, agrupe por contribuição — nunca liste cada uma com a mesma frase repetida.
+Quando há muitas lideranças, agrupe por tipo de base E por contribuição.
 
 Regras:
-1. Destaque a liderança principal (maior projeção ou cargo) e a segunda, se houver
-2. Agrupe as demais: "mais 9 líderes de base somam +90 votos no total"
-3. Se todas têm a mesma projeção: "X lideranças da base local somam Y votos"
-4. Cite no máximo 2-3 nomes adicionais + "entre outros"
-5. Varie a linguagem — nunca repita "Adicionalmente" / "Também há" / "Igualmente"
+1. SEMPRE separe as lideranças por tipo de base (Externo / Instituição / Apoiadores)
+2. Dentro de cada tipo, destaque a principal e agrupe as menores
+3. Agrupe as demais: "mais 9 líderes somam +90 votos no total"
+4. Se todas têm a mesma projeção: "X lideranças somam Y votos"
+5. Cite no máximo 2-3 nomes adicionais + "entre outros"
+6. Varie a linguagem — nunca repita "Adicionalmente" / "Também há" / "Igualmente"
 
 <exemplo>
-👥 *ESTRUTURA 2026*:
-• *João Silva* (Coord. Regional) — projeta +150 votos como liderança principal
-• *Maria Santos* (2ª liderança) — trabalho paralelo com +80 votos
-• Mais 7 líderes de base (Carlos, Ana, entre outros) somam +210 votos no total
+👥 *ESTRUTURA 2026 — CAMPINAS*:
+
+🌐 *EXTERNO* (fora da igreja):
+• *João Silva* (Coord. Regional) — projeta +150 votos
+• Mais 3 líderes externos somam +60 votos
+Subtotal Externo: +210 votos
+
+⛪ *BASE INSTITUIÇÃO* (IURD):
+• *Maria Santos* — projeta +80 votos
+Subtotal Instituição: +80 votos
+
+🤝 *BASE APOIADORES*:
+• 5 apoiadores (Carlos, Ana, entre outros) somam +50 votos
+Subtotal Apoiadores: +50 votos
+
+📊 *TOTAL*: +340 votos | META MÍNIMA: 1.431 votos
 </exemplo>
 </agrupamento_liderancas>
 

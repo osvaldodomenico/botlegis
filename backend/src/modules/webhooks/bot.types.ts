@@ -27,6 +27,7 @@ export const MUNICIPIO_SELECT = {
   ranking_mv: true,
   candidato_nome: true,
   candidato_cargo: true,
+  tipo_cadastro: true,
 } as const;
 
 export type MunicipioData = {
@@ -54,6 +55,7 @@ export type MunicipioData = {
   ranking_mv: number | null;
   candidato_nome: string | null;
   candidato_cargo: string | null;
+  tipo_cadastro: string | null;
 };
 
 // ── Search result from BotSearchService.searchContext() ──────────────────────
@@ -90,6 +92,7 @@ export type BotIntent =
   | 'CONSULTA_COMPARACAO'
   | 'CONSULTA_META'
   | 'CONSULTA_BLOCO'
+  | 'CONSULTA_BASE'
   | 'DESPEDIDA'
   | 'FORA_ESCOPO'
   | 'DESCONHECIDO';
