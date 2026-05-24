@@ -32,6 +32,57 @@ export class BotContextService {
     return linhas.join('\n');
   }
 
+  // ── 1b. Formatter: municipality with all leadership rows ──────────────────
+
+  contextoMunicipioCompleto(registros: MunicipioData[]): string {
+    if (registros.length <= 1) return this.contextoMunicipio(registros[0]);
+
+    // Use first record for base data (2022 stats are the same across rows)
+    const base = registros[0];
+    const linhas: string[] = [`📊 Dados de *${base.nome}* (Eleições 2026):`];
+    if (base.mesorregiao) linhas.push(`• Mesorregião: ${base.mesorregiao}`);
+    if (base.rm_ra) linhas.push(`• RM/RA: ${base.rm_ra}`);
+    if (base.regiao) linhas.push(`• Região: ${base.regiao}`);
+    if (base.votos_22 != null) linhas.push(`• Votos MV em 2022: ${base.votos_22 === 0 ? '*0 votos* (sem presença registrada em 2022)' : base.votos_22.toLocaleString('pt-BR')}`);
+    if (base.eleitores_22 != null) linhas.push(`• Eleitores em 2022: ${base.eleitores_22.toLocaleString('pt-BR')}`);
+    if (base.votos_validos_22 != null) linhas.push(`• Votos válidos 2022: ${base.votos_validos_22.toLocaleString('pt-BR')}`);
+    if (base.percentual_mv != null) linhas.push(`• % dos votos válidos 2022: ${(base.percentual_mv * 100).toFixed(2)}%`);
+    if (base.ranking_mv != null) linhas.push(`• Ranking entre deputados federais 2022: ${base.ranking_mv}º lugar`);
+
+    // Aggregate all leaders from all rows
+    linhas.push('');
+    linhas.push(`👥 LIDERANÇAS (${registros.length} registros):`);
+    let totalProjecao = 0;
+    for (const r of registros) {
+      const projLid1 = r.projecao_votos || 0;
+      const projBase = r.projecao_base || 0;
+      const projLid2 = r.projecao_2 || 0;
+      const projIurd = r.projecao_apoio_iurd || 0;
+      const contrib = projLid1 + projBase + projLid2 + projIurd;
+      totalProjecao += contrib;
+
+      if (r.lideranca) {
+        linhas.push(`• ${r.lideranca}${r.funcao_cargo ? ` (${r.funcao_cargo})` : ''} — projeção: ${projLid1.toLocaleString('pt-BR')} votos`);
+      }
+      if (r.coordenacao && r.coordenacao !== r.lideranca) {
+        linhas.push(`  Coordenação: ${r.coordenacao}`);
+      }
+      if (r.coord_lideranca_2) {
+        linhas.push(`• ${r.coord_lideranca_2}${r.funcao_cargo_2 ? ` (${r.funcao_cargo_2})` : ''} — projeção 2: ${projLid2.toLocaleString('pt-BR')} votos`);
+      }
+      if (projBase > 0) linhas.push(`  Base: +${projBase.toLocaleString('pt-BR')}`);
+      if (projIurd > 0) linhas.push(`  IURD: +${projIurd.toLocaleString('pt-BR')}`);
+    }
+
+    linhas.push('');
+    linhas.push(`📊 TOTAL PROJEÇÕES 2026: +${totalProjecao.toLocaleString('pt-BR')} votos`);
+    if (base.votos_22 != null) {
+      linhas.push(`🎯 META MÍNIMA 2026 (base 2022 + todas as lideranças): ${((base.votos_22 || 0) + totalProjecao).toLocaleString('pt-BR')} votos`);
+    }
+    if (base.candidato_nome) linhas.push(`• Candidato vinculado: ${base.candidato_nome} (${base.candidato_cargo || ''})`);
+    return linhas.join('\n');
+  }
+
   // ── 2. Formatter: region ──────────────────────────────────────────────────
 
   contextoRegiao(cidades: MunicipioData[], nomeRegiao: string): string {
@@ -105,6 +156,9 @@ export class BotContextService {
   buildContextFromSearch(result: SearchResult): string | undefined {
     switch (result.type) {
       case 'municipio':
+        if (result.cidades && result.cidades.length > 1) {
+          return this.contextoMunicipioCompleto(result.cidades);
+        }
         return result.municipio ? this.contextoMunicipio(result.municipio) : undefined;
       case 'regiao':
         return result.cidades && result.regiaoNome

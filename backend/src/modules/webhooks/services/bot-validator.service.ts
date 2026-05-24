@@ -29,6 +29,16 @@ export class BotValidatorService {
 
   private readonly FILLER_ENDINGS: RegExp[] = [
     /\n*\s*(se precisar|caso precise|qualquer d[uú]vida|estou [àa] disposi[çc][aã]o|n[aã]o hesit|pode contar comigo|fico [àa] disposi[çc][aã]o|sempre que precisar|[eé] s[oó] falar|[eé] s[oó] chamar|s[oó] me chamar|estou aqui para (ajudar|te ajudar|auxiliar)|conte comigo|a seu dispor|ao seu dispor|me coloco [àa] disposi[çc][aã]o|posso ajudar com mais alguma coisa|precisa de algo mais|algo mais que eu possa|se quiser estrat[eé]gias espec[ií]ficas).*$/gim,
+    /\n*\s*\*?Bora ganhar a elei[çc][aã]o\!?\*?\s*🚀?\s*$/gim,
+  ];
+
+  // ── Padrões repetitivos que indicam resposta de baixa qualidade ──────────
+
+  private readonly REPETITIVE_PATTERNS: RegExp[] = [
+    /integra a base local, somando mais/gi,
+    /Adicionalmente,\s/gi,
+    /Igualmente,\s/gi,
+    /Também há atuação de,?\s/gi,
   ];
 
   // ── Extract numbers > 100 from text ──────────────────────────────────────
@@ -121,7 +131,17 @@ export class BotValidatorService {
       issues.push('truncated_to_4000');
     }
 
-    // 4. Check "não recebeu votos" hallucination — context may have votos_22 > 0
+    // 4. Count repetitive patterns — flag if too many
+    const repCount = this.REPETITIVE_PATTERNS.reduce(
+      (count, pat) => count + (result.match(pat) || []).length,
+      0,
+    );
+    if (repCount >= 3) {
+      issues.push('repetitive_response');
+      return { valid: false, response: result, issues };
+    }
+
+    // 6. Check "não recebeu votos" hallucination — context may have votos_22 > 0
     if (context) {
       const votosMatch = context.match(/Votos MV em 2022:\s*([\d.]+)/);
       if (votosMatch) {
@@ -134,7 +154,7 @@ export class BotValidatorService {
       }
     }
 
-    // 5. Check for hallucinated numbers (only if context is provided)
+    // 7. Check for hallucinated numbers (only if context is provided)
     if (context && context.length > 0) {
       const responseNumbers = this.extractNumbers(result);
       const contextNumbers = this.extractNumbers(context);

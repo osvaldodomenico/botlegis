@@ -76,6 +76,16 @@ export class BotSearchService {
     return melhorScore >= 0.6 ? melhor : null;
   }
 
+  // ── 1b. Busca todas as linhas de um município (múltiplas lideranças) ─────
+
+  async buscarTodasLinhasMunicipio(nome: string): Promise<MunicipioData[]> {
+    return this.municipios().findMany({
+      where: { uf: 'SP', nome },
+      select: MUNICIPIO_SELECT,
+      orderBy: { projecao_votos: 'desc' },
+    });
+  }
+
   // ── 2. Busca regional (mesorregião / região) ──────────────────────────────
 
   private readonly REGIOES_MAP: Record<string, { campo: 'mesorregiao' | 'regiao'; valor: string }> = {
@@ -215,10 +225,11 @@ export class BotSearchService {
       }
     }
 
-    // 1. City search
+    // 1. City search — fetch ALL rows for matched city (multiple leaders per city)
     const municipio = await this.buscarMunicipio(texto);
     if (municipio && String(municipio.id) !== String(currentMunicipioId ?? '')) {
-      return { type: 'municipio', municipio };
+      const todasLinhas = await this.buscarTodasLinhasMunicipio(municipio.nome);
+      return { type: 'municipio', municipio, cidades: todasLinhas.length > 1 ? todasLinhas : undefined };
     }
 
     // 2. Region search (fallback if city not found or not an explicit region query)

@@ -178,24 +178,22 @@ export class WebhooksService {
     municipioId?: bigint,
     contextHint?: string,
   ): Promise<string> {
-    // Load user's registered municipality as base context
+    // Load user's registered municipality as base context (all rows for multi-leader support)
     let extraContexto: string | undefined;
     if (municipioId) {
       try {
         const mun = await (this.prisma as any).municipio.findUnique({
           where: { id: municipioId },
-          select: {
-            id: true, nome: true, mesorregiao: true, rm_ra: true, regiao: true,
-            projecao_votos: true, projecao_base: true, lideranca: true,
-            coordenacao: true, funcao_cargo: true,
-            projecao_2: true, coord_lideranca_2: true, funcao_cargo_2: true,
-            votos_22: true, eleitores_22: true,
-            votos_validos_22: true, percentual_mv: true, ranking_mv: true,
-            projecao_apoio_iurd: true, candidato_nome: true, candidato_cargo: true,
-            divisao_regional: true, microrregiao: true, bloco: true,
-          },
+          select: { nome: true },
         });
-        if (mun) extraContexto = this.botContext.contextoMunicipio(mun);
+        if (mun) {
+          const todasLinhas = await this.botSearch.buscarTodasLinhasMunicipio(mun.nome);
+          extraContexto = todasLinhas.length > 1
+            ? this.botContext.contextoMunicipioCompleto(todasLinhas)
+            : todasLinhas.length === 1
+              ? this.botContext.contextoMunicipio(todasLinhas[0])
+              : undefined;
+        }
       } catch (e) {
         this.logger.warn(`Erro ao carregar município do contato: ${e}`);
       }
@@ -211,7 +209,10 @@ export class WebhooksService {
       try {
         const hintMun = await this.botSearch.buscarMunicipio(contextHint);
         if (hintMun) {
-          extraContexto = this.botContext.contextoMunicipio(hintMun);
+          const hintLinhas = await this.botSearch.buscarTodasLinhasMunicipio(hintMun.nome);
+          extraContexto = hintLinhas.length > 1
+            ? this.botContext.contextoMunicipioCompleto(hintLinhas)
+            : this.botContext.contextoMunicipio(hintMun);
         }
       } catch (e) {
         this.logger.warn(`Erro ao resolver contextHint "${contextHint}": ${e}`);
@@ -318,7 +319,10 @@ export class WebhooksService {
           data: { municipio_id: municipio.id, estado: 'ATIVO' },
           select: { id: true },
         });
-        const ctx = this.botContext.contextoMunicipio(municipio);
+        const cidadeLinhas = await this.botSearch.buscarTodasLinhasMunicipio(municipio.nome);
+        const ctx = cidadeLinhas.length > 1
+          ? this.botContext.contextoMunicipioCompleto(cidadeLinhas)
+          : this.botContext.contextoMunicipio(municipio);
         resposta =
           await this.botLLM.gerarResposta(
             `O usuário ${nome} confirmou que atua em ${municipio.nome}. Apresente um resumo amigável e motivador dos dados da cidade para a campanha, usando os dados abaixo. Seja conciso e use o estilo WhatsApp.`,

@@ -12,8 +12,8 @@ export class BotIntentService {
     {
       intent: 'SAUDACAO',
       patterns: [
-        /^(oi|ola|olá|oie|oii|eai|e aí|e ai|hey|hello|bom dia|boa tarde|boa noite|boas|salve|fala|opa)[!?\s.,]*$/i,
-        /^(tudo bem|tudo certo|tudo bom|como vai|como estás|como está)[?!\s.]*$/i,
+        /^(oi|ola|olá|oie|oii|eai|e aí|e ai|hey|hello|bom dia|boa tarde|boa noite|boas|salve|fala|opa|eae|falaaa?|oiii?)[!?\s.,]*$/i,
+        /^(tudo bem|tudo certo|tudo bom|como vai|como estás|como está|beleza|blz|tmj|td bem|td bom)[?!\s.]*$/i,
       ],
     },
     {
@@ -36,6 +36,37 @@ export class BotIntentService {
       patterns: [
         /\b(ranking|classificação|classificacao|posição|posicao|colocação|colocacao)\b/i,
         /\b(top|melhor|maior votaç|mais voto)\b/i,
+        /\b(top\s*\d+|primeiros|melhores cidades)\b/i,
+      ],
+    },
+    {
+      intent: 'CONSULTA_PROJECAO',
+      patterns: [
+        /\b(projeção|projecao|projetados|projetamos|vamos conseguir|quantos votos)\b/i,
+        /\b(previsão|previsao|estimativa|esperamos|esperado)\b/i,
+        /\b(quanto falta|faltam quantos|quantos faltam)\b/i,
+      ],
+    },
+    {
+      intent: 'CONSULTA_COMPARACAO',
+      patterns: [
+        /\b(compar|diferença entre|diferenca entre|versus|vs\.?)\b/i,
+        /\bmelhor (que|do que)\b/i,
+        /\b(dobrada|dobrado|dobramos|crescimento|evolução|evoluiu)\b/i,
+      ],
+    },
+    {
+      intent: 'CONSULTA_META',
+      patterns: [
+        /\b(meta|metas|objetivo|alvo|precisamos de|necessário|necessario)\b/i,
+        /\b(atingir|bater a meta|cumprir)\b/i,
+      ],
+    },
+    {
+      intent: 'CONSULTA_BLOCO',
+      patterns: [
+        /\b(bloco|blocos|divisão regional|divisao regional|microrregião|microrregiao)\b/i,
+        /\b(rm\b|ra\b|rm\/ra)\b/i,
       ],
     },
     {
@@ -62,7 +93,9 @@ export class BotIntentService {
     {
       intent: 'CONSULTA_CIDADE',
       patterns: [
-        /\b(como (foi|estamos|está|esta) em|dados (de|do|da)|votos em|resultado em)\b/i,
+        /\b(como (foi|estamos|está|esta|tá|ta) em|dados (de|do|da)|votos em|resultado em)\b/i,
+        /\b(me (fala|fale|diz) (de|sobre|da|do))\b/i,
+        /\b(situação|situacao) (de|do|da|em)\b/i,
         /\b(campinas|são paulo|sao paulo|sjc|s\.j\.c|são josé dos campos|taubaté|taubate|guarulhos|osasco|ribeirão|ribeirao|sorocaba|santos|mogi)\b/i,
       ],
     },

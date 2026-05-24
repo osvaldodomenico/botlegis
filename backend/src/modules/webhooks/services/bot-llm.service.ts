@@ -96,7 +96,8 @@ export class BotLLMService {
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
           body: JSON.stringify({
             model: modelName,
-            temperature: 0.5,
+            temperature: 0.3,
+            max_tokens: 800,
             messages: msgs,
           }),
           signal: ac.signal,
@@ -119,24 +120,27 @@ export class BotLLMService {
 
       const firstValidation = this.botValidator.validate(firstOut, extraContexto);
 
-      if (!firstValidation.valid && firstValidation.issues.some(i => i.startsWith('possible_hallucination'))) {
-        this.logger.warn('Hallucination detected — retrying with stricter instruction');
-        const retryMessages = [
-          ...messages,
-          { role: 'assistant', content: firstOut },
-          {
-            role: 'user',
-            content:
-              'INSTRUÇÃO: Use APENAS os números que aparecem explicitamente no contexto fornecido. Não some, não estime, não invente. Reescreva a resposta anterior.',
-          },
-        ];
-        const retryOut = await callOpenAI(retryMessages);
-        if (retryOut) {
-          const retryValidation = this.botValidator.validate(retryOut, extraContexto);
-          return retryValidation.response;
+      if (!firstValidation.valid) {
+        const hasHallucination = firstValidation.issues.some(i => i.startsWith('possible_hallucination'));
+        const hasRepetition = firstValidation.issues.includes('repetitive_response');
+
+        if (hasHallucination || hasRepetition) {
+          const retryInstruction = hasHallucination
+            ? 'INSTRUÇÃO: Use APENAS os números que aparecem explicitamente no contexto fornecido. Não some, não estime, não invente. Reescreva a resposta anterior.'
+            : 'INSTRUÇÃO: Sua resposta anterior ficou repetitiva. Reescreva de forma mais direta e variada — cada liderança em uma linha concisa, sem repetir frases como "integra a base local" ou "Adicionalmente". Vá direto ao ponto.';
+          this.logger.warn(`${hasHallucination ? 'Hallucination' : 'Repetition'} detected — retrying`);
+          const retryMessages = [
+            ...messages,
+            { role: 'assistant', content: firstOut },
+            { role: 'user', content: retryInstruction },
+          ];
+          const retryOut = await callOpenAI(retryMessages);
+          if (retryOut) {
+            const retryValidation = this.botValidator.validate(retryOut, extraContexto);
+            return retryValidation.response;
+          }
+          return firstValidation.response;
         }
-        // Retry failed entirely — fall back to first result (filtered)
-        return firstValidation.response;
       }
 
       return firstValidation.response;
