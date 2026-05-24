@@ -47,7 +47,7 @@ export class BotValidatorService {
     const matches = text.match(/\b\d[\d.,]*\b/g) || [];
     return matches
       .map(m => parseFloat(m.replace(/\./g, '').replace(',', '.')))
-      .filter(n => !isNaN(n) && n > 100);
+      .filter(n => !isNaN(n) && n > 100 && !(n >= 2020 && n <= 2030)); // skip years
   }
 
   // ── Check if number exists in context (or is a valid sum) ────────────────
@@ -56,12 +56,19 @@ export class BotValidatorService {
     // Exact match
     if (contextNumbers.some(cn => Math.abs(cn - n) < 1)) return true;
 
-    // Allow a sum of any 2-4 context numbers (for META MÍNIMA calculations)
+    // Allow a sum of any 2-5 context numbers (for META MÍNIMA calculations)
     for (let i = 0; i < contextNumbers.length; i++) {
       for (let j = i + 1; j < contextNumbers.length; j++) {
         if (Math.abs(contextNumbers[i] + contextNumbers[j] - n) < 2) return true;
         for (let k = j + 1; k < contextNumbers.length; k++) {
-          if (Math.abs(contextNumbers[i] + contextNumbers[j] + contextNumbers[k] - n) < 2) return true;
+          const sum3 = contextNumbers[i] + contextNumbers[j] + contextNumbers[k];
+          if (Math.abs(sum3 - n) < 2) return true;
+          for (let l = k + 1; l < contextNumbers.length; l++) {
+            if (Math.abs(sum3 + contextNumbers[l] - n) < 2) return true;
+            for (let m = l + 1; m < contextNumbers.length; m++) {
+              if (Math.abs(sum3 + contextNumbers[l] + contextNumbers[m] - n) < 2) return true;
+            }
+          }
         }
       }
     }
