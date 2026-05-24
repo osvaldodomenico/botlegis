@@ -162,6 +162,24 @@ export default function DashboardPage() {
                   </div>
                 </div>
               ))}
+              {data?.top10_projecao && data.top10_projecao.length > 0 && (
+                <div className="flex items-center gap-3 pt-3 mt-1 font-semibold">
+                  <span className="w-6 h-6 flex items-center justify-center text-[12px] font-semibold text-ink-muted flex-shrink-0">
+                    {/* Empty spacer to align with items */}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[15px] font-bold text-ink">Total do Top 10</p>
+                  </div>
+                  <div className="text-right flex-shrink-0">
+                    <p className="text-[15px] font-bold text-primary">
+                      {data.top10_projecao.reduce((sum, m) => sum + (m.total_votos ?? m.projecao_votos), 0).toLocaleString('pt-BR')}
+                    </p>
+                    <p className="text-[11px] text-ink-muted">
+                      +{data.top10_projecao.reduce((sum, m) => sum + m.projecao_votos, 0).toLocaleString('pt-BR')} proj.
+                    </p>
+                  </div>
+                </div>
+              )}
               {(!data?.top10_projecao?.length) && (
                 <p className="text-[15px] text-ink-muted text-center py-8">Adicione cadastros para ver o ranking</p>
               )}
