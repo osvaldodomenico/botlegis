@@ -168,7 +168,8 @@ export class BotValidatorService {
 
       if (responseNumbers.length > 0 && contextNumbers.length > 0) {
         const hallucinated = responseNumbers.filter(n => !this.numberExistsInContext(n, contextNumbers));
-        if (hallucinated.length > 0) {
+        // Only flag if >50% of response numbers are hallucinated (avoids false positives on META sums)
+        if (hallucinated.length > 0 && hallucinated.length > responseNumbers.length * 0.5) {
           this.logger.warn(`Possible hallucinated numbers: ${hallucinated.join(', ')}`);
           issues.push(`possible_hallucination:${hallucinated.join(',')}`);
           // For now, log and flag but don't reject — hallucination retry is in BotLLMService

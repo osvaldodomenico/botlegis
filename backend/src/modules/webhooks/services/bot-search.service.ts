@@ -23,12 +23,30 @@ export class BotSearchService {
   }
 
   private readonly STOPWORDS = new Set([
-    'QUANTOS','VOTOS','PROMETEU','NOSSA','BASE','QUAL','QUEM','SAO','DOS','DAS',
-    'PARA','COM','NAO','TEM','NOSSA','NOSSO','ESTA','ESTAO','COMO','ESTA','FOI',
-    'TEMOS','BLOCO','REGIAO','MICRO','ZONA','AREA','PARTE','TODA','TODO','QUAL',
+    'QUANTOS','VOTOS','PROMETEU','NOSSA','BASE','QUAL','QUEM','DOS','DAS',
+    'PARA','COM','NAO','TEM','NOSSO','ESTAO','COMO','FOI',
+    'TEMOS','REGIAO','MICRO','ZONA','AREA','PARTE','TODA','TODO',
     'ESSE','ESSA','ESTE','ESTA','QUAIS','ONDE','QUANDO','PORQUE','CIDADES','CIDADE',
     'MUNICIPIO','MUNICIPIOS','LIDERANCA','COORDENADOR','CANDIDATO','APOIADOR',
   ]);
+
+  // Compound city names that should be matched as a whole phrase
+  private readonly COMPOUND_NAMES: Record<string, string> = {
+    'SAO PAULO': 'SAO PAULO',
+    'SAO JOSE': 'SAO JOSE DOS CAMPOS',
+    'SAO JOSE DOS CAMPOS': 'SAO JOSE DOS CAMPOS',
+    'SAO BERNARDO': 'SAO BERNARDO DO CAMPO',
+    'SANTO ANDRE': 'SANTO ANDRE',
+    'SAO CAETANO': 'SAO CAETANO DO SUL',
+    'RIBEIRAO PRETO': 'RIBEIRAO PRETO',
+    'SAO JOSE DO RIO PRETO': 'SAO JOSE DO RIO PRETO',
+    'PRAIA GRANDE': 'PRAIA GRANDE',
+    'MOGI DAS CRUZES': 'MOGI DAS CRUZES',
+    'TABOAO DA SERRA': 'TABOAO DA SERRA',
+    'EMBU DAS ARTES': 'EMBU DAS ARTES',
+    'SAO VICENTE': 'SAO VICENTE',
+    'PRESIDENTE PRUDENTE': 'PRESIDENTE PRUDENTE',
+  };
 
   extrairNomesProprios(texto: string): string[] {
     const norm = this.normalizarNome(texto);
@@ -44,6 +62,15 @@ export class BotSearchService {
     });
 
     const textoNorm = this.normalizarNome(texto);
+
+    // Check compound names first (e.g., "São Paulo", "São José dos Campos")
+    for (const [key, target] of Object.entries(this.COMPOUND_NAMES)) {
+      if (textoNorm.includes(key)) {
+        const found = candidatos.find(m => this.normalizarNome(m.nome) === target);
+        if (found) return found;
+      }
+    }
+
     const palavras = textoNorm.split(/\s+/).filter(p => p.length > 2 && !this.STOPWORDS.has(p));
 
     if (palavras.length === 0) return null;
