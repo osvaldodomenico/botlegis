@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateMunicipioDto, UpdateMunicipioDto, ListMunicipiosDto } from './dto/municipio.dto';
 
@@ -37,6 +38,67 @@ export class MunicipiosService {
       if (projecao_max !== undefined) where.projecao_votos.lte = Number(projecao_max);
     }
 
+    const sortDir = order === 'desc' ? 'desc' : 'asc';
+
+    if (orderBy === 'dobrada') {
+      const conditions: Prisma.Sql[] = [];
+      if (nome) conditions.push(Prisma.sql`m.nome LIKE ${`%${nome}%`}`);
+      if (tipo_cadastro) conditions.push(Prisma.sql`m.tipo_cadastro = ${String(tipo_cadastro).trim().toUpperCase()}`);
+      if (regiao) conditions.push(Prisma.sql`m.regiao = ${regiao}`);
+      if (bloco) conditions.push(Prisma.sql`m.bloco = ${bloco}`);
+      if (rm_ra) conditions.push(Prisma.sql`m.rm_ra = ${rm_ra}`);
+      if (mesorregiao) conditions.push(Prisma.sql`m.mesorregiao = ${mesorregiao}`);
+      if (microrregiao) conditions.push(Prisma.sql`m.microrregiao = ${microrregiao}`);
+      if (coordenacao) {
+        conditions.push(Prisma.sql`(
+          m.coordenacao LIKE ${`%${coordenacao}%`}
+          OR m.lideranca LIKE ${`%${coordenacao}%`}
+          OR m.coord_lideranca_2 LIKE ${`%${coordenacao}%`}
+        )`);
+      }
+      if (projecao_min !== undefined) conditions.push(Prisma.sql`m.projecao_votos >= ${Number(projecao_min)}`);
+      if (projecao_max !== undefined) conditions.push(Prisma.sql`m.projecao_votos <= ${Number(projecao_max)}`);
+
+      const whereSql = conditions.length
+        ? Prisma.sql`WHERE ${Prisma.join(conditions, ' AND ')}`
+        : Prisma.empty;
+      const orderSql = sortDir === 'desc'
+        ? Prisma.sql`d.dobrada_nome IS NULL ASC, d.dobrada_nome DESC, m.nome ASC`
+        : Prisma.sql`d.dobrada_nome IS NULL ASC, d.dobrada_nome ASC, m.nome ASC`;
+
+      const [data, totalRows] = await Promise.all([
+        this.prisma.$queryRaw<any[]>(Prisma.sql`
+          SELECT m.*
+          FROM municipios m
+          LEFT JOIN (
+            SELECT UPPER(cidade) AS cidade_key, MIN(nome) AS dobrada_nome
+            FROM dobradas
+            GROUP BY UPPER(cidade)
+          ) d ON UPPER(m.nome) = d.cidade_key
+          ${whereSql}
+          ORDER BY ${orderSql}
+          LIMIT ${safeLimit} OFFSET ${skip}
+        `),
+        this.prisma.$queryRaw<Array<{ total: bigint }>>(Prisma.sql`
+          SELECT COUNT(*) AS total
+          FROM municipios m
+          ${whereSql}
+        `),
+      ]);
+
+      const total = Number(totalRows[0]?.total || 0);
+
+      return {
+        data: data.map(this.serialize),
+        meta: {
+          total,
+          page: Number(page),
+          limit: safeLimit,
+          pages: Math.ceil(total / safeLimit),
+        },
+      };
+    }
+
     const allowedSort = ['nome', 'regiao', 'bloco', 'tipo_cadastro', 'coordenacao', 'funcao', 'lideranca', 'projecao_votos', 'created_at', 'mesorregiao', 'microrregiao'];
     const sortField = allowedSort.includes(orderBy) ? orderBy : 'nome';
 
@@ -45,7 +107,7 @@ export class MunicipiosService {
         where,
         skip,
         take: safeLimit,
-        orderBy: { [sortField]: order },
+        orderBy: { [sortField]: sortDir },
       }),
       this.prisma.municipio.count({ where }),
     ]);

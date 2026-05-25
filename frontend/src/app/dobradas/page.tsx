@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { Plus, Trash2, Search } from 'lucide-react';
@@ -29,27 +29,31 @@ export default function DobradaPage() {
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState(1);
 
-  const load = async (p = page, cidade = busca) => {
+  const load = useCallback(async (p = page, cidade = busca, orderBy = sortField, order = sortDir) => {
     setLoading(true);
     try {
-      const params: any = { page: p, limit: PAGE_SIZE };
+      const params: any = { page: p, limit: PAGE_SIZE, orderBy, order };
       if (cidade) params.cidade = cidade;
       const r = await api.get('/dobradas', { params });
       setDobradas(r.data.data);
       setTotal(r.data.meta.total);
       setPages(r.data.meta.pages || 1);
     } finally { setLoading(false); }
-  };
+  }, [busca, page, sortField, sortDir]);
 
-  useEffect(() => { load(1); setPage(1); }, []);
   useEffect(() => { setPage(1); }, [busca]);
-  useEffect(() => { load(page); }, [page, busca]);
+  useEffect(() => { load(page); }, [page, busca, sortField, sortDir, load]);
 
   const handleSave = async () => {
     if (!nome || !cidade) return alert('Preencha Nome e Cidade');
-    await api.post('/dobradas', { nome: nome.toUpperCase(), cidade, projecao_votos: projecao ? Number(projecao) : 0 });
-    setNome(''); setCidade(''); setProjecao(''); setShowForm(false);
-    setPage(1);
+    try {
+      await api.post('/dobradas', { nome: nome.toUpperCase(), cidade, projecao_votos: projecao ? Number(projecao) : 0 });
+      setNome(''); setCidade(''); setProjecao(''); setShowForm(false);
+      setPage(1);
+      load(1);
+    } catch (e: any) {
+      alert(e?.response?.data?.message || 'Erro ao salvar dobrada');
+    }
   };
 
   const handleDelete = async (id: string, nome: string) => {
@@ -61,17 +65,8 @@ export default function DobradaPage() {
   const toggleSort = (field: keyof Dobrada) => {
     if (sortField === field) setSortDir(d => d === 'asc' ? 'desc' : 'asc');
     else { setSortField(field); setSortDir('asc'); }
+    setPage(1);
   };
-
-  const sorted = [...dobradas].sort((a, b) => {
-    const av = a[sortField] ?? '';
-    const bv = b[sortField] ?? '';
-    if (typeof av === 'number' && typeof bv === 'number')
-      return sortDir === 'asc' ? av - bv : bv - av;
-    return sortDir === 'asc'
-      ? String(av).localeCompare(String(bv))
-      : String(bv).localeCompare(String(av));
-  });
 
   const SortTh = ({ field, label, className = '' }: { field: keyof Dobrada; label: string; className?: string }) => (
     <th className={`table-th cursor-pointer select-none ${className}`} onClick={() => toggleSort(field)}>
@@ -128,10 +123,10 @@ export default function DobradaPage() {
               {loading && (
                 <tr><td colSpan={4} className="table-td text-center text-ink-muted py-10">Carregando...</td></tr>
               )}
-              {!loading && sorted.length === 0 && (
+              {!loading && dobradas.length === 0 && (
                 <tr><td colSpan={4} className="table-td text-center text-ink-muted py-10">Nenhuma dobrada cadastrada</td></tr>
               )}
-              {sorted.map(d => (
+              {dobradas.map(d => (
                 <tr key={d.id} className="hover:bg-parchment/50 transition-colors">
                   <td className="table-td font-semibold text-ink uppercase">{d.nome}</td>
                   <td className="table-td text-ink-muted">{d.cidade}</td>

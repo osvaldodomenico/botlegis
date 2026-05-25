@@ -23,4 +23,6 @@ export class ListDobradaDto {
   @IsOptional() @IsString() nome?: string;
   @IsOptional() @Type(() => Number) page?: number;
   @IsOptional() @Type(() => Number) limit?: number;
+  @IsOptional() @IsString() orderBy?: string;
+  @IsOptional() @IsString() order?: 'asc' | 'desc';
 }

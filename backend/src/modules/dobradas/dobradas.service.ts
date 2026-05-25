@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateDobradaDto, UpdateDobradaDto, ListDobradaDto } from './dto/dobrada.dto';
 
@@ -11,14 +12,49 @@ export class DobradaService {
     const limit = Math.min(25, Math.max(1, Number(query.limit) || 25));
     const skip = (page - 1) * limit;
 
-    const where: any = {};
-    if (query.cidade) where.cidade = { contains: query.cidade };
-    if (query.nome) where.nome = { contains: query.nome };
+    const conditions: Prisma.Sql[] = [];
+    if (query.cidade) conditions.push(Prisma.sql`cidade LIKE ${`%${query.cidade}%`}`);
+    if (query.nome) conditions.push(Prisma.sql`nome LIKE ${`%${query.nome}%`}`);
 
-    const [data, total] = await Promise.all([
-      this.prisma.dobrada.findMany({ where, skip, take: limit, orderBy: { cidade: 'asc' } }),
-      this.prisma.dobrada.count({ where }),
+    const whereSql = conditions.length
+      ? Prisma.sql`WHERE ${Prisma.join(conditions, ' AND ')}`
+      : Prisma.empty;
+
+    const sortFieldMap: Record<string, Prisma.Sql> = {
+      nome: Prisma.sql`nome`,
+      cidade: Prisma.sql`cidade`,
+      projecao_votos: Prisma.sql`projecao_votos`,
+    };
+    const sortField = sortFieldMap[query.orderBy || 'cidade'] || sortFieldMap.cidade;
+    const sortDir = query.order === 'desc' ? Prisma.sql`DESC` : Prisma.sql`ASC`;
+
+    const [data, totalRows] = await Promise.all([
+      this.prisma.$queryRaw<any[]>(Prisma.sql`
+        SELECT
+          MIN(id) AS id,
+          UPPER(TRIM(nome)) AS nome,
+          UPPER(TRIM(cidade)) AS cidade,
+          MAX(projecao_votos) AS projecao_votos,
+          MIN(created_at) AS created_at,
+          MAX(updated_at) AS updated_at
+        FROM dobradas
+        ${whereSql}
+        GROUP BY UPPER(TRIM(nome)), UPPER(TRIM(cidade))
+        ORDER BY ${sortField} ${sortDir}, cidade ASC, nome ASC
+        LIMIT ${limit} OFFSET ${skip}
+      `),
+      this.prisma.$queryRaw<Array<{ total: bigint }>>(Prisma.sql`
+        SELECT COUNT(*) AS total
+        FROM (
+          SELECT 1
+          FROM dobradas
+          ${whereSql}
+          GROUP BY UPPER(TRIM(nome)), UPPER(TRIM(cidade))
+        ) deduplicadas
+      `),
     ]);
+
+    const total = Number(totalRows[0]?.total || 0);
 
     return {
       data: data.map(d => ({ ...d, id: d.id.toString() })),
@@ -57,17 +93,55 @@ export class DobradaService {
   }
 
   async create(dto: CreateDobradaDto) {
-    const d = await this.prisma.dobrada.create({ data: dto as any });
+    const data = this.prepareData(dto);
+    await this.ensureNotDuplicate(data.nome, data.cidade);
+    const d = await this.prisma.dobrada.create({ data: data as any });
     return { ...d, id: d.id.toString() };
   }
 
   async update(id: string, dto: UpdateDobradaDto) {
-    const d = await this.prisma.dobrada.update({ where: { id: BigInt(id) }, data: dto });
+    const current = await this.prisma.dobrada.findUnique({ where: { id: BigInt(id) } });
+    const data = this.prepareData(dto);
+    const nome = data.nome || current?.nome || '';
+    const cidade = data.cidade || current?.cidade || '';
+    await this.ensureNotDuplicate(nome, cidade, BigInt(id));
+    const d = await this.prisma.dobrada.update({ where: { id: BigInt(id) }, data });
     return { ...d, id: d.id.toString() };
   }
 
   async remove(id: string) {
-    await this.prisma.dobrada.delete({ where: { id: BigInt(id) } });
+    const current = await this.prisma.dobrada.findUnique({ where: { id: BigInt(id) } });
+    if (!current) return { ok: true };
+
+    await this.prisma.$executeRaw(Prisma.sql`
+      DELETE FROM dobradas
+      WHERE UPPER(TRIM(nome)) = ${current.nome.trim().toUpperCase()}
+        AND UPPER(TRIM(cidade)) = ${current.cidade.trim().toUpperCase()}
+    `);
     return { ok: true };
+  }
+
+  private prepareData<T extends CreateDobradaDto | UpdateDobradaDto>(dto: T): T {
+    const data: any = { ...dto };
+    if (data.nome) data.nome = data.nome.trim().toUpperCase();
+    if (data.cidade) data.cidade = data.cidade.trim().toUpperCase();
+    if (data.projecao_votos === '' || data.projecao_votos === null) data.projecao_votos = 0;
+    return data;
+  }
+
+  private async ensureNotDuplicate(nome: string, cidade: string, ignoreId?: bigint) {
+    if (!nome || !cidade) return;
+
+    const duplicate = await this.prisma.dobrada.findFirst({
+      where: {
+        nome,
+        cidade,
+        ...(ignoreId ? { id: { not: ignoreId } } : {}),
+      },
+    });
+
+    if (duplicate) {
+      throw new ConflictException(`Dobrada "${nome}" já cadastrada para ${cidade}.`);
+    }
   }
 }

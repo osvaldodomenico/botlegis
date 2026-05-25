@@ -11,9 +11,15 @@ interface DashboardData {
   por_tipo: { tipo: string; total_projecao: number; total_registros: number }[];
   por_rm_ra: { rm_ra: string; total_projecao: number; total_municipios: number }[];
   top10_projecao: { id: string; nome: string; regiao: string; bloco: string; votos_22: number; projecao_votos: number; total_votos: number; tipos: { tipo: string; projecao: number }[] }[];
+  top10_por_tipo: Record<string, { id: string; nome: string; regiao: string; bloco: string; votos_22: number; projecao_votos: number; total_votos: number; tipos: { tipo: string; projecao: number }[] }[]>;
 }
 
 const CHART_COLORS = ['#0066cc', '#0071e3', '#2997ff', '#5ac8fa', '#34c759', '#ff9f0a', '#ff3b30', '#af52de', '#1d1d1f', '#7a7a7a'];
+const TIPO_CARDS = [
+  { key: 'EXTERNO', label: 'Externo', color: '#0066cc' },
+  { key: 'BASE - INSTITUIÇÃO', label: 'Base Instituição', color: '#059669' },
+  { key: 'BASE APOIADORES', label: 'Base Apoiadores', color: '#d97706' },
+];
 
 export default function DashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
@@ -44,7 +50,7 @@ export default function DashboardPage() {
             <div className="flex items-center gap-2 text-ink-muted text-[13px] mb-2">
               <MapPin size={15} />
               Municípios
-            </div>
+      </div>
             <p className="text-[40px] font-semibold text-ink leading-none" style={{ letterSpacing: '-0.5px' }}>
               {data?.total_municipios?.toLocaleString('pt-BR') ?? '—'}
             </p>
@@ -55,7 +61,7 @@ export default function DashboardPage() {
             <div className="flex items-center gap-2 text-ink-muted text-[13px] mb-2">
               <TrendingUp size={15} />
               Projeção Total
-            </div>
+      </div>
             <p className="text-[40px] font-semibold text-primary leading-none" style={{ letterSpacing: '-0.5px' }}>
               {data?.total_projecao?.toLocaleString('pt-BR') ?? '—'}
             </p>
@@ -116,8 +122,8 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Charts + Table */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Charts */}
+        <div className="grid grid-cols-1 gap-6">
           {/* Bar Chart */}
           <div className="card">
             <h2 className="text-[21px] font-semibold text-ink mb-6" style={{ letterSpacing: '-0.022em' }}>
@@ -140,57 +146,47 @@ export default function DashboardPage() {
               </BarChart>
             </ResponsiveContainer>
           </div>
+        </div>
 
-          {/* Top 10 Table */}
-          <div className="card">
-            <h2 className="text-[21px] font-semibold text-ink mb-4" style={{ letterSpacing: '-0.022em' }}>
-              Top 10 Municípios
-            </h2>
-            <div className="space-y-2">
-              {data?.top10_projecao.map((m, i) => (
-                <div key={m.id} className="flex items-center gap-3 py-2 border-b border-hairline last:border-0">
-                  <span className="w-6 h-6 rounded-full bg-parchment flex items-center justify-center text-[12px] font-semibold text-ink-muted flex-shrink-0">
-                    {i + 1}
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[15px] font-semibold text-ink truncate">{m.nome}</p>
-                    <div className="flex flex-wrap gap-1 mt-0.5">
-                      {m.tipos?.map((t, j) => (
-                        <span key={j} className="inline-flex items-center text-[10px] px-1.5 py-0.5 rounded-full bg-parchment text-ink-muted">
-                          {t.tipo}: +{t.projecao.toLocaleString('pt-BR')}
+        <div>
+          <h2 className="text-[21px] font-semibold text-ink mb-4" style={{ letterSpacing: '-0.022em' }}>
+            Top 10 por Tipo de Cadastro
+          </h2>
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+            {TIPO_CARDS.map(({ key, label, color }) => {
+              const ranking = data?.top10_por_tipo?.[key] || [];
+              const totalTop = ranking.reduce((sum, m) => sum + m.projecao_votos, 0);
+              return (
+                <div key={key} className="card p-0 overflow-hidden">
+                  <div className="px-5 py-4 border-b border-hairline" style={{ borderTop: `4px solid ${color}` }}>
+                    <p className="text-[12px] font-semibold uppercase tracking-widest" style={{ color }}>{label}</p>
+                    <p className="text-[13px] text-ink-muted mt-1">{totalTop.toLocaleString('pt-BR')} votos no Top 10</p>
+                  </div>
+                  <div className="px-5">
+                    {ranking.map((m, i) => (
+                      <div key={m.id} className="flex items-center gap-3 py-3 border-b border-hairline last:border-0">
+                        <span className="w-7 h-7 rounded-full bg-parchment flex items-center justify-center text-[12px] font-semibold text-ink-muted flex-shrink-0">
+                          {i + 1}
                         </span>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="text-right flex-shrink-0">
-                    <p className="text-[15px] font-semibold text-primary">{(m.total_votos ?? m.projecao_votos).toLocaleString('pt-BR')}</p>
-                    <p className="text-[11px] text-ink-muted">+{m.projecao_votos.toLocaleString('pt-BR')} proj.</p>
-                    {m.votos_22 > 0 && <p className="text-[10px] text-ink-muted">2022: {m.votos_22.toLocaleString('pt-BR')}</p>}
-                  </div>
-                </div>
-              ))}
-              {data?.top10_projecao && data.top10_projecao.length > 0 && (
-                <div className="flex items-center gap-3 pt-3 mt-1 font-semibold">
-                  <span className="w-6 h-6 flex items-center justify-center text-[12px] font-semibold text-ink-muted flex-shrink-0">
-                    {/* Empty spacer to align with items */}
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[15px] font-bold text-ink">Total do Top 10</p>
-                  </div>
-                  <div className="text-right flex-shrink-0">
-                    <p className="text-[15px] font-bold text-primary">
-                      {data.top10_projecao.reduce((sum, m) => sum + (m.total_votos ?? m.projecao_votos), 0).toLocaleString('pt-BR')}
-                    </p>
-                    <p className="text-[11px] text-ink-muted">
-                      +{data.top10_projecao.reduce((sum, m) => sum + m.projecao_votos, 0).toLocaleString('pt-BR')} proj.
-                    </p>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[14px] font-semibold text-ink truncate">{m.nome}</p>
+                          {(m.regiao || m.bloco) && (
+                            <p className="text-[11px] text-ink-muted truncate">{m.bloco || m.regiao}</p>
+                          )}
+                        </div>
+                        <div className="text-right flex-shrink-0">
+                          <p className="text-[15px] font-semibold" style={{ color }}>{m.projecao_votos.toLocaleString('pt-BR')}</p>
+                          <p className="text-[11px] text-ink-muted">proj.</p>
+                        </div>
+                      </div>
+                    ))}
+                    {ranking.length === 0 && (
+                      <p className="text-[14px] text-ink-muted text-center py-10">Sem projeções cadastradas</p>
+                    )}
                   </div>
                 </div>
-              )}
-              {(!data?.top10_projecao?.length) && (
-                <p className="text-[15px] text-ink-muted text-center py-8">Adicione cadastros para ver o ranking</p>
-              )}
-            </div>
+              );
+            })}
           </div>
         </div>
       </div>

@@ -39,14 +39,22 @@ export default function TerritoriosPage() {
   const [saving, setSaving] = useState(false);
   const { register, handleSubmit, reset } = useForm<Territorio>();
 
-  const load = useCallback(async (p: number) => {
+  const load = useCallback(async (p: number, orderBy = sortField, order = sortDir) => {
     setLoading(true);
     try {
-      const r = await api.get('/territorios', { params: { nome: search || undefined, page: p, limit: PAGE_SIZE } });
+      const r = await api.get('/territorios', {
+        params: {
+          nome: search || undefined,
+          page: p,
+          limit: PAGE_SIZE,
+          orderBy,
+          order,
+        },
+      });
       setTerritorios(r.data.data);
       setMeta(r.data.meta);
     } finally { setLoading(false); }
-  }, [search]);
+  }, [search, sortField, sortDir]);
 
   useEffect(() => { setPage(1); }, [search]);
   useEffect(() => { load(page); }, [page, load]);
@@ -62,6 +70,7 @@ export default function TerritoriosPage() {
       else await api.post('/territorios', data);
       closeForm();
       setPage(1);
+      load(1);
     } catch (e: any) {
       alert('Erro ao salvar: ' + (e?.response?.data?.message || e?.message || 'Tente novamente'));
     } finally {
@@ -73,18 +82,16 @@ export default function TerritoriosPage() {
     if (!confirm(`Remover território de "${nome}"?`)) return;
     await api.delete(`/territorios/${id}`);
     setPage(1);
+    load(1);
   };
 
   const toggleSort = (field: keyof Territorio) => {
-    if (sortField === field) setSortDir(d => d === 'asc' ? 'desc' : 'asc');
-    else { setSortField(field); setSortDir('asc'); }
+    const nextDir = sortField === field && sortDir === 'asc' ? 'desc' : 'asc';
+    setSortField(field);
+    setSortDir(nextDir);
+    setPage(1);
+    load(1, field, nextDir);
   };
-
-  const sorted = [...territorios].sort((a, b) => {
-    const av = (a[sortField] || '') as string;
-    const bv = (b[sortField] || '') as string;
-    return sortDir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av);
-  });
 
   const SortTh = ({ field, label, className = '' }: { field: keyof Territorio; label: string; className?: string }) => (
     <th className={`table-th cursor-pointer select-none ${className}`} onClick={() => toggleSort(field)}>
@@ -104,7 +111,7 @@ export default function TerritoriosPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-[34px] font-semibold text-ink" style={{ letterSpacing: '-0.374px' }}>Territórios</h1>
-            <p className="text-[17px] text-ink-muted mt-1">{territorios.length} configurações</p>
+            <p className="text-[17px] text-ink-muted mt-1">{meta.total.toLocaleString('pt-BR')} configurações</p>
           </div>
           <button onClick={openNew} className="btn-primary">
             <Plus size={18} /> Novo
@@ -137,9 +144,9 @@ export default function TerritoriosPage() {
             <tbody>
               {loading ? (
                 <tr><td colSpan={6} className="table-td text-center text-ink-muted py-16">Carregando...</td></tr>
-              ) : sorted.length === 0 ? (
+              ) : territorios.length === 0 ? (
                 <tr><td colSpan={6} className="table-td text-center text-ink-muted py-16">Nenhum território cadastrado</td></tr>
-              ) : sorted.map(t => (
+              ) : territorios.map(t => (
                 <tr key={t.id} className="border-t border-hairline hover:bg-parchment/40 transition-colors">
                   <td className="table-td font-semibold uppercase">{t.nome}</td>
                   <td className="table-td hidden md:table-cell text-[13px] text-ink-muted uppercase">{t.rm_ra || '—'}</td>

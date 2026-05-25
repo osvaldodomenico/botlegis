@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateTerritorioDto, UpdateTerritorioDto, ListTerritoriosDto } from './dto/territorio.dto';
 
@@ -14,12 +15,29 @@ export class TerritoriosService {
     const where: any = {};
     if (query.nome) where.nome = { contains: query.nome };
 
-    const validFields = ['nome', 'rm_ra', 'mesorregiao', 'microrregiao', 'divisao_regional'];
-    const sortField = validFields.includes(query.orderBy as string) ? query.orderBy as string : 'nome';
-    const sortDir = query.order === 'desc' ? 'desc' : 'asc';
+    const sortFieldMap: Record<string, Prisma.Sql> = {
+      nome: Prisma.sql`nome`,
+      rm_ra: Prisma.sql`rm_ra`,
+      mesorregiao: Prisma.sql`mesorregiao`,
+      microrregiao: Prisma.sql`microrregiao`,
+      divisao_regional: Prisma.sql`divisao_regional`,
+    };
+    const sortField = sortFieldMap[query.orderBy || 'nome'] || sortFieldMap.nome;
+    const sortDir = query.order === 'desc' ? Prisma.sql`DESC` : Prisma.sql`ASC`;
+    const conditions: Prisma.Sql[] = [];
+    if (query.nome) conditions.push(Prisma.sql`nome LIKE ${`%${query.nome}%`}`);
+    const whereSql = conditions.length
+      ? Prisma.sql`WHERE ${Prisma.join(conditions, ' AND ')}`
+      : Prisma.empty;
 
     const [data, total] = await Promise.all([
-      this.prisma.territorio.findMany({ where, skip, take: limit, orderBy: { [sortField]: sortDir } }),
+      this.prisma.$queryRaw<any[]>(Prisma.sql`
+        SELECT *
+        FROM territorios
+        ${whereSql}
+        ORDER BY (${sortField} IS NULL OR TRIM(${sortField}) = '') ASC, ${sortField} ${sortDir}, nome ASC
+        LIMIT ${limit} OFFSET ${skip}
+      `),
       this.prisma.territorio.count({ where }),
     ]);
 

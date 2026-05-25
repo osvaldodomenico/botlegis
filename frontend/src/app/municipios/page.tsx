@@ -145,7 +145,9 @@ export default function MunicipiosPage() {
     <th className={`table-th cursor-pointer select-none ${className || ''}`} onClick={() => sortBy(field)}>
       <span className="flex items-center gap-1">
         {label}
-        {orderBy === field && <span className="text-primary">{order === 'asc' ? '↑' : '↓'}</span>}
+        {orderBy === field
+          ? <span className="text-primary text-[11px]">{order === 'asc' ? '↑' : '↓'}</span>
+          : <span className="text-[#c7c7cc] text-[11px]">↕</span>}
       </span>
     </th>
   );
@@ -324,7 +326,7 @@ export default function MunicipiosPage() {
                   <SortHeader field="coordenacao" label="Coordenador" className="hidden lg:table-cell" />
                   <SortHeader field="funcao" label="Função" className="hidden lg:table-cell" />
                   <SortHeader field="lideranca" label="Liderança" className="hidden xl:table-cell" />
-                  <th className="table-th hidden xl:table-cell">Dobrada</th>
+                  <SortHeader field="dobrada" label="Dobrada" className="hidden xl:table-cell" />
                   <SortHeader field="projecao_votos" label="Projeção" />
                   <th className="table-th w-20"></th>
                 </tr>

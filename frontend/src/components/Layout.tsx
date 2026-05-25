@@ -41,17 +41,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         lg:translate-x-0
       `}>
         {/* Logo */}
-        <div className="px-5 py-5 border-b border-white/10 flex items-center gap-3">
-          <img
-            src="/legisbot-avatar.svg"
-            alt="Legis BOT"
-            className="w-12 h-12 rounded-[12px] flex-shrink-0"
-            style={{ imageRendering: 'crisp-edges' }}
-          />
-          <div>
-            <h1 className="text-[19px] font-bold tracking-tight leading-tight">Legis BOT</h1>
-            <p className="text-[11px] text-white/50 mt-0.5 uppercase tracking-widest">Módulo Robô</p>
-          </div>
+        <div className="px-5 py-7 border-b border-white/10 flex items-center justify-center">
+          <h1 className="text-[20px] font-semibold leading-none tracking-[0.18em] text-white">
+            LEGIS BOT
+          </h1>
         </div>
 
         {/* Nav */}
@@ -110,7 +103,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <button onClick={() => setSidebarOpen(!sidebarOpen)}>
             {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
-          <span className="text-[17px] font-semibold">Legis BOT</span>
+          <span className="text-[17px] font-semibold tracking-[0.12em]">LEGIS BOT</span>
         </header>
 
         {/* Page content */}

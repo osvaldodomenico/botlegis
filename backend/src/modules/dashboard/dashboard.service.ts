@@ -73,18 +73,61 @@ export class DashboardService {
       rmRaMap.set(rmra, existing);
     }
 
+    const toTopItem = (c: {
+      id: string; nome: string; regiao: string | null; bloco: string | null;
+      votos_22: number; projecao_total: number; tipos: Array<{ tipo: string; projecao: number }>;
+    }) => ({
+      id: c.id, nome: c.nome, regiao: c.regiao, bloco: c.bloco,
+      votos_22: c.votos_22,
+      projecao_votos: c.projecao_total,
+      total_votos: c.votos_22 + c.projecao_total,
+      tipos: c.tipos,
+    });
+
     // ── Top 10 (deduplicated, sorted by total projection) ─────────────────
     const top10 = cidades
       .filter(c => c.projecao_total > 0)
       .sort((a, b) => b.projecao_total - a.projecao_total)
       .slice(0, 10)
-      .map(c => ({
-        id: c.id, nome: c.nome, regiao: c.regiao, bloco: c.bloco,
-        votos_22: c.votos_22,
-        projecao_votos: c.projecao_total,
-        total_votos: c.votos_22 + c.projecao_total,
-        tipos: c.tipos,
-      }));
+      .map(toTopItem);
+
+    const tiposRanking = ['EXTERNO', 'BASE - INSTITUIÇÃO', 'BASE APOIADORES'];
+    const top10PorTipo = tiposRanking.reduce<Record<string, typeof top10>>((acc, tipo) => {
+      const cidadesTipo = new Map<string, {
+        id: string; nome: string; regiao: string | null; bloco: string | null;
+        votos_22: number; projecao_total: number; tipos: Array<{ tipo: string; projecao: number }>;
+      }>();
+
+      for (const m of todos) {
+        const tipoCadastro = (m.tipo_cadastro || 'Sem Tipo').trim().toUpperCase();
+        if (tipoCadastro !== tipo) continue;
+
+        const proj = projRow(m);
+        if (proj <= 0) continue;
+
+        const key = m.nome.toUpperCase();
+        if (!cidadesTipo.has(key)) {
+          cidadesTipo.set(key, {
+            id: m.id.toString(), nome: m.nome, regiao: m.regiao, bloco: m.bloco,
+            votos_22: m.votos_22 || 0,
+            projecao_total: 0,
+            tipos: [],
+          });
+        }
+
+        const city = cidadesTipo.get(key)!;
+        city.projecao_total += proj;
+        if (m.votos_22 && m.votos_22 > city.votos_22) city.votos_22 = m.votos_22;
+        city.tipos.push({ tipo, projecao: proj });
+      }
+
+      acc[tipo] = [...cidadesTipo.values()]
+        .sort((a, b) => b.projecao_total - a.projecao_total)
+        .slice(0, 10)
+        .map(toTopItem);
+
+      return acc;
+    }, {});
 
     return {
       total_municipios: totalMunicipios,
@@ -96,6 +139,7 @@ export class DashboardService {
         .map(([rm_ra, v]) => ({ rm_ra, total_projecao: v.projecao, total_municipios: v.municipios }))
         .sort((a, b) => b.total_projecao - a.total_projecao),
       top10_projecao: top10,
+      top10_por_tipo: top10PorTipo,
     };
   }
 
