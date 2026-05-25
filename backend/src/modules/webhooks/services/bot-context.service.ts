@@ -171,6 +171,68 @@ export class BotContextService {
     return linhas.join('\n');
   }
 
+  // ── 5. Formatter: ranking / strategy results ──────────────────────────────
+
+  contextoRanking(cidades: MunicipioData[], criterio: string): string {
+    // Group by city name
+    const porCidade = new Map<string, MunicipioData[]>();
+    for (const c of cidades) {
+      const existing = porCidade.get(c.nome) || [];
+      existing.push(c);
+      porCidade.set(c.nome, existing);
+    }
+
+    const linhas: string[] = [`📊 *${criterio}*\n`];
+    let pos = 0;
+
+    for (const [nome, rows] of porCidade) {
+      pos++;
+      const base = rows[0];
+      const votos22 = base.votos_22 || 0;
+      const eleitores22 = base.eleitores_22 || 0;
+
+      // Aggregate projections and leaders across all rows
+      let totalProj = 0;
+      const lideres: string[] = [];
+
+      for (const r of rows) {
+        const proj = ([r.projecao_votos, r.projecao_base, r.projecao_2, r.projecao_apoio_iurd]
+          .filter(Boolean) as number[]).reduce((s, v) => s + v, 0);
+        totalProj += proj;
+
+        if (r.lideranca) {
+          lideres.push(`${r.lideranca}${r.funcao_cargo ? ` (${r.funcao_cargo})` : ''} [${r.tipo_cadastro || '-'}] → +${(r.projecao_votos || 0).toLocaleString('pt-BR')}`);
+        }
+        if (r.coord_lideranca_2) {
+          lideres.push(`${r.coord_lideranca_2}${r.funcao_cargo_2 ? ` (${r.funcao_cargo_2})` : ''} → +${(r.projecao_2 || 0).toLocaleString('pt-BR')}`);
+        }
+      }
+
+      const metaMinima = votos22 + totalProj;
+
+      linhas.push(`*${pos}. ${nome}* (${base.mesorregiao || '-'})`);
+      linhas.push(`  📈 2022: ${votos22.toLocaleString('pt-BR')} votos | #${base.ranking_mv || '?'}º | ${base.percentual_mv ? (base.percentual_mv * 100).toFixed(2) + '%' : '0%'} | ${eleitores22.toLocaleString('pt-BR')} eleitores`);
+
+      if (lideres.length > 0) {
+        linhas.push(`  👥 Lideranças (${lideres.length}):`);
+        for (const l of lideres) {
+          linhas.push(`    • ${l}`);
+        }
+      } else {
+        linhas.push(`  👥 *SEM LIDERANÇA CADASTRADA*`);
+      }
+
+      if (totalProj > 0) {
+        linhas.push(`  🎯 Projeções: +${totalProj.toLocaleString('pt-BR')} | META MÍNIMA 2026: ${metaMinima.toLocaleString('pt-BR')}`);
+      } else {
+        linhas.push(`  🎯 Sem projeções 2026 | Apenas base 2022: ${votos22.toLocaleString('pt-BR')}`);
+      }
+      linhas.push('');
+    }
+
+    return linhas.join('\n');
+  }
+
   // ── Build context string from unified SearchResult ────────────────────────
 
   buildContextFromSearch(result: SearchResult): string | undefined {
@@ -192,6 +254,10 @@ export class BotContextService {
       case 'funcao_cargo':
         return result.cidades && result.termoBusca
           ? this.contextoLideranca(result.cidades, result.termoBusca)
+          : undefined;
+      case 'ranking':
+        return result.cidades && result.rankingCriterio
+          ? this.contextoRanking(result.cidades, result.rankingCriterio)
           : undefined;
       default:
         return undefined;

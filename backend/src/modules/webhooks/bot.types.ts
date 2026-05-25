@@ -66,6 +66,7 @@ export type SearchResultType =
   | 'subdivisao'
   | 'lideranca'
   | 'funcao_cargo'
+  | 'ranking'
   | 'none';
 
 export type SearchResult = {
@@ -76,6 +77,7 @@ export type SearchResult = {
   subdivisaoTipo?: string;
   subdivisaoValor?: string;
   termoBusca?: string;
+  rankingCriterio?: string;
 };
 
 // ── Bot intent types (used by BotIntentService in Phase 2) ───────────────────

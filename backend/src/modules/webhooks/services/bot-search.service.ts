@@ -233,8 +233,102 @@ export class BotSearchService {
     });
   }
 
+  // ── 6. Ranking / strategy search ────────────────────────────────────────
+
+  private isRankingQuery(textoNorm: string): boolean {
+    return (
+      /\b(TOP\s*\d+|RANKING|CLASSIFICACAO)\b/.test(textoNorm) ||
+      /\b(MAIS\s+FORTE|MAIS\s+FRACO|MELHOR\s+CIDADE|PIOR\s+CIDADE)\b/.test(textoNorm) ||
+      /\b(PRIORIZAR|PRIORIDADE|FOCAR|FOCO|INVESTIR)\b/.test(textoNorm) ||
+      /\b(POTENCIAL|OPORTUNIDADE|CRESCIMENTO|INEXPLORADO|ZONA\s+BRANCA)\b/.test(textoNorm) ||
+      /\b(FORTE|FRACO|MELHOR|PIOR|DESTAQUE)\b.{0,30}\b(CIDADE|MUNICIPIO|TRABALHO)\b/.test(textoNorm) ||
+      /\b(CIDADE|MUNICIPIO)\b.{0,30}\b(FORTE|FRACO|MELHOR|PIOR|DESTAQUE|TRABALHO)\b/.test(textoNorm) ||
+      /\b(RESUMO|PANORAMA|CENARIO|VISAO\s+GERAL|RESUMAO|RELATORIO)\b/.test(textoNorm) ||
+      /\b(SWOT|ANALISE\s+GERAL)\b/.test(textoNorm) ||
+      /\b(ONDE\s+DEVEMOS|ONDE\s+FOCAR|ONDE\s+INVESTIR|ONDE\s+TRABALHAR)\b/.test(textoNorm) ||
+      /\b(MELHORES|PIORES)\b.{0,15}\b(CIDADES|MUNICIPIOS)\b/.test(textoNorm)
+    );
+  }
+
+  async buscarRanking(textoNorm: string): Promise<{ cidades: MunicipioData[]; criterio: string } | null> {
+    if (!this.isRankingQuery(textoNorm)) return null;
+
+    const todos: MunicipioData[] = await this.municipios().findMany({
+      where: { uf: 'SP' },
+      select: MUNICIPIO_SELECT,
+    });
+
+    // Group by city name and aggregate metrics
+    const porCidade = new Map<string, { rows: MunicipioData[]; votos22: number; eleitores22: number; totalProj: number; metaMinima: number; numLideres: number }>();
+    for (const m of todos) {
+      const existing = porCidade.get(m.nome);
+      const proj = ([m.projecao_votos, m.projecao_base, m.projecao_2, m.projecao_apoio_iurd].filter(Boolean) as number[]).reduce((s, v) => s + v, 0);
+      const temLider = m.lideranca || m.coord_lideranca_2 ? 1 : 0;
+      if (existing) {
+        existing.rows.push(m);
+        existing.totalProj += proj;
+        existing.metaMinima += proj;
+        existing.numLideres += temLider;
+      } else {
+        const votos22 = m.votos_22 || 0;
+        porCidade.set(m.nome, {
+          rows: [m],
+          votos22,
+          eleitores22: m.eleitores_22 || 0,
+          totalProj: proj,
+          metaMinima: votos22 + proj,
+          numLideres: temLider,
+        });
+      }
+    }
+
+    const agregados = Array.from(porCidade.entries()).map(([nome, agg]) => ({ nome, ...agg }));
+
+    // Determine sort direction from query intent
+    const isNegative = /\b(FRACO|PIOR|POTENCIAL|INEXPLORADO|OPORTUNIDADE|CRESCIMENTO|INVESTIR|TRABALHAR|FOCAR|PRIORIZAR)\b/.test(textoNorm);
+    const isGeneral = /\b(RESUMO|PANORAMA|CENARIO|VISAO|RESUMAO|SWOT|RELATORIO|GERAL)\b/.test(textoNorm);
+
+    let selected: typeof agregados;
+    let criterio: string;
+
+    if (isGeneral) {
+      // General overview: top 8 strongest + top 5 biggest opportunities
+      const fortes = [...agregados].sort((a, b) => b.metaMinima - a.metaMinima).slice(0, 8);
+      const nomes = new Set(fortes.map(f => f.nome));
+      const oportunidades = [...agregados]
+        .filter(a => a.eleitores22 > 30000 && a.metaMinima < 200 && !nomes.has(a.nome))
+        .sort((a, b) => b.eleitores22 - a.eleitores22)
+        .slice(0, 5);
+      selected = [...fortes, ...oportunidades];
+      criterio = 'PANORAMA GERAL: Top 8 mais fortes + Top 5 maiores oportunidades';
+    } else if (isNegative) {
+      // Opportunity/weak: big cities with low engagement
+      selected = agregados
+        .filter(a => a.eleitores22 > 30000)
+        .sort((a, b) => {
+          const ratioA = a.metaMinima / Math.max(a.eleitores22, 1);
+          const ratioB = b.metaMinima / Math.max(b.eleitores22, 1);
+          return ratioA - ratioB;
+        })
+        .slice(0, 15);
+      criterio = 'MAIORES OPORTUNIDADES (grande eleitorado + baixa presença MV)';
+    } else {
+      // Strong/top: highest meta minima
+      selected = [...agregados].sort((a, b) => b.metaMinima - a.metaMinima).slice(0, 15);
+      criterio = 'CIDADES MAIS FORTES (maior meta mínima 2026 = votos 2022 + projeções)';
+    }
+
+    // Flatten back to MunicipioData rows
+    const cidadesResult: MunicipioData[] = [];
+    for (const agg of selected) {
+      cidadesResult.push(...agg.rows);
+    }
+
+    return cidadesResult.length > 0 ? { cidades: cidadesResult, criterio } : null;
+  }
+
   // ── Unified search chain ──────────────────────────────────────────────────
-  // Runs all 5 searches in priority order and returns the first hit.
+  // Runs all 6 searches in priority order and returns the first hit.
   // currentMunicipioId: skip if matched city is same as user's registered city.
 
   async searchContext(texto: string, currentMunicipioId?: bigint): Promise<SearchResult> {
@@ -290,6 +384,17 @@ export class BotSearchService {
     const porFuncao = await this.buscarPorFuncaoCargo(texto);
     if (porFuncao.length > 0) {
       return { type: 'funcao_cargo', cidades: porFuncao, termoBusca: texto };
+    }
+
+    // 6. Ranking/strategy search — top N cities with all data
+    const ranking = await this.buscarRanking(textoNorm);
+    if (ranking) {
+      return {
+        type: 'ranking',
+        cidades: ranking.cidades,
+        rankingCriterio: ranking.criterio,
+        termoBusca: texto,
+      };
     }
 
     return { type: 'none' };
