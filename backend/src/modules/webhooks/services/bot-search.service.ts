@@ -181,11 +181,11 @@ export class BotSearchService {
   }
 
   // ── 4. Busca por subdivisão geográfica ────────────────────────────────────
+  // Match the user text against ALL distinct values of bloco, rm_ra, divisao_regional, microrregiao.
+  // Uses direct substring matching (normalized) to avoid stopword/length filtering issues.
 
   async buscarPorSubdivisao(texto: string): Promise<{ tipo: string; valor: string; cidades: MunicipioData[] } | null> {
     const norm = this.normalizarNome(texto);
-    const palavras = norm.split(/\s+/).filter(p => p.length > 3 && !this.STOPWORDS.has(p));
-    if (palavras.length === 0) return null;
 
     const campos: Array<{ campo: string; label: string }> = [
       { campo: 'bloco', label: 'Bloco' },
@@ -200,18 +200,48 @@ export class BotSearchService {
       orderBy: { eleitores_22: 'desc' },
     });
 
+    // Build a map of all distinct values per field with their normalized forms
+    const campoValores: Array<{ campo: string; label: string; valores: Array<{ raw: string; norm: string }> }> = [];
     for (const { campo, label } of campos) {
-      const achados = todos.filter(m => {
+      const seen = new Set<string>();
+      const valores: Array<{ raw: string; norm: string }> = [];
+      for (const m of todos) {
         const val = (m as any)[campo];
-        if (!val) return false;
-        const valNorm = this.normalizarNome(val);
-        return palavras.some(p => valNorm.includes(p));
-      });
-      if (achados.length > 0) {
-        const valorEncontrado = (achados[0] as any)[campo] as string;
-        return { tipo: label, valor: valorEncontrado, cidades: achados };
+        if (val && String(val).trim() && !seen.has(String(val).trim())) {
+          seen.add(String(val).trim());
+          valores.push({ raw: String(val).trim(), norm: this.normalizarNome(String(val).trim()) });
+        }
+      }
+      campoValores.push({ campo, label, valores });
+    }
+
+    // Pass 1: exact substring match (most precise) — "ZONA SUL" found inside query text
+    for (const { campo, label, valores } of campoValores) {
+      // Sort by longest norm first so "ZONA SUL" beats "ZONA" if both are substrings
+      const sorted = [...valores].sort((a, b) => b.norm.length - a.norm.length);
+      for (const { raw, norm: dbNorm } of sorted) {
+        if (dbNorm.length >= 3 && norm.includes(dbNorm)) {
+          const achados = todos.filter(m => (m as any)[campo] === raw);
+          if (achados.length > 0) {
+            return { tipo: label, valor: raw, cidades: achados };
+          }
+        }
       }
     }
+
+    // Pass 2: word-based fallback — single word >= 5 chars matches (e.g. "JUNDIAI" in query matches bloco "JUNDIAI")
+    for (const { campo, label, valores } of campoValores) {
+      for (const { raw, norm: dbNorm } of valores) {
+        const words = dbNorm.split(/\s+/).filter(w => w.length >= 5);
+        if (words.some(w => norm.includes(w))) {
+          const achados = todos.filter(m => (m as any)[campo] === raw);
+          if (achados.length > 0) {
+            return { tipo: label, valor: raw, cidades: achados };
+          }
+        }
+      }
+    }
+
     return null;
   }
 
@@ -346,6 +376,21 @@ export class BotSearchService {
         if (cidades.length > 0) {
           return { type: 'regiao', cidades, regiaoNome: regiao.valor, termoBusca: texto };
         }
+      }
+    }
+
+    // If query mentions "bloco", "divisao", or "vale", prioritize subdivision search before city
+    const isBlocoQuery = /\bBLOCO\b|\bDIVISAO\b|\bVALE\b|\bRM\b|\bRA\b/.test(textoNorm);
+    if (isBlocoQuery) {
+      const subdiv = await this.buscarPorSubdivisao(texto);
+      if (subdiv) {
+        return {
+          type: 'subdivisao',
+          cidades: subdiv.cidades,
+          subdivisaoTipo: subdiv.tipo,
+          subdivisaoValor: subdiv.valor,
+          termoBusca: texto,
+        };
       }
     }
 

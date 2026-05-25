@@ -146,7 +146,7 @@ export class BotContextService {
       const meta = (c.votos_22 || 0) + contrib;
       linhas.push(`🏙️ ${c.nome}`);
       linhas.push(`  2022: ${(c.votos_22 || 0).toLocaleString('pt-BR')} votos | #${c.ranking_mv || '?'}º | ${c.percentual_mv ? (c.percentual_mv * 100).toFixed(2) + '%' : '0%'} | ${(c.eleitores_22 || 0).toLocaleString('pt-BR')} eleitores`);
-      if (c.lideranca || c.coordenacao) linhas.push(`  Lid.: ${c.lideranca || '-'} (${c.funcao_cargo || ''}) | Coord.: ${c.coordenacao || '-'}`);
+      if (c.lideranca || c.coordenacao) linhas.push(`  Lid.: ${c.lideranca || '-'} (${c.funcao_cargo || ''}) [${c.tipo_cadastro || '-'}] | Coord.: ${c.coordenacao || '-'}`);
       if (c.coord_lideranca_2) linhas.push(`  Lid.2: ${c.coord_lideranca_2} (${c.funcao_cargo_2 || ''})`);
       if (contrib > 0) linhas.push(`  Proj.: +${contrib.toLocaleString('pt-BR')} | META: ${meta.toLocaleString('pt-BR')}`);
     }
