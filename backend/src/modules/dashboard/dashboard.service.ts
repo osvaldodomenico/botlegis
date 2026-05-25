@@ -6,6 +6,10 @@ export class DashboardService {
   constructor(private prisma: PrismaService) {}
 
   async getStats() {
+    const tiposCadastro = ['EXTERNO', 'BASE - INSTITUIÇÃO', 'BASE APOIADORES'];
+    const normalizeTipo = (tipo?: string | null) => (tipo || '').trim().toUpperCase();
+    const isTipoCadastro = (tipo?: string | null) => tiposCadastro.includes(normalizeTipo(tipo));
+
     // Single query: fetch ALL rows and deduplicate in JS
     const todos = await this.prisma.municipio.findMany({
       select: {
@@ -18,6 +22,7 @@ export class DashboardService {
 
     // O dashboard deve seguir a mesma projeção principal usada nas outras telas.
     const projRow = (m: typeof todos[0]) => m.projecao_votos || 0;
+    const cadastros = todos.filter(m => isTipoCadastro(m.tipo_cadastro));
 
     // ── Deduplicate by city name ──────────────────────────────────────────
     const porCidade = new Map<string, {
@@ -27,7 +32,7 @@ export class DashboardService {
       tipos: Array<{ tipo: string; projecao: number }>;
     }>();
 
-    for (const m of todos) {
+    for (const m of cadastros) {
       const key = m.nome.toUpperCase();
       const proj = projRow(m);
       if (!porCidade.has(key)) {
@@ -44,7 +49,7 @@ export class DashboardService {
       if (!city.rm_ra && m.rm_ra) city.rm_ra = m.rm_ra;
       if (m.votos_22 && m.votos_22 > city.votos_22) city.votos_22 = m.votos_22;
       if (m.eleitores_22 && m.eleitores_22 > city.eleitores_22) city.eleitores_22 = m.eleitores_22;
-      if (proj > 0) city.tipos.push({ tipo: m.tipo_cadastro || 'Sem Tipo', projecao: proj });
+      if (proj > 0) city.tipos.push({ tipo: normalizeTipo(m.tipo_cadastro), projecao: proj });
     }
 
     const cidades = [...porCidade.values()];
@@ -52,13 +57,13 @@ export class DashboardService {
     // ── Total municípios (distinct) ───────────────────────────────────────
     const totalMunicipios = cidades.length;
 
-    // ── Total projeção (all projection fields, all rows) ──────────────────
-    const totalProjecao = todos.reduce((s, m) => s + projRow(m), 0);
+    // ── Total projeção (somente cadastros dos três tipos válidos) ─────────
+    const totalProjecao = cadastros.reduce((s, m) => s + projRow(m), 0);
 
     // ── Por tipo (raw rows — each tipo_cadastro is a separate entry) ──────
     const tipoMap = new Map<string, { projecao: number; registros: number }>();
-    for (const m of todos) {
-      const tipo = m.tipo_cadastro || 'Sem Tipo';
+    for (const m of cadastros) {
+      const tipo = normalizeTipo(m.tipo_cadastro);
       const existing = tipoMap.get(tipo) || { projecao: 0, registros: 0 };
       existing.projecao += projRow(m);
       existing.registros++;
@@ -94,15 +99,14 @@ export class DashboardService {
       .slice(0, 10)
       .map(toTopItem);
 
-    const tiposRanking = ['EXTERNO', 'BASE - INSTITUIÇÃO', 'BASE APOIADORES'];
-    const top10PorTipo = tiposRanking.reduce<Record<string, typeof top10>>((acc, tipo) => {
+    const top10PorTipo = tiposCadastro.reduce<Record<string, typeof top10>>((acc, tipo) => {
       const cidadesTipo = new Map<string, {
         id: string; nome: string; regiao: string | null; bloco: string | null;
         votos_22: number; projecao_total: number; tipos: Array<{ tipo: string; projecao: number }>;
       }>();
 
-      for (const m of todos) {
-        const tipoCadastro = (m.tipo_cadastro || 'Sem Tipo').trim().toUpperCase();
+      for (const m of cadastros) {
+        const tipoCadastro = normalizeTipo(m.tipo_cadastro);
         if (tipoCadastro !== tipo) continue;
 
         const proj = projRow(m);

@@ -54,7 +54,7 @@ export default function DashboardPage() {
             <p className="text-[40px] font-semibold text-ink leading-none" style={{ letterSpacing: '-0.5px' }}>
               {data?.total_municipios?.toLocaleString('pt-BR') ?? '—'}
             </p>
-            <p className="text-[13px] text-ink-muted mt-1">registros ativos</p>
+            <p className="text-[13px] text-ink-muted mt-1">em algum dos 3 tipos</p>
           </div>
 
           <div className="stat-card">
@@ -65,7 +65,7 @@ export default function DashboardPage() {
             <p className="text-[40px] font-semibold text-primary leading-none" style={{ letterSpacing: '-0.5px' }}>
               {data?.total_projecao?.toLocaleString('pt-BR') ?? '—'}
             </p>
-            <p className="text-[13px] text-ink-muted mt-1">votos projetados</p>
+            <p className="text-[13px] text-ink-muted mt-1">votos dos cadastros</p>
           </div>
 
           <div className="stat-card">
@@ -76,7 +76,7 @@ export default function DashboardPage() {
             <p className="text-[40px] font-semibold text-ink leading-none" style={{ letterSpacing: '-0.5px' }}>
               {data?.por_rm_ra?.length ?? '—'}
             </p>
-            <p className="text-[13px] text-ink-muted mt-1">RM/RA cobertas</p>
+            <p className="text-[13px] text-ink-muted mt-1">RM/RA com cadastro</p>
           </div>
 
           <div className="stat-card">
@@ -164,7 +164,7 @@ export default function DashboardPage() {
                   </div>
                   <div className="px-5 flex-1">
                     {ranking.map((m, i) => (
-                      <div key={m.id} className="flex items-center gap-3 py-3 border-b border-hairline last:border-0">
+                      <div key={m.id} className="flex items-center gap-3 py-2.5 border-b border-hairline last:border-0">
                         <span className="w-7 h-7 rounded-full bg-parchment flex items-center justify-center text-[12px] font-semibold text-ink-muted flex-shrink-0">
                           {i + 1}
                         </span>
@@ -184,13 +184,13 @@ export default function DashboardPage() {
                       <p className="text-[14px] text-ink-muted text-center py-10">Sem projeções cadastradas</p>
                     )}
                   </div>
-                  <div className="mx-5 mb-5 mt-3 rounded-2xl px-4 py-4 border" style={{ backgroundColor: `${color}12`, borderColor: `${color}40` }}>
-                    <p className="text-[11px] font-semibold uppercase tracking-widest" style={{ color }}>Total do Top 10</p>
-                    <div className="flex items-end justify-between gap-3 mt-2">
-                      <p className="text-[30px] font-semibold leading-none" style={{ color }}>
+                  <div className="mt-auto border-t px-5 py-4" style={{ backgroundColor: `${color}10`, borderColor: `${color}35` }}>
+                    <p className="text-[11px] font-semibold uppercase tracking-widest" style={{ color }}>Total do card</p>
+                    <div className="flex items-end justify-between gap-3 mt-1">
+                      <p className="text-[38px] font-semibold leading-none" style={{ color, letterSpacing: '-0.03em' }}>
                         {totalTop.toLocaleString('pt-BR')}
                       </p>
-                      <p className="text-[12px] text-ink-muted whitespace-nowrap">votos projetados</p>
+                      <p className="text-[12px] font-semibold text-ink-muted uppercase tracking-wider whitespace-nowrap">votos</p>
                     </div>
                   </div>
                 </div>
