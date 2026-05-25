@@ -102,7 +102,7 @@ export default function DashboardPage() {
                 { key: 'EXTERNO', label: 'Base Externo', color: '#0066cc', bg: '#eff6ff' },
                 { key: 'BASE - INSTITUIÇÃO', label: 'Base Instituição', color: '#059669', bg: '#ecfdf5' },
                 { key: 'BASE APOIADORES', label: 'Base Apoiadores', color: '#d97706', bg: '#fffbeb' },
-              ].map(({ key, label, color, bg }) => {
+              ].map(({ key, label, color }) => {
                 const t = data.por_tipo.find(x => x.tipo === key);
                 return (
                   <div key={key} className="stat-card" style={{ borderLeft: `4px solid ${color}` }}>
@@ -157,12 +157,12 @@ export default function DashboardPage() {
               const ranking = data?.top10_por_tipo?.[key] || [];
               const totalTop = ranking.reduce((sum, m) => sum + m.projecao_votos, 0);
               return (
-                <div key={key} className="card p-0 overflow-hidden">
+                <div key={key} className="card p-0 overflow-hidden h-full flex flex-col">
                   <div className="px-5 py-4 border-b border-hairline" style={{ borderTop: `4px solid ${color}` }}>
                     <p className="text-[12px] font-semibold uppercase tracking-widest" style={{ color }}>{label}</p>
-                    <p className="text-[13px] text-ink-muted mt-1">{totalTop.toLocaleString('pt-BR')} votos no Top 10</p>
+                    <p className="text-[13px] text-ink-muted mt-1">Ranking dos 10 maiores municípios por projeção</p>
                   </div>
-                  <div className="px-5">
+                  <div className="px-5 flex-1">
                     {ranking.map((m, i) => (
                       <div key={m.id} className="flex items-center gap-3 py-3 border-b border-hairline last:border-0">
                         <span className="w-7 h-7 rounded-full bg-parchment flex items-center justify-center text-[12px] font-semibold text-ink-muted flex-shrink-0">
@@ -183,6 +183,15 @@ export default function DashboardPage() {
                     {ranking.length === 0 && (
                       <p className="text-[14px] text-ink-muted text-center py-10">Sem projeções cadastradas</p>
                     )}
+                  </div>
+                  <div className="mx-5 mb-5 mt-3 rounded-2xl px-4 py-4 border" style={{ backgroundColor: `${color}12`, borderColor: `${color}40` }}>
+                    <p className="text-[11px] font-semibold uppercase tracking-widest" style={{ color }}>Total do Top 10</p>
+                    <div className="flex items-end justify-between gap-3 mt-2">
+                      <p className="text-[30px] font-semibold leading-none" style={{ color }}>
+                        {totalTop.toLocaleString('pt-BR')}
+                      </p>
+                      <p className="text-[12px] text-ink-muted whitespace-nowrap">votos projetados</p>
+                    </div>
                   </div>
                 </div>
               );

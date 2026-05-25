@@ -16,9 +16,8 @@ export class DashboardService {
       },
     });
 
-    // Helper: sum all 4 projection fields for a row
-    const projRow = (m: typeof todos[0]) =>
-      (m.projecao_votos || 0) + (m.projecao_base || 0) + (m.projecao_2 || 0) + (m.projecao_apoio_iurd || 0);
+    // O dashboard deve seguir a mesma projeção principal usada nas outras telas.
+    const projRow = (m: typeof todos[0]) => m.projecao_votos || 0;
 
     // ── Deduplicate by city name ──────────────────────────────────────────
     const porCidade = new Map<string, {
@@ -40,6 +39,9 @@ export class DashboardService {
       }
       const city = porCidade.get(key)!;
       city.projecao_total += proj;
+      if (!city.regiao && m.regiao) city.regiao = m.regiao;
+      if (!city.bloco && m.bloco) city.bloco = m.bloco;
+      if (!city.rm_ra && m.rm_ra) city.rm_ra = m.rm_ra;
       if (m.votos_22 && m.votos_22 > city.votos_22) city.votos_22 = m.votos_22;
       if (m.eleitores_22 && m.eleitores_22 > city.eleitores_22) city.eleitores_22 = m.eleitores_22;
       if (proj > 0) city.tipos.push({ tipo: m.tipo_cadastro || 'Sem Tipo', projecao: proj });
@@ -66,7 +68,8 @@ export class DashboardService {
     // ── Por RM/RA (deduplicated cities) ───────────────────────────────────
     const rmRaMap = new Map<string, { projecao: number; municipios: number }>();
     for (const c of cidades) {
-      const rmra = c.rm_ra || 'Sem RM/RA';
+      const rmra = (c.rm_ra || '').trim();
+      if (!rmra) continue;
       const existing = rmRaMap.get(rmra) || { projecao: 0, municipios: 0 };
       existing.projecao += c.projecao_total;
       existing.municipios++;
