@@ -14,8 +14,12 @@ export class TerritoriosService {
     const where: any = {};
     if (query.nome) where.nome = { contains: query.nome };
 
+    const validFields = ['nome', 'rm_ra', 'mesorregiao', 'microrregiao', 'divisao_regional'];
+    const sortField = validFields.includes(query.orderBy as string) ? query.orderBy as string : 'nome';
+    const sortDir = query.order === 'desc' ? 'desc' : 'asc';
+
     const [data, total] = await Promise.all([
-      this.prisma.territorio.findMany({ where, skip, take: limit, orderBy: { nome: 'asc' } }),
+      this.prisma.territorio.findMany({ where, skip, take: limit, orderBy: { [sortField]: sortDir } }),
       this.prisma.territorio.count({ where }),
     ]);
 

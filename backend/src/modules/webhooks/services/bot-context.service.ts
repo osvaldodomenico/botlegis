@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { MunicipioData, SearchResult } from '../bot.types';
+import { MunicipioData, SearchResult, CoordenadorRegiao } from '../bot.types';
 
 @Injectable()
 export class BotContextService {
@@ -233,6 +233,30 @@ export class BotContextService {
     return linhas.join('\n');
   }
 
+  // ── 6. Formatter: coordinator listing by region ──────────────────────────
+
+  contextoCoordenadoresLista(lista: CoordenadorRegiao[]): string {
+    const totalCoords = lista.reduce((s, r) => s + r.coordenadores.length, 0);
+    const linhas: string[] = [
+      `INSTRUÇÃO: O usuário perguntou sobre coordenadores/lideranças. Os dados COMPLETOS estão abaixo. RESPONDA DIRETAMENTE com estes dados, NÃO peça esclarecimento.`,
+      '',
+      `📊 *Coordenadores e Lideranças por Região* — ${totalCoords} pessoas em ${lista.length} regiões:\n`,
+    ];
+
+    for (const grupo of lista) {
+      const nomes = grupo.coordenadores.map(c => c.nome).join(', ');
+      const cidades = [...new Set(grupo.coordenadores.map(c => c.cidade))];
+      linhas.push(`📍 *${grupo.regiao}* — ${grupo.coordenadores.length} pessoa(s)`);
+      linhas.push(`  Nomes: ${nomes}`);
+      linhas.push(`  Cidades: ${cidades.join(', ')}`);
+      linhas.push('');
+    }
+
+    linhas.push(`RESUMO: Temos ${totalCoords} coordenadores e lideranças em ${lista.length} regiões/blocos de SP.`);
+
+    return linhas.join('\n');
+  }
+
   // ── Build context string from unified SearchResult ────────────────────────
 
   buildContextFromSearch(result: SearchResult): string | undefined {
@@ -258,6 +282,10 @@ export class BotContextService {
       case 'ranking':
         return result.cidades && result.rankingCriterio
           ? this.contextoRanking(result.cidades, result.rankingCriterio)
+          : undefined;
+      case 'coordenadores_lista':
+        return result.coordenadoresLista
+          ? this.contextoCoordenadoresLista(result.coordenadoresLista)
           : undefined;
       default:
         return undefined;
@@ -301,6 +329,64 @@ Quando perguntarem "qual cidade trabalhar mais", "onde focar esforço", "onde es
 - PRIORIDADE 3: Cidades sem nenhum voto E sem liderança — zona em branco total
 - NÃO priorize apenas cidades com 0 votos — cidades pequenas com 0 votos têm menor impacto que uma grande cidade com 50 votos
 - Cidades com 2-3 votos absolutamente NÃO são "destaques" — são casos normais de presença mínima
+
+TRABALHO PARLAMENTAR DO DEPUTADO MILTON VIEIRA (57ª Legislatura, 2023-2026):
+
+Comissão Atual: Titular da Comissão de Viação e Transportes (CVT) — desde abril/2026
+
+PROJETOS DE LEI (46 PLs/PECs/PLPs como autor):
+
+2026 (5 projetos novos):
+• PL 2299/2026 — Lacre de segurança obrigatório em placas de motos/quadriciclos
+• PL 2020/2026 — Proteção contra evasão acadêmica feminina no ensino superior
+• PL 1849/2026 — Proíbe uso de cadastro de inadimplentes como impeditivo a programas habitacionais
+• PL 1836/2026 — Política Nacional de Transparência e Consentimento Parental na Educação Básica
+• PL 1835/2026 — Dia Nacional Família ao Pé da Cruz
+
+2023 (principais):
+• PEC 5/2023 — Imunidade tributária de templos religiosos e entidades
+• PEC 9/2023 — Cotas raciais e de gênero em eleições
+• PL 2425/2023 — Exigência de conhecimento sobre TGD em concursos para professor
+• PL 1864/2023 — Detectores de metais em escolas públicas e privadas
+• PL 1395/2023 — Identificação civil para cidadãos bariátricos
+• PL 301/2023 — Regulamentação de procedimentos em caso de gravidez resultante de estupro
+• PL 2162/2023 — Anistia a manifestantes políticos (pós-outubro/2022)
+• CPI do MST (RCP 3/2023) — coautor
+• CPI das Pirâmides Financeiras (RCP 4/2023) — coautor
+
+2022:
+• PL 2868/2022 — Estatuto da Pessoa com Câncer (tratamento integral SUS)
+• PL 2090/2022 — Assento preferencial para pessoas com TEA no transporte público
+• PL 1670/2022 — Direito de visita de avós e bisavós
+• PL 1488/2022 — São José dos Campos: Capital Nacional da Indústria Aeroespacial
+• PEC 14/2022 — Redução de contribuições sociais para municípios
+
+2021:
+• PEC 5/2021 — Composição do CNMP
+• PEC 3/2021 — Prerrogativas parlamentares
+• PL 4242/2021 — Bíblias em bibliotecas de escolas públicas
+• PL 4532/2021 — Dedução IR para doações a hospitais públicos
+
+2020 (COVID):
+• PL 3134/2020 — Aumento de pena para pedofilia + crime hediondo
+• PL 3110/2020 — Regime fechado para corrupção em verbas COVID
+• PLP 91/2020 — Recursos de iluminação pública para combate ao COVID
+
+Frentes Parlamentares (participação ativa):
+Frente Parlamentar Evangélica (membro fundador), Frente em Defesa da Vida e da Família, Frente de Segurança Pública, Frente da Juventude, Frente da Saúde Mental e Emocional, Frente Brasil-Israel, +40 outras frentes parlamentares
+
+Áreas de atuação principal:
+1. Família e valores (consentimento parental, família, religião)
+2. Saúde (câncer, autismo, bariátrica, saúde digital)
+3. Segurança (escolas, pedofilia, anticorrupção)
+4. Direitos sociais (habitação, idosos, pessoas com deficiência)
+5. Economia (municípios, MPEs, desburocratização)
+
+REGRAS PARA RESPONDER SOBRE TRABALHO PARLAMENTAR:
+- Quando perguntarem "o que o deputado fez", "trabalho parlamentar", "projetos de lei", "PLs do Milton" → responda com os dados acima
+- Destaque os projetos mais recentes (2026) e os mais impactantes
+- Mencione as áreas de atuação e frentes parlamentares
+- Se perguntarem sobre área específica, filtre os PLs relevantes
 
 DADOS DE BI: Você tem acesso aos dados de votação 2022 e projeções 2026 de todos os 645 municípios de SP. Os dados detalhados do município do usuário são fornecidos no contexto de cada mensagem.
 

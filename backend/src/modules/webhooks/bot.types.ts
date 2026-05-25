@@ -67,7 +67,13 @@ export type SearchResultType =
   | 'lideranca'
   | 'funcao_cargo'
   | 'ranking'
+  | 'coordenadores_lista'
   | 'none';
+
+export type CoordenadorRegiao = {
+  regiao: string;
+  coordenadores: Array<{ nome: string; cidade: string; funcao?: string; tipo?: string }>;
+};
 
 export type SearchResult = {
   type: SearchResultType;
@@ -78,6 +84,7 @@ export type SearchResult = {
   subdivisaoValor?: string;
   termoBusca?: string;
   rankingCriterio?: string;
+  coordenadoresLista?: CoordenadorRegiao[];
 };
 
 // ── Bot intent types (used by BotIntentService in Phase 2) ───────────────────

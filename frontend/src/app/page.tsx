@@ -10,7 +10,7 @@ interface DashboardData {
   total_projecao: number;
   por_tipo: { tipo: string; total_projecao: number; total_registros: number }[];
   por_rm_ra: { rm_ra: string; total_projecao: number; total_municipios: number }[];
-  top10_projecao: { id: string; nome: string; regiao: string; projecao_votos: number; total_votos: number }[];
+  top10_projecao: { id: string; nome: string; regiao: string; bloco: string; votos_22: number; projecao_votos: number; total_votos: number; tipos: { tipo: string; projecao: number }[] }[];
 }
 
 const CHART_COLORS = ['#0066cc', '#0071e3', '#2997ff', '#5ac8fa', '#34c759', '#ff9f0a', '#ff3b30', '#af52de', '#1d1d1f', '#7a7a7a'];
@@ -154,11 +154,18 @@ export default function DashboardPage() {
                   </span>
                   <div className="flex-1 min-w-0">
                     <p className="text-[15px] font-semibold text-ink truncate">{m.nome}</p>
-                    <p className="text-[12px] text-ink-muted">{m.regiao}</p>
+                    <div className="flex flex-wrap gap-1 mt-0.5">
+                      {m.tipos?.map((t, j) => (
+                        <span key={j} className="inline-flex items-center text-[10px] px-1.5 py-0.5 rounded-full bg-parchment text-ink-muted">
+                          {t.tipo}: +{t.projecao.toLocaleString('pt-BR')}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                   <div className="text-right flex-shrink-0">
                     <p className="text-[15px] font-semibold text-primary">{(m.total_votos ?? m.projecao_votos).toLocaleString('pt-BR')}</p>
                     <p className="text-[11px] text-ink-muted">+{m.projecao_votos.toLocaleString('pt-BR')} proj.</p>
+                    {m.votos_22 > 0 && <p className="text-[10px] text-ink-muted">2022: {m.votos_22.toLocaleString('pt-BR')}</p>}
                   </div>
                 </div>
               ))}

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { MUNICIPIO_SELECT, MunicipioData, SearchResult } from '../bot.types';
+import { MUNICIPIO_SELECT, MunicipioData, SearchResult, CoordenadorRegiao } from '../bot.types';
 
 @Injectable()
 export class BotSearchService {
@@ -25,12 +25,13 @@ export class BotSearchService {
   private readonly STOPWORDS = new Set([
     'QUANTOS','VOTOS','PROMETEU','NOSSA','BASE','QUAL','QUEM','DOS','DAS',
     'PARA','COM','NAO','TEM','NOSSO','ESTAO','COMO','FOI','QUE','MAIS',
-    'TEMOS','REGIAO','MICRO','ZONA','AREA','PARTE','TODA','TODO',
+    'TEMOS','REGIAO','REGIOES','MICRO','ZONA','AREA','PARTE','TODA','TODO',
     'ESSE','ESSA','ESTE','ESTA','QUAIS','ONDE','QUANDO','PORQUE','CIDADES','CIDADE',
-    'MUNICIPIO','MUNICIPIOS','LIDERANCA','COORDENADOR','CANDIDATO','APOIADOR',
+    'MUNICIPIO','MUNICIPIOS','LIDERANCA','LIDERANCAS','COORDENADOR','COORDENADORES',
+    'COORDENACAO','COORDENACOES','CANDIDATO','APOIADOR','APOIADORES',
     'FORTE','FRACO','MELHOR','PIOR','MAIOR','MENOR','MUITO','POUCO',
-    'SOBRE','FALA','FALE','MOSTRA','LISTA','DIGA','PRECISA','PRECISAMOS',
-    'TRABALHO','TRABALHAR','VOCE','PODE','GENTE','SERIA','DEVEMOS',
+    'SOBRE','FALA','FALE','MOSTRA','LISTA','LISTAR','DIGA','PRECISA','PRECISAMOS',
+    'TRABALHO','TRABALHAR','VOCE','PODE','GENTE','SERIA','DEVEMOS','TODOS','TODAS','NOSSOS','NOSSAS',
   ]);
 
   // Compound city names that should be matched as a whole phrase
@@ -266,6 +267,83 @@ export class BotSearchService {
     });
   }
 
+  // ── 5b. Coordinator listing (aggregation by region) ─────────────────────
+
+  private isCoordenadorListaQuery(textoNorm: string): boolean {
+    return (
+      /\b(QUANTOS|QUAIS|LISTA|LISTAR|TODOS|TODAS|NOSSOS|NOSSAS)\b/.test(textoNorm) &&
+      /\b(COORDENADOR|COORDENADORES|COORDENACAO|COORDENACOES|LIDERANCA|LIDERANCAS)\b/.test(textoNorm)
+    );
+  }
+
+  async listarCoordenadoresPorRegiao(): Promise<CoordenadorRegiao[]> {
+    const todos: MunicipioData[] = await this.municipios().findMany({
+      where: { uf: 'SP' },
+      select: MUNICIPIO_SELECT,
+      orderBy: { bloco: 'asc' },
+    });
+
+    // Group coordinators/leaders by bloco (most granular grouping)
+    const porRegiao = new Map<string, Map<string, { nome: string; cidade: string; funcao?: string; tipo?: string }>>();
+
+    for (const m of todos) {
+      const regiao = m.bloco || m.mesorregiao || 'SEM REGIÃO';
+
+      if (!porRegiao.has(regiao)) porRegiao.set(regiao, new Map());
+      const coordMap = porRegiao.get(regiao)!;
+
+      // Add coordenacao
+      if (m.coordenacao) {
+        const key = this.normalizarNome(m.coordenacao);
+        if (!coordMap.has(key)) {
+          coordMap.set(key, {
+            nome: m.coordenacao,
+            cidade: m.nome,
+            funcao: m.funcao_cargo || undefined,
+            tipo: m.tipo_cadastro || undefined,
+          });
+        }
+      }
+      // Add lideranca
+      if (m.lideranca) {
+        const key = 'LID_' + this.normalizarNome(m.lideranca);
+        if (!coordMap.has(key)) {
+          coordMap.set(key, {
+            nome: m.lideranca,
+            cidade: m.nome,
+            funcao: m.funcao_cargo || undefined,
+            tipo: m.tipo_cadastro || undefined,
+          });
+        }
+      }
+      // Add lideranca 2
+      if (m.coord_lideranca_2) {
+        const key = 'LID2_' + this.normalizarNome(m.coord_lideranca_2);
+        if (!coordMap.has(key)) {
+          coordMap.set(key, {
+            nome: m.coord_lideranca_2,
+            cidade: m.nome,
+            funcao: m.funcao_cargo_2 || undefined,
+            tipo: m.tipo_cadastro || undefined,
+          });
+        }
+      }
+    }
+
+    const resultado: CoordenadorRegiao[] = [];
+    for (const [regiao, coordMap] of porRegiao) {
+      if (coordMap.size === 0) continue;
+      resultado.push({
+        regiao,
+        coordenadores: Array.from(coordMap.values()),
+      });
+    }
+
+    // Sort by region name
+    resultado.sort((a, b) => a.regiao.localeCompare(b.regiao));
+    return resultado;
+  }
+
   // ── 6. Ranking / strategy search ────────────────────────────────────────
 
   private isRankingQuery(textoNorm: string): boolean {
@@ -366,7 +444,16 @@ export class BotSearchService {
 
   async searchContext(texto: string, currentMunicipioId?: bigint): Promise<SearchResult> {
     const textoNorm = this.normalizarNome(texto);
-    const isRegiaoQuery = /\bREGIAO\b|\bMESORREGIAO\b|\bMICRORREGIAO\b|\bCIDADES\b|\bMUNICIPIOS\b/.test(textoNorm);
+
+    // 0. Coordinator listing query — "quantos coordenadores nas regiões temos?"
+    if (this.isCoordenadorListaQuery(textoNorm)) {
+      const lista = await this.listarCoordenadoresPorRegiao();
+      if (lista.length > 0) {
+        return { type: 'coordenadores_lista', coordenadoresLista: lista, termoBusca: texto };
+      }
+    }
+
+    const isRegiaoQuery = /\bREGIAO\b|\bREGIOES\b|\bMESORREGIAO\b|\bMICRORREGIAO\b|\bCIDADES\b|\bMUNICIPIOS\b/.test(textoNorm);
 
     // If query explicitly mentions "regiao", try region search before city
     if (isRegiaoQuery) {
