@@ -24,10 +24,13 @@ export class BotSearchService {
 
   private readonly STOPWORDS = new Set([
     'QUANTOS','VOTOS','PROMETEU','NOSSA','BASE','QUAL','QUEM','DOS','DAS',
-    'PARA','COM','NAO','TEM','NOSSO','ESTAO','COMO','FOI',
+    'PARA','COM','NAO','TEM','NOSSO','ESTAO','COMO','FOI','QUE','MAIS',
     'TEMOS','REGIAO','MICRO','ZONA','AREA','PARTE','TODA','TODO',
     'ESSE','ESSA','ESTE','ESTA','QUAIS','ONDE','QUANDO','PORQUE','CIDADES','CIDADE',
     'MUNICIPIO','MUNICIPIOS','LIDERANCA','COORDENADOR','CANDIDATO','APOIADOR',
+    'FORTE','FRACO','MELHOR','PIOR','MAIOR','MENOR','MUITO','POUCO',
+    'SOBRE','FALA','FALE','MOSTRA','LISTA','DIGA','PRECISA','PRECISAMOS',
+    'TRABALHO','TRABALHAR','VOCE','PODE','GENTE','SERIA','DEVEMOS',
   ]);
 
   // Compound city names that should be matched as a whole phrase
@@ -348,6 +351,7 @@ export class BotSearchService {
 
     // 1. City search — fetch ALL rows for matched city (multiple leaders per city)
     const municipio = await this.buscarMunicipio(texto);
+
     if (municipio && String(municipio.id) !== String(currentMunicipioId ?? '')) {
       const todasLinhas = await this.buscarTodasLinhasMunicipio(municipio.nome);
       return { type: 'municipio', municipio, cidades: todasLinhas.length > 1 ? todasLinhas : undefined };
