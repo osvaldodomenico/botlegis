@@ -13,7 +13,7 @@ export class DashboardService {
     // Single query: fetch ALL rows and deduplicate in JS
     const todos = await this.prisma.municipio.findMany({
       select: {
-        id: true, nome: true, regiao: true, bloco: true, rm_ra: true,
+        id: true, nome: true, regiao: true, bloco: true, rm_ra: true, divisao_regional: true,
         tipo_cadastro: true,
         projecao_votos: true, projecao_base: true, projecao_2: true, projecao_apoio_iurd: true,
         votos_22: true, eleitores_22: true,
@@ -26,7 +26,7 @@ export class DashboardService {
 
     // ── Deduplicate by city name ──────────────────────────────────────────
     const porCidade = new Map<string, {
-      nome: string; regiao: string | null; bloco: string | null; rm_ra: string | null;
+      nome: string; regiao: string | null; bloco: string | null; rm_ra: string | null; divisao_regional: string | null;
       votos_22: number; eleitores_22: number; projecao_total: number;
       id: string;
       tipos: Array<{ tipo: string; projecao: number }>;
@@ -37,7 +37,7 @@ export class DashboardService {
       const proj = projRow(m);
       if (!porCidade.has(key)) {
         porCidade.set(key, {
-          id: m.id.toString(), nome: m.nome, regiao: m.regiao, bloco: m.bloco, rm_ra: m.rm_ra,
+          id: m.id.toString(), nome: m.nome, regiao: m.regiao, bloco: m.bloco, rm_ra: m.rm_ra, divisao_regional: m.divisao_regional,
           votos_22: m.votos_22 || 0, eleitores_22: m.eleitores_22 || 0,
           projecao_total: 0, tipos: [],
         });
@@ -47,6 +47,7 @@ export class DashboardService {
       if (!city.regiao && m.regiao) city.regiao = m.regiao;
       if (!city.bloco && m.bloco) city.bloco = m.bloco;
       if (!city.rm_ra && m.rm_ra) city.rm_ra = m.rm_ra;
+      if (!city.divisao_regional && m.divisao_regional) city.divisao_regional = m.divisao_regional;
       if (m.votos_22 && m.votos_22 > city.votos_22) city.votos_22 = m.votos_22;
       if (m.eleitores_22 && m.eleitores_22 > city.eleitores_22) city.eleitores_22 = m.eleitores_22;
       if (proj > 0) city.tipos.push({ tipo: normalizeTipo(m.tipo_cadastro), projecao: proj });
@@ -70,15 +71,15 @@ export class DashboardService {
       tipoMap.set(tipo, existing);
     }
 
-    // ── Por RM/RA (deduplicated cities) ───────────────────────────────────
-    const rmRaMap = new Map<string, { projecao: number; municipios: number }>();
-    for (const c of cidades) {
-      const rmra = (c.rm_ra || '').trim();
-      if (!rmra) continue;
-      const existing = rmRaMap.get(rmra) || { projecao: 0, municipios: 0 };
-      existing.projecao += c.projecao_total;
-      existing.municipios++;
-      rmRaMap.set(rmra, existing);
+    // ── Por Divisão Regional (all cadastros — cada registro conta na sua divisão) ──
+    const divRegMap = new Map<string, { projecao: number; municipios: Set<string> }>();
+    for (const m of cadastros) {
+      const div = (m.divisao_regional || '').trim();
+      if (!div) continue;
+      if (!divRegMap.has(div)) divRegMap.set(div, { projecao: 0, municipios: new Set() });
+      const entry = divRegMap.get(div)!;
+      entry.projecao += projRow(m);
+      entry.municipios.add(m.nome.toUpperCase());
     }
 
     const toTopItem = (c: {
@@ -142,8 +143,8 @@ export class DashboardService {
       por_tipo: [...tipoMap.entries()]
         .map(([tipo, v]) => ({ tipo, total_projecao: v.projecao, total_registros: v.registros }))
         .sort((a, b) => b.total_projecao - a.total_projecao),
-      por_rm_ra: [...rmRaMap.entries()]
-        .map(([rm_ra, v]) => ({ rm_ra, total_projecao: v.projecao, total_municipios: v.municipios }))
+      por_divisao_regional: [...divRegMap.entries()]
+        .map(([divisao_regional, v]) => ({ divisao_regional, total_projecao: v.projecao, total_municipios: v.municipios.size }))
         .sort((a, b) => b.total_projecao - a.total_projecao),
       top10_projecao: top10,
       top10_por_tipo: top10PorTipo,

@@ -67,55 +67,59 @@ function gerarNarrativaConsolidada(registros: any[]): string {
   }
   partes.push(abertura);
 
-  // Descrição de cada liderança
-  registros.forEach((m: any, idx: number) => {
+  // Descrição de cada liderança — primeiro registro detalhado, demais agrupados por projeção
+  const primeiro = registros[0];
+  {
     let frase = '';
-    const conectivos = ['', 'Além disso', 'Também há atuação de', 'Igualmente', 'Adicionalmente'];
-    const conectivo = conectivos[Math.min(idx, conectivos.length - 1)];
+    if (primeiro.coordenacao && primeiro.lideranca) {
+      frase = `A principal articulação é conduzida por **${primeiro.coordenacao}**`;
+      if (primeiro.funcao_cargo) frase += ` (${primeiro.funcao_cargo})`;
+      frase += `, ao lado da liderança **${primeiro.lideranca}**`;
+      if (primeiro.funcao) frase += ` (${primeiro.funcao})`;
+    } else if (primeiro.coordenacao) {
+      frase = `A articulação local é conduzida por **${primeiro.coordenacao}**`;
+      if (primeiro.funcao_cargo) frase += `, ${primeiro.funcao_cargo}`;
+    } else if (primeiro.lideranca) {
+      frase = `Conta com a liderança de **${primeiro.lideranca}**`;
+      if (primeiro.funcao) frase += `, ${primeiro.funcao}`;
+    }
+    if (primeiro.coord_lideranca_2) {
+      frase += `. Há também **${primeiro.coord_lideranca_2}** como segundo contato`;
+      if (primeiro.funcao_cargo_2) frase += ` (${primeiro.funcao_cargo_2})`;
+    }
+    if (primeiro.projecao_votos && nLider > 1) {
+      frase += `, com projeção de **${primeiro.projecao_votos.toLocaleString('pt-BR')} votos**`;
+    } else if (primeiro.projecao_votos) {
+      frase += `, com projeção estimada de **${primeiro.projecao_votos.toLocaleString('pt-BR')} votos**`;
+    }
+    if (frase) partes.push(frase);
+  }
 
-    if (idx === 0) {
-      // Primeira: "A principal articulação..."
-      if (m.coordenacao && m.lideranca) {
-        frase = `A principal articulação é conduzida por **${m.coordenacao}**`;
-        if (m.funcao_cargo) frase += ` (${m.funcao_cargo})`;
-        frase += `, ao lado da liderança **${m.lideranca}**`;
-        if (m.funcao) frase += ` (${m.funcao})`;
-      } else if (m.coordenacao) {
-        frase = `A articulação local é conduzida por **${m.coordenacao}**`;
-        if (m.funcao_cargo) frase += `, ${m.funcao_cargo}`;
-      } else if (m.lideranca) {
-        frase = `Conta com a liderança de **${m.lideranca}**`;
-        if (m.funcao) frase += `, ${m.funcao}`;
-      }
-      if (m.coord_lideranca_2) {
-        frase += `. Há também **${m.coord_lideranca_2}** como segundo contato`;
-        if (m.funcao_cargo_2) frase += ` (${m.funcao_cargo_2})`;
-      }
-      if (m.projecao_votos && nLider > 1) {
-        frase += `, com projeção de **${m.projecao_votos.toLocaleString('pt-BR')} votos**`;
-      } else if (m.projecao_votos) {
-        frase += `, com projeção estimada de **${m.projecao_votos.toLocaleString('pt-BR')} votos**`;
-      }
-    } else {
-      // Demais: conectivo + nome
-      if (m.coordenacao && m.lideranca) {
-        frase = `${conectivo}, **${m.coordenacao}** atua junto a **${m.lideranca}**`;
-        if (m.funcao) frase += ` (${m.funcao})`;
-      } else if (m.coordenacao) {
-        frase = `${conectivo}, **${m.coordenacao}** também integra a base local`;
-      } else if (m.lideranca) {
-        frase = `${conectivo}, **${m.lideranca}** integra a base local`;
-        if (m.funcao) frase += ` como ${m.funcao}`;
+  // Demais registros: agrupar por valor de projeção
+  if (registros.length > 1) {
+    const demais = registros.slice(1);
+    const grupos: Record<number, string[]> = {};
+    for (const m of demais) {
+      const proj = m.projecao_votos || 0;
+      const nome = m.lideranca || m.coordenacao || 'registro';
+      if (!grupos[proj]) grupos[proj] = [];
+      grupos[proj].push(nome);
+    }
+    for (const [projStr, nomes] of Object.entries(grupos)) {
+      const proj = Number(projStr);
+      const nomesFormatados = nomes.map((n: string) => `**${n}**`).join(', ');
+      if (nomes.length === 1) {
+        let frase = `Além disso, ${nomesFormatados} integra a base local`;
+        if (proj > 0) frase += `, somando **${proj.toLocaleString('pt-BR')} votos projetados**`;
+        partes.push(frase);
       } else {
-        frase = `${conectivo}, há mais um registro cadastrado neste município`;
-      }
-      if (m.projecao_votos) {
-        frase += `, somando mais **${m.projecao_votos.toLocaleString('pt-BR')} votos projetados**`;
+        const totalGrupo = proj * nomes.length;
+        let frase = `Também atuam na base local: ${nomesFormatados}`;
+        if (proj > 0) frase += `, com **${proj.toLocaleString('pt-BR')} votos projetados** cada (total: **${totalGrupo.toLocaleString('pt-BR')} votos**)`;
+        partes.push(frase);
       }
     }
-
-    if (frase) partes.push(frase);
-  });
+  }
 
   // Conclusão com total consolidado (apenas se múltiplos)
   if (nLider > 1) {
@@ -123,11 +127,15 @@ function gerarNarrativaConsolidada(registros: any[]): string {
   }
 
   // Dados TSE do primeiro registro
-  const m0e = registros.find((m: any) => m.eleitores_22);
-  if (m0e?.eleitores_22) {
-    let dados22 = `Em 2022, o município contava com **${m0e.eleitores_22.toLocaleString('pt-BR')} eleitores**`;
-    if (m0e.votos_validos_22) dados22 += `, com **${m0e.votos_validos_22.toLocaleString('pt-BR')} votos válidos**`;
-    partes.push(dados22);
+  const m0e = registros.find((m: any) => m.eleitores_22 || m.votos_22 != null);
+  if (m0e) {
+    const tse: string[] = [];
+    if (m0e.votos_22 != null) tse.push(`**${m0e.votos_22.toLocaleString('pt-BR')} votos** para Milton Vieira`);
+    if (m0e.eleitores_22) tse.push(`**${m0e.eleitores_22.toLocaleString('pt-BR')} eleitores**`);
+    if (m0e.votos_validos_22) tse.push(`**${m0e.votos_validos_22.toLocaleString('pt-BR')} votos válidos**`);
+    if (m0e.percentual_mv != null) tse.push(`**${(m0e.percentual_mv * 100).toFixed(2)}%** dos votos válidos`);
+    if (m0e.ranking_mv != null) tse.push(`**${m0e.ranking_mv}º lugar** no ranking de deputados federais`);
+    if (tse.length > 0) partes.push(`Em 2022, o município registrou ${tse.join(', ')}`);
   }
 
   return partes.join('. ') + '.';

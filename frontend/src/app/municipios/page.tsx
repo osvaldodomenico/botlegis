@@ -9,7 +9,7 @@ import { MUNICIPIOS_SP } from '@/lib/municipios-sp';
 const RM_RA_OPCOES = ['ARAÇATUBA','BAIXADA SANTISTA','BARRETOS','BAURU','CAMPINAS','CENTRAL','FRANCA','ITAPEVA','MARÍLIA','PRESIDENTE PRUDENTE','REGISTRO','RIBEIRÃO PRETO','SÃO JOSÉ DO RIO PRETO','SÃO PAULO','SOROCABA','VALE E LITORAL'];
 const MESORREGIAO_OPCOES = ['ARAÇATUBA','ARARAQUARA','ASSIS','BAURU','CAMPINAS','ITAPETININGA','LITORAL SUL','MACRO METROPOLITANA','MARILIA','METROPOLITANA SP','PIRACICABA','PRESIDENTE PRUDENTE','RIBEIRÃO PRETO','SÃO JOSÉ DO RIO PRETO','VALE DO PARAIBA'];
 const MICRORREGIAO_OPCOES = ['ADAMANTINA','AMPARO','ANDRADINA','ARAÇATUBA','ARARAQUARA','ASSIS','AURIFLAMA','AVARÉ','BANANAL','BARRETOS','BATATAIS','BAURU','BIRIGUI','BOTUCATU','BRAGANÇA PAULISTA','CAMPINAS','CAMPOS DO JORDÃO','CAPÃO BONITO','CARAGUATATUBA','CATANDUVA','DRACENA','FERNANDÓPOLIS','FRANCA','FRANCO DA ROCHA','GUARATINGUETA','GUARULHOS','ITANHAÉM','ITAPECERICA DA SERRA','ITAPETININGA','ITAPEVA','ITUVERAVA','JABOTICABAL','JALES','JAÚ','JUNDIAI','LIMEIRA','LINS','MARÍLIA','MOGI DAS CRUZES','MOGI MIRIM','NHANDEARA','NOVO HORIZONTE','OSASCO','OURINHOS','PARAIBUNA/PARAITINGA','PIEDADE','PIRACICABA','PIRASSUNUNGA','PRESIDENTE PRUDENTE','REGISTRO','RIBEIRÃO PRETO','RIO CLARO','SANTOS','SÃO CARLOS','SÃO JOÃO DA BOA VISTA','SÃO JOAQUIM DA BARRA','SÃO JOSÉ DO RIO PRETO','SÃO JOSÉ DOS CAMPOS','SÃO PAULO','SOROCABA','TATUÍ','TUPÃ','VOTUPORANGA'];
-const DIVISAO_REGIONAL_OPCOES = ['ALTO TIETE','BRAGANTINA','LITORAL NORTE','SAO JOSE DOS CAMPOS','SERRA DA MANTIQUEIRA','TAUBATE','VALE DA FÉ','VALE HISTORICO'];
+const DIVISAO_REGIONAL_OPCOES = ['ALTO TIETE','BRAGANTINA','CAPITAL','LITORAL NORTE','SAO JOSE DOS CAMPOS','SERRA DA MANTIQUEIRA','TAUBATE','VALE DA FÉ','VALE HISTORICO','ZONA LESTE','ZONA NORTE','ZONA OESTE','ZONA SUL'];
 
 interface Municipio {
   id: string; nome: string; uf: string; tipo_cadastro: string; funcao: string; distrito: string; bloco: string; regiao: string;
@@ -18,7 +18,7 @@ interface Municipio {
   projecao_2: number; coord_lideranca_2: string; funcao_cargo_2: string;
   projecao_apoio_iurd: number; projecao_base: number; eleitores_22: number;
   votos_validos_22: number; percentual_mv: number; votos_22: number;
-  percentual_perda: number; observacoes: string;
+  percentual_perda: number; dobrada: string; observacoes: string;
 }
 interface Meta { total: number; page: number; limit: number; pages: number; }
 interface Opcoes { regioes: string[]; blocos: string[]; rm_ras: string[]; mesorregioes: string[]; microrregioes: string[]; }
@@ -40,8 +40,6 @@ export default function MunicipiosPage() {
   const [orderBy, setOrderBy] = useState('nome');
   const [order, setOrder] = useState<'asc'|'desc'>('asc');
   const [tipoBloqueado, setTipoBloqueado] = useState(false);
-  const [dobNome, setDobNome] = useState('');
-  const [dobProjecao, setDobProjecao] = useState('');
   const [dobradasMap, setDobradasMap] = useState<Record<string, any>>({});
   const debounceRef = useRef<any>(null);
   const prevNomeRef = useRef<string | undefined>(undefined);
@@ -118,7 +116,9 @@ export default function MunicipiosPage() {
   }, [municipios]);
 
   const setFilter = (key: string, value: string) => {
-    const next = { ...filters, [key]: value };
+    const next = key === 'tipo_cadastro'
+      ? { ...EMPTY_FILTERS, tipo_cadastro: value }
+      : { ...filters, [key]: value };
     setFilters(next);
     setPage(1);
     if (debounceRef.current) clearTimeout(debounceRef.current);
@@ -156,35 +156,24 @@ export default function MunicipiosPage() {
     setEditing(m);
     Object.entries(m).forEach(([k, v]) => setValue(k as any, v as any));
     setTipoBloqueado(true);
-    setDobNome(''); setDobProjecao('');
     setShowForm(true);
   };
 
   const openNew = () => {
     setEditing(null); reset();
     setTipoBloqueado(false);
-    setDobNome(''); setDobProjecao('');
     setShowForm(true);
   };
 
   const closeForm = () => {
     setShowForm(false);
     setTipoBloqueado(false);
-    setDobNome(''); setDobProjecao('');
   };
 
   const onSubmit = async (data: Municipio) => {
     try {
       if (editing) await api.put(`/municipios/${editing.id}`, data);
       else await api.post('/municipios', data);
-      // Salvar dobrada se preenchida (apenas em BASE - INSTITUIÇÃO)
-      if (data.tipo_cadastro === 'BASE - INSTITUIÇÃO' && dobNome) {
-        await api.post('/dobradas', {
-          nome: dobNome.toUpperCase(),
-          cidade: (data.nome || '').toUpperCase(),
-          projecao_votos: dobProjecao ? Number(dobProjecao) : 0,
-        });
-      }
       closeForm();
       load();
     } catch (e: any) { alert(e.response?.data?.message || 'Erro ao salvar'); }
@@ -217,6 +206,14 @@ export default function MunicipiosPage() {
         <div className="card space-y-4">
           {/* Row 1: busca + região + bloco + botão avançado */}
           <div className="flex flex-wrap gap-3">
+            <select className="input w-48 text-[15px]" value={filters.bloco} onChange={e => setFilter('bloco', e.target.value)}>
+              <option value="">Bloco</option>
+              {opcoes.blocos.map(b => <option key={b} value={b}>{b}</option>)}
+            </select>
+            <select className="input w-56 text-[15px]" value={filters.tipo_cadastro} onChange={e => setFilter('tipo_cadastro', e.target.value)}>
+              <option value="">Tipo</option>
+              {TIPO_CADASTRO_OPCOES.map(t => <option key={t} value={t}>{t}</option>)}
+            </select>
             <div className="relative flex-1 min-w-[200px]">
               <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-muted" />
               <input
@@ -226,14 +223,6 @@ export default function MunicipiosPage() {
                 onChange={e => setFilter('nome', e.target.value)}
               />
             </div>
-            <select className="input w-48 text-[15px]" value={filters.bloco} onChange={e => setFilter('bloco', e.target.value)}>
-              <option value="">Bloco</option>
-              {opcoes.blocos.map(b => <option key={b} value={b}>{b}</option>)}
-            </select>
-            <select className="input w-56 text-[15px]" value={filters.tipo_cadastro} onChange={e => setFilter('tipo_cadastro', e.target.value)}>
-              <option value="">Tipo</option>
-              {TIPO_CADASTRO_OPCOES.map(t => <option key={t} value={t}>{t}</option>)}
-            </select>
             <button
               onClick={() => setShowAdvanced(!showAdvanced)}
               className={`btn-utility flex items-center gap-1 ${showAdvanced ? 'bg-primary text-white' : ''}`}
@@ -319,17 +308,49 @@ export default function MunicipiosPage() {
           <div className="overflow-x-auto">
             <table className="w-full border-collapse">
               <thead className="bg-parchment border-b border-hairline">
-                <tr>
-                  <SortHeader field="tipo_cadastro" label="Tipo" />
-                  <SortHeader field="nome" label="Município" />
-                  <SortHeader field="bloco" label="Bloco" className="hidden md:table-cell" />
-                  <SortHeader field="coordenacao" label="Coordenador" className="hidden lg:table-cell" />
-                  <SortHeader field="funcao" label="Função" className="hidden lg:table-cell" />
-                  <SortHeader field="lideranca" label="Liderança" className="hidden xl:table-cell" />
-                  <SortHeader field="dobrada" label="Dobrada" className="hidden xl:table-cell" />
-                  <SortHeader field="projecao_votos" label="Projeção" />
-                  <th className="table-th w-20"></th>
-                </tr>
+                {/* Grid dinâmico por tipo */}
+                {filters.tipo_cadastro === 'EXTERNO' ? (
+                  <tr>
+                    <SortHeader field="nome" label="Município" />
+                    <SortHeader field="coordenacao" label="Coordenador" className="hidden md:table-cell" />
+                    <SortHeader field="lideranca" label="Liderança" className="hidden md:table-cell" />
+                    <SortHeader field="funcao" label="Função" className="hidden lg:table-cell" />
+                    <SortHeader field="dobrada" label="Dobrada" className="hidden lg:table-cell" />
+                    <SortHeader field="projecao_votos" label="Projeção" />
+                    <th className="table-th w-20"></th>
+                  </tr>
+                ) : filters.tipo_cadastro === 'BASE - INSTITUIÇÃO' ? (
+                  <tr>
+                    <SortHeader field="nome" label="Município" />
+                    <SortHeader field="bloco" label="Bloco" className="hidden md:table-cell" />
+                    <SortHeader field="coordenacao" label="Coordenador" className="hidden md:table-cell" />
+                    <SortHeader field="dobrada" label="Dobrada" className="hidden lg:table-cell" />
+                    <SortHeader field="projecao_votos" label="Projeção" />
+                    <th className="table-th w-20"></th>
+                  </tr>
+                ) : filters.tipo_cadastro === 'BASE APOIADORES' ? (
+                  <tr>
+                    <SortHeader field="nome" label="Município" />
+                    <SortHeader field="bloco" label="Bloco" className="hidden md:table-cell" />
+                    <SortHeader field="distrito" label="Distrito" className="hidden md:table-cell" />
+                    <SortHeader field="funcao" label="Função" className="hidden lg:table-cell" />
+                    <SortHeader field="lideranca" label="Nome" className="hidden lg:table-cell" />
+                    <SortHeader field="projecao_votos" label="Projeção" />
+                    <th className="table-th w-20"></th>
+                  </tr>
+                ) : (
+                  <tr>
+                    <SortHeader field="tipo_cadastro" label="Tipo" />
+                    <SortHeader field="nome" label="Município" />
+                    <SortHeader field="bloco" label="Bloco" className="hidden md:table-cell" />
+                    <SortHeader field="coordenacao" label="Coordenador" className="hidden lg:table-cell" />
+                    <SortHeader field="funcao" label="Função" className="hidden lg:table-cell" />
+                    <SortHeader field="lideranca" label="Liderança" className="hidden xl:table-cell" />
+                    <SortHeader field="dobrada" label="Dobrada" className="hidden xl:table-cell" />
+                    <SortHeader field="projecao_votos" label="Projeção" />
+                    <th className="table-th w-20"></th>
+                  </tr>
+                )}
               </thead>
               <tbody>
                 {loading ? (
@@ -338,22 +359,45 @@ export default function MunicipiosPage() {
                   <tr><td colSpan={9} className="table-td text-center text-ink-muted py-16">Nenhum município encontrado</td></tr>
                 ) : municipios.map((m) => (
                   <tr key={m.id} className="border-t border-hairline hover:bg-parchment/40 transition-colors">
-                    <td className="table-td">
-                      {m.tipo_cadastro ? (
-                        <span className={`inline-flex px-2 py-0.5 rounded-full text-[11px] font-semibold whitespace-nowrap ${
-                          m.tipo_cadastro === 'EXTERNO' ? 'bg-blue-100 text-blue-700' :
-                          m.tipo_cadastro === 'BASE - INSTITUIÇÃO' ? 'bg-emerald-100 text-emerald-700' :
-                          'bg-orange-100 text-orange-700'
-                        }`}>{m.tipo_cadastro}</span>
-                      ) : <span className="text-ink-muted text-[12px]">—</span>}
-                    </td>
-                    <td className="table-td font-semibold uppercase">{m.nome}</td>
-                    <td className="table-td hidden md:table-cell text-[13px] text-ink-muted uppercase">{m.bloco || '—'}</td>
-                    <td className="table-td hidden lg:table-cell text-[13px] text-ink-muted truncate max-w-[160px] uppercase">{m.coordenacao || '—'}</td>
-                    <td className="table-td hidden lg:table-cell text-[13px] text-ink-muted uppercase">{(m as any).funcao || '—'}</td>
-                    <td className="table-td hidden xl:table-cell text-[13px] text-ink-muted truncate max-w-[160px] uppercase">{m.lideranca || '—'}</td>
-                    <td className="table-td hidden xl:table-cell text-[13px] text-ink-muted truncate max-w-[160px] uppercase">{dobradasMap[(m.nome || '').toUpperCase()]?.nome || '—'}</td>
-                    <td className="table-td font-semibold text-primary text-right">{m.projecao_votos?.toLocaleString('pt-BR') || '—'}</td>
+                    {/* Colunas dinâmicas por tipo */}
+                    {filters.tipo_cadastro === 'EXTERNO' ? (<>
+                      <td className="table-td font-semibold uppercase">{m.nome}</td>
+                      <td className="table-td hidden md:table-cell text-[13px] text-ink-muted truncate max-w-[160px] uppercase">{m.coordenacao || '—'}</td>
+                      <td className="table-td hidden md:table-cell text-[13px] text-ink-muted truncate max-w-[160px] uppercase">{m.lideranca || '—'}</td>
+                      <td className="table-td hidden lg:table-cell text-[13px] text-ink-muted uppercase">{(m as any).funcao || '—'}</td>
+                      <td className="table-td hidden lg:table-cell text-[13px] text-ink-muted truncate max-w-[160px] uppercase">{m.dobrada || '—'}</td>
+                      <td className="table-td font-semibold text-primary text-right">{m.projecao_votos?.toLocaleString('pt-BR') || '—'}</td>
+                    </>) : filters.tipo_cadastro === 'BASE - INSTITUIÇÃO' ? (<>
+                      <td className="table-td font-semibold uppercase">{m.nome}</td>
+                      <td className="table-td hidden md:table-cell text-[13px] text-ink-muted uppercase">{m.bloco || '—'}</td>
+                      <td className="table-td hidden md:table-cell text-[13px] text-ink-muted truncate max-w-[160px] uppercase">{m.coordenacao || '—'}</td>
+                      <td className="table-td hidden lg:table-cell text-[13px] text-ink-muted truncate max-w-[160px] uppercase">{m.dobrada || '—'}</td>
+                      <td className="table-td font-semibold text-primary text-right">{m.projecao_votos?.toLocaleString('pt-BR') || '—'}</td>
+                    </>) : filters.tipo_cadastro === 'BASE APOIADORES' ? (<>
+                      <td className="table-td font-semibold uppercase">{m.nome}</td>
+                      <td className="table-td hidden md:table-cell text-[13px] text-ink-muted uppercase">{m.bloco || '—'}</td>
+                      <td className="table-td hidden md:table-cell text-[13px] text-ink-muted uppercase">{m.distrito || '—'}</td>
+                      <td className="table-td hidden lg:table-cell text-[13px] text-ink-muted uppercase">{(m as any).funcao || '—'}</td>
+                      <td className="table-td hidden lg:table-cell text-[13px] text-ink-muted truncate max-w-[160px] uppercase">{m.lideranca || '—'}</td>
+                      <td className="table-td font-semibold text-primary text-right">{m.projecao_votos?.toLocaleString('pt-BR') || '—'}</td>
+                    </>) : (<>
+                      <td className="table-td">
+                        {m.tipo_cadastro ? (
+                          <span className={`inline-flex px-2 py-0.5 rounded-full text-[11px] font-semibold whitespace-nowrap ${
+                            m.tipo_cadastro === 'EXTERNO' ? 'bg-blue-100 text-blue-700' :
+                            m.tipo_cadastro === 'BASE - INSTITUIÇÃO' ? 'bg-emerald-100 text-emerald-700' :
+                            'bg-orange-100 text-orange-700'
+                          }`}>{m.tipo_cadastro}</span>
+                        ) : <span className="text-ink-muted text-[12px]">—</span>}
+                      </td>
+                      <td className="table-td font-semibold uppercase">{m.nome}</td>
+                      <td className="table-td hidden md:table-cell text-[13px] text-ink-muted uppercase">{m.bloco || '—'}</td>
+                      <td className="table-td hidden lg:table-cell text-[13px] text-ink-muted truncate max-w-[160px] uppercase">{m.coordenacao || '—'}</td>
+                      <td className="table-td hidden lg:table-cell text-[13px] text-ink-muted uppercase">{(m as any).funcao || '—'}</td>
+                      <td className="table-td hidden xl:table-cell text-[13px] text-ink-muted truncate max-w-[160px] uppercase">{m.lideranca || '—'}</td>
+                      <td className="table-td hidden xl:table-cell text-[13px] text-ink-muted truncate max-w-[160px] uppercase">{m.dobrada || '—'}</td>
+                      <td className="table-td font-semibold text-primary text-right">{m.projecao_votos?.toLocaleString('pt-BR') || '—'}</td>
+                    </>)}
                     <td className="table-td">
                       <div className="flex items-center gap-1 justify-end">
                         <button onClick={() => openEdit(m)} className="p-2 rounded-[8px] text-ink-muted hover:bg-parchment hover:text-ink transition-colors" title="Editar">
@@ -536,6 +580,10 @@ export default function MunicipiosPage() {
                       <label className="label">Projeção de Votos</label>
                       <input {...register('projecao_votos')} type="number" className="input" placeholder="0" />
                     </div>
+                    <div className="sm:col-span-2">
+                      <label className="label">Dobrada</label>
+                      <input {...register('dobrada')} className="input uppercase" placeholder="Nome da dobrada" />
+                    </div>
                   </div>
                 </div>
               )}
@@ -575,34 +623,23 @@ export default function MunicipiosPage() {
                         <option value="ZONA SUL">ZONA SUL</option>
                       </select>
                     </div>
-                    <div className="sm:col-span-2">
+                  </div>
+
+                  {/* Projeção + Dobrada lado a lado */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
                       <label className="label">Projeção de Votos</label>
                       <input {...register('projecao_votos')} type="number" className="input" placeholder="0" />
                     </div>
-                  </div>
-
-                  {/* Seção Dobrada */}
-                  <div className="border border-dashed border-emerald-300 rounded-[12px] p-4 space-y-3 bg-emerald-50/40">
-                    <p className="text-[11px] font-semibold text-emerald-600 uppercase tracking-widest">Dobrada (opcional)</p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="border border-dashed border-emerald-300 rounded-[12px] p-4 space-y-3 bg-emerald-50/40">
+                      <p className="text-[11px] font-semibold text-emerald-600 uppercase tracking-widest">Dobrada (opcional)</p>
                       <div>
                         <label className="label">Nome</label>
-                        <input
-                          className="input uppercase"
-                          placeholder="Nome da dobrada"
-                          value={dobNome}
-                          onChange={e => setDobNome(e.target.value)}
-                        />
-                      </div>
-                      <div>
-                        <label className="label">Projeção de Votos</label>
-                        <input
-                          type="number"
-                          className="input"
-                          placeholder="0"
-                          value={dobProjecao}
-                          onChange={e => setDobProjecao(e.target.value)}
-                        />
+                        <select {...register('dobrada')} className="input">
+                          <option value="">Selecione</option>
+                          <option value="RUI ALVES">RUI ALVES</option>
+                          <option value="GILMACI">GILMACI</option>
+                        </select>
                       </div>
                     </div>
                   </div>

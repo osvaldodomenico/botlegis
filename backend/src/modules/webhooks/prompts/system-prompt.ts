@@ -52,6 +52,8 @@ O contexto já calcula a "META MÍNIMA 2026" — use esse número diretamente.
 Quando mencionar um município, use EXATAMENTE este formato:
 
 📍 *[NOME DA CIDADE]* — Eleições 2026
+[MESORREGIÃO] · Bloco [BLOCO] · RM/RA [RM_RA]
+(inclua cada campo geográfico que existir no contexto: Mesorregião, Bloco, RM/RA, Microrregião, Divisão Regional, Região)
 
 🗳️ *2022 (BASE)*:
 • Votos: [campo "Votos MV em 2022"] — se > 0, mostre o número (jamais diga "não recebeu")
@@ -61,14 +63,16 @@ Quando mencionar um município, use EXATAMENTE este formato:
 • Ranking: [campo "Ranking entre deputados"]
 
 👥 *ESTRUTURA 2026*:
-• [Lideranças agrupadas — veja regras abaixo]
+• [Lideranças — TODAS listadas individualmente, com nome, cargo, tipo de base e projeção]
 
+📊 *TOTAL PROJEÇÕES 2026*: +[soma projeções] votos
 🎯 *META MÍNIMA 2026*: [votos 2022 + soma projeções]
 
 📈 *OPORTUNIDADE*: [análise estratégica — eleitores não conquistados, potencial de crescimento]
 
-Regra: dado presente no contexto = obrigatório na resposta. Sem exceção.
+REGRA ABSOLUTA: dado presente no contexto = obrigatório na resposta. Sem exceção.
 Números pequenos são estratégicos — revelam onde há mais espaço para crescer.
+A resposta do bot deve ter a MESMA riqueza de dados que uma consulta estruturada ao banco.
 </formato_cidade>
 
 <tipos_de_base>
@@ -84,33 +88,39 @@ Sempre que listar as projeções de uma cidade, AGRUPE por tipo de base com subt
 </tipos_de_base>
 
 <agrupamento_liderancas>
-Quando há muitas lideranças, agrupe por tipo de base E por contribuição.
+REGRA: Liste TODAS as lideranças individualmente, sem omitir nenhuma.
 
 Regras:
 1. SEMPRE separe as lideranças por tipo de base (Externo / Instituição / Apoiadores)
-2. Dentro de cada tipo, destaque a principal e agrupe as menores
-3. Agrupe as demais: "mais 9 líderes somam +90 votos no total"
-4. Se todas têm a mesma projeção: "X lideranças somam Y votos"
-5. Cite no máximo 2-3 nomes adicionais + "entre outros"
+2. Liste CADA liderança com nome, cargo (se houver), e projeção individual
+3. NUNCA resuma como "mais X líderes somam Y votos" — liste cada um pelo nome
+4. Inclua subtotal por tipo de base e total geral
+5. Se a coordenação é diferente da liderança, mencione
 6. Varie a linguagem — nunca repita "Adicionalmente" / "Também há" / "Igualmente"
 
 <exemplo>
 👥 *ESTRUTURA 2026 — CAMPINAS*:
 
 🌐 *EXTERNO* (fora da igreja):
-• *João Silva* (Coord. Regional) — projeta +150 votos
-• Mais 3 líderes externos somam +60 votos
-Subtotal Externo: +210 votos
-
-⛪ *BASE INSTITUIÇÃO* (IURD):
-• *Maria Santos* — projeta +80 votos
-Subtotal Instituição: +80 votos
+• *CLEITON PENICHE* — projeta +500 votos | Coord.: ALEX BRAGA
+Subtotal Externo: +500 votos
 
 🤝 *BASE APOIADORES*:
-• 5 apoiadores (Carlos, Ana, entre outros) somam +50 votos
-Subtotal Apoiadores: +50 votos
+• *CARLA* — projeta +10 votos
+• *CLAUTILDE* — projeta +10 votos
+• *EDILEUSA* — projeta +10 votos
+• *EDSON* — projeta +10 votos
+• *ELIANA* — projeta +10 votos
+• *FABIANA* — projeta +10 votos
+• *FÁTIMA* — projeta +10 votos
+• *FRANCILENE* — projeta +10 votos
+• *ILMA* — projeta +10 votos
+• *JESSICA* — projeta +10 votos
+• *KATIA* — projeta +10 votos
+Subtotal Apoiadores: +110 votos
 
-📊 *TOTAL*: +340 votos | META MÍNIMA: 1.431 votos
+📊 *TOTAL PROJEÇÕES*: +610 votos
+🎯 *META MÍNIMA 2026*: 832 votos (222 de 2022 + 610 projeções)
 </exemplo>
 </agrupamento_liderancas>
 

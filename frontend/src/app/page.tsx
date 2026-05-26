@@ -9,7 +9,7 @@ interface DashboardData {
   total_municipios: number;
   total_projecao: number;
   por_tipo: { tipo: string; total_projecao: number; total_registros: number }[];
-  por_rm_ra: { rm_ra: string; total_projecao: number; total_municipios: number }[];
+  por_divisao_regional: { divisao_regional: string; total_projecao: number; total_municipios: number }[];
   top10_projecao: { id: string; nome: string; regiao: string; bloco: string; votos_22: number; projecao_votos: number; total_votos: number; tipos: { tipo: string; projecao: number }[] }[];
   top10_por_tipo: Record<string, { id: string; nome: string; regiao: string; bloco: string; votos_22: number; projecao_votos: number; total_votos: number; tipos: { tipo: string; projecao: number }[] }[]>;
 }
@@ -71,12 +71,12 @@ export default function DashboardPage() {
           <div className="stat-card">
             <div className="flex items-center gap-2 text-ink-muted text-[13px] mb-2">
               <Globe size={15} />
-              RM/RA
+              Divisão Regional
             </div>
             <p className="text-[40px] font-semibold text-ink leading-none" style={{ letterSpacing: '-0.5px' }}>
-              {data?.por_rm_ra?.length ?? '—'}
+              {data?.por_divisao_regional?.length ?? '—'}
             </p>
-            <p className="text-[13px] text-ink-muted mt-1">RM/RA com cadastro</p>
+            <p className="text-[13px] text-ink-muted mt-1">divisões com cadastro</p>
           </div>
 
           <div className="stat-card">
@@ -127,19 +127,19 @@ export default function DashboardPage() {
           {/* Bar Chart */}
           <div className="card">
             <h2 className="text-[21px] font-semibold text-ink mb-6" style={{ letterSpacing: '-0.022em' }}>
-              Projeção por RM/RA
+              Projeção por Divisão Regional
             </h2>
-            <ResponsiveContainer width="100%" height={280}>
-              <BarChart data={data?.por_rm_ra} barSize={32}>
+            <ResponsiveContainer width="100%" height={380}>
+              <BarChart data={data?.por_divisao_regional} barSize={32} margin={{ bottom: 60 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
-                <XAxis dataKey="rm_ra" tick={{ fontSize: 12, fill: '#7a7a7a' }} axisLine={false} tickLine={false} />
+                <XAxis dataKey="divisao_regional" tick={{ fontSize: 11, fill: '#7a7a7a' }} axisLine={false} tickLine={false} angle={-35} textAnchor="end" interval={0} />
                 <YAxis tick={{ fontSize: 12, fill: '#7a7a7a' }} axisLine={false} tickLine={false} />
                 <Tooltip
                   contentStyle={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: 11, fontSize: 14 }}
                   cursor={{ fill: '#f5f5f7' }}
                 />
                 <Bar dataKey="total_projecao" name="Projeção" radius={[6, 6, 0, 0]}>
-                  {data?.por_rm_ra?.map((_, i) => (
+                  {data?.por_divisao_regional?.map((_, i) => (
                     <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />
                   ))}
                 </Bar>
@@ -184,13 +184,13 @@ export default function DashboardPage() {
                       <p className="text-[14px] text-ink-muted text-center py-10">Sem projeções cadastradas</p>
                     )}
                   </div>
-                  <div className="mt-auto border-t px-5 py-4" style={{ backgroundColor: `${color}10`, borderColor: `${color}35` }}>
-                    <p className="text-[11px] font-semibold uppercase tracking-widest" style={{ color }}>Total do card</p>
-                    <div className="flex items-end justify-between gap-3 mt-1">
-                      <p className="text-[38px] font-semibold leading-none" style={{ color, letterSpacing: '-0.03em' }}>
+                  <div className="mt-auto border-t px-5 py-3" style={{ backgroundColor: `${color}10`, borderColor: `${color}35` }}>
+                    <div className="flex items-center justify-end gap-2">
+                      <p className="text-[11px] font-semibold uppercase tracking-widest text-ink-muted">Total:</p>
+                      <p className="text-[18px] font-semibold leading-none" style={{ color }}>
                         {totalTop.toLocaleString('pt-BR')}
                       </p>
-                      <p className="text-[12px] font-semibold text-ink-muted uppercase tracking-wider whitespace-nowrap">votos</p>
+                      <p className="text-[11px] font-semibold text-ink-muted uppercase">votos</p>
                     </div>
                   </div>
                 </div>

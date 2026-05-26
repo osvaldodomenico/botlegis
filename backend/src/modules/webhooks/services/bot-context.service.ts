@@ -7,15 +7,24 @@ export class BotContextService {
 
   contextoMunicipio(mun: MunicipioData): string {
     const linhas: string[] = [`📊 Dados de *${mun.nome}* (Eleições 2026):`];
+
+    // ── Geografia completa ──
     if (mun.mesorregiao) linhas.push(`• Mesorregião: ${mun.mesorregiao}`);
+    if (mun.bloco) linhas.push(`• Bloco: ${mun.bloco}`);
     if (mun.rm_ra) linhas.push(`• RM/RA: ${mun.rm_ra}`);
+    if (mun.microrregiao) linhas.push(`• Microrregião: ${mun.microrregiao}`);
+    if (mun.divisao_regional) linhas.push(`• Divisão Regional: ${mun.divisao_regional}`);
     if (mun.regiao) linhas.push(`• Região: ${mun.regiao}`);
+
+    // ── Dados eleitorais 2022 ──
     // votos_22 = 0 é dado real e DEVE ser mostrado (não omitir zero!)
     if (mun.votos_22 != null) linhas.push(`• Votos MV em 2022: ${mun.votos_22 === 0 ? '*0 votos* (sem presença registrada em 2022)' : mun.votos_22.toLocaleString('pt-BR')}`);
     if (mun.eleitores_22 != null) linhas.push(`• Eleitores em 2022: ${mun.eleitores_22.toLocaleString('pt-BR')}`);
     if (mun.votos_validos_22 != null) linhas.push(`• Votos válidos 2022: ${mun.votos_validos_22.toLocaleString('pt-BR')}`);
     if (mun.percentual_mv != null) linhas.push(`• % dos votos válidos 2022: ${(mun.percentual_mv * 100).toFixed(2)}%`);
     if (mun.ranking_mv != null) linhas.push(`• Ranking entre deputados federais 2022: ${mun.ranking_mv}º lugar`);
+
+    // ── Lideranças e projeções ──
     if (mun.tipo_cadastro) linhas.push(`• Tipo de Base: ${mun.tipo_cadastro}`);
     if (mun.lideranca) linhas.push(`• Liderança 1: ${mun.lideranca}${mun.funcao_cargo ? ` (${mun.funcao_cargo})` : ''}`);
     if (mun.coordenacao) linhas.push(`• Coordenação 1: ${mun.coordenacao}`);
@@ -24,8 +33,13 @@ export class BotContextService {
     if (mun.coord_lideranca_2) linhas.push(`• Liderança 2: ${mun.coord_lideranca_2}${mun.funcao_cargo_2 ? ` (${mun.funcao_cargo_2})` : ''}`);
     if (mun.projecao_2 != null) linhas.push(`• Projeção Liderança 2 (2026): ${mun.projecao_2.toLocaleString('pt-BR')}`);
     if (mun.projecao_apoio_iurd != null && mun.projecao_apoio_iurd > 0) linhas.push(`• Projeção Apoio IURD (2026): ${mun.projecao_apoio_iurd.toLocaleString('pt-BR')}`);
+
+    // ── Totais ──
     const contribuicoes = [mun.projecao_votos, mun.projecao_base, mun.projecao_2, mun.projecao_apoio_iurd].filter(Boolean) as number[];
     const totalContribuicoes = contribuicoes.reduce((s, v) => s + v, 0);
+    if (totalContribuicoes > 0) {
+      linhas.push(`• TOTAL PROJEÇÕES 2026: ${totalContribuicoes.toLocaleString('pt-BR')} votos`);
+    }
     if (mun.votos_22 && totalContribuicoes > 0) {
       linhas.push(`• META MÍNIMA 2026 (base 2022 + lideranças): ${(mun.votos_22 + totalContribuicoes).toLocaleString('pt-BR')} votos`);
     }
@@ -41,9 +55,16 @@ export class BotContextService {
     // Use first record for base data (2022 stats are the same across rows)
     const base = registros[0];
     const linhas: string[] = [`📊 Dados de *${base.nome}* (Eleições 2026):`];
+
+    // ── Geografia completa ──
     if (base.mesorregiao) linhas.push(`• Mesorregião: ${base.mesorregiao}`);
+    if (base.bloco) linhas.push(`• Bloco: ${base.bloco}`);
     if (base.rm_ra) linhas.push(`• RM/RA: ${base.rm_ra}`);
+    if (base.microrregiao) linhas.push(`• Microrregião: ${base.microrregiao}`);
+    if (base.divisao_regional) linhas.push(`• Divisão Regional: ${base.divisao_regional}`);
     if (base.regiao) linhas.push(`• Região: ${base.regiao}`);
+
+    // ── Dados eleitorais 2022 ──
     if (base.votos_22 != null) linhas.push(`• Votos MV em 2022: ${base.votos_22 === 0 ? '*0 votos* (sem presença registrada em 2022)' : base.votos_22.toLocaleString('pt-BR')}`);
     if (base.eleitores_22 != null) linhas.push(`• Eleitores em 2022: ${base.eleitores_22.toLocaleString('pt-BR')}`);
     if (base.votos_validos_22 != null) linhas.push(`• Votos válidos 2022: ${base.votos_validos_22.toLocaleString('pt-BR')}`);
@@ -119,10 +140,11 @@ export class BotContextService {
     for (const c of cidades) {
       const contrib = ([c.projecao_votos, c.projecao_base, c.projecao_2, c.projecao_apoio_iurd].filter(Boolean) as number[]).reduce((a, b) => a + b, 0);
       const meta = (c.votos_22 || 0) + contrib;
-      linhas.push(`🏙️ ${c.nome}`);
-      linhas.push(`  2022: ${(c.votos_22 || 0).toLocaleString('pt-BR')} votos | #${c.ranking_mv || '?'}º ranking | ${c.percentual_mv ? (c.percentual_mv * 100).toFixed(2) + '%' : '0%'} | ${(c.eleitores_22 || 0).toLocaleString('pt-BR')} eleitores`);
-      if (c.lideranca || c.coordenacao) linhas.push(`  Liderança: ${c.lideranca || '-'} | Coord.: ${c.coordenacao || '-'}`);
-      if (c.projecao_2 || c.coord_lideranca_2) linhas.push(`  Liderança 2: ${c.coord_lideranca_2 || '-'} | Proj.2: ${c.projecao_2 ? c.projecao_2.toLocaleString('pt-BR') : '-'}`);
+      const geo = [c.bloco, c.rm_ra, c.microrregiao].filter(Boolean).join(' · ');
+      linhas.push(`🏙️ ${c.nome}${geo ? ` (${geo})` : ''}`);
+      linhas.push(`  2022: ${(c.votos_22 || 0).toLocaleString('pt-BR')} votos | ${(c.eleitores_22 || 0).toLocaleString('pt-BR')} eleitores | ${(c.votos_validos_22 || 0).toLocaleString('pt-BR')} válidos | ${c.percentual_mv ? (c.percentual_mv * 100).toFixed(2) + '%' : '0%'} | #${c.ranking_mv || '?'}º ranking`);
+      if (c.lideranca || c.coordenacao) linhas.push(`  Liderança: ${c.lideranca || '-'}${c.funcao_cargo ? ` (${c.funcao_cargo})` : ''} [${c.tipo_cadastro || '-'}] | Coord.: ${c.coordenacao || '-'}`);
+      if (c.coord_lideranca_2) linhas.push(`  Liderança 2: ${c.coord_lideranca_2}${c.funcao_cargo_2 ? ` (${c.funcao_cargo_2})` : ''} | Proj.2: ${c.projecao_2 ? c.projecao_2.toLocaleString('pt-BR') : '-'}`);
       if (contrib > 0) linhas.push(`  Projeções 2026: +${contrib.toLocaleString('pt-BR')} | META MÍNIMA: ${meta.toLocaleString('pt-BR')}`);
     }
     return linhas.join('\n');
@@ -145,7 +167,7 @@ export class BotContextService {
       const contrib = ([c.projecao_votos, c.projecao_base, c.projecao_2, c.projecao_apoio_iurd].filter(Boolean) as number[]).reduce((a, b) => a + b, 0);
       const meta = (c.votos_22 || 0) + contrib;
       linhas.push(`🏙️ ${c.nome}`);
-      linhas.push(`  2022: ${(c.votos_22 || 0).toLocaleString('pt-BR')} votos | #${c.ranking_mv || '?'}º | ${c.percentual_mv ? (c.percentual_mv * 100).toFixed(2) + '%' : '0%'} | ${(c.eleitores_22 || 0).toLocaleString('pt-BR')} eleitores`);
+      linhas.push(`  2022: ${(c.votos_22 || 0).toLocaleString('pt-BR')} votos | ${(c.eleitores_22 || 0).toLocaleString('pt-BR')} eleitores | ${(c.votos_validos_22 || 0).toLocaleString('pt-BR')} válidos | ${c.percentual_mv ? (c.percentual_mv * 100).toFixed(2) + '%' : '0%'} | #${c.ranking_mv || '?'}º`);
       if (c.lideranca || c.coordenacao) linhas.push(`  Lid.: ${c.lideranca || '-'} (${c.funcao_cargo || ''}) [${c.tipo_cadastro || '-'}] | Coord.: ${c.coordenacao || '-'}`);
       if (c.coord_lideranca_2) linhas.push(`  Lid.2: ${c.coord_lideranca_2} (${c.funcao_cargo_2 || ''})`);
       if (contrib > 0) linhas.push(`  Proj.: +${contrib.toLocaleString('pt-BR')} | META: ${meta.toLocaleString('pt-BR')}`);
@@ -162,10 +184,11 @@ export class BotContextService {
     for (const c of cidades) {
       const contrib = ([c.projecao_votos, c.projecao_base, c.projecao_2, c.projecao_apoio_iurd].filter(Boolean) as number[]).reduce((a, b) => a + b, 0);
       const meta = (c.votos_22 || 0) + contrib;
-      linhas.push(`\n🏙️ ${c.nome} (${c.mesorregiao || ''})`);
-      linhas.push(`  Liderança: ${c.lideranca || '-'} | Coord.: ${c.coordenacao || '-'}`);
-      if (c.coord_lideranca_2) linhas.push(`  Liderança 2: ${c.coord_lideranca_2}`);
-      linhas.push(`  2022: ${(c.votos_22 || 0).toLocaleString('pt-BR')} votos | #${c.ranking_mv || '?'}º`);
+      const geo = [c.mesorregiao, c.bloco, c.rm_ra].filter(Boolean).join(' · ');
+      linhas.push(`\n🏙️ ${c.nome} (${geo || '-'})`);
+      linhas.push(`  Liderança: ${c.lideranca || '-'}${c.funcao_cargo ? ` (${c.funcao_cargo})` : ''} [${c.tipo_cadastro || '-'}] | Coord.: ${c.coordenacao || '-'}`);
+      if (c.coord_lideranca_2) linhas.push(`  Liderança 2: ${c.coord_lideranca_2}${c.funcao_cargo_2 ? ` (${c.funcao_cargo_2})` : ''}`);
+      linhas.push(`  2022: ${(c.votos_22 || 0).toLocaleString('pt-BR')} votos | ${(c.eleitores_22 || 0).toLocaleString('pt-BR')} eleitores | ${(c.votos_validos_22 || 0).toLocaleString('pt-BR')} válidos | ${c.percentual_mv ? (c.percentual_mv * 100).toFixed(2) + '%' : '0%'} | #${c.ranking_mv || '?'}º`);
       if (contrib > 0) linhas.push(`  Projeções: +${contrib.toLocaleString('pt-BR')} | META MÍNIMA: ${meta.toLocaleString('pt-BR')}`);
     }
     return linhas.join('\n');
@@ -211,7 +234,7 @@ export class BotContextService {
       const metaMinima = votos22 + totalProj;
 
       linhas.push(`*${pos}. ${nome}* (${base.mesorregiao || '-'})`);
-      linhas.push(`  📈 2022: ${votos22.toLocaleString('pt-BR')} votos | #${base.ranking_mv || '?'}º | ${base.percentual_mv ? (base.percentual_mv * 100).toFixed(2) + '%' : '0%'} | ${eleitores22.toLocaleString('pt-BR')} eleitores`);
+      linhas.push(`  📈 2022: ${votos22.toLocaleString('pt-BR')} votos | ${eleitores22.toLocaleString('pt-BR')} eleitores | ${(base.votos_validos_22 || 0).toLocaleString('pt-BR')} válidos | ${base.percentual_mv ? (base.percentual_mv * 100).toFixed(2) + '%' : '0%'} | #${base.ranking_mv || '?'}º`);
 
       if (lideres.length > 0) {
         linhas.push(`  👥 Lideranças (${lideres.length}):`);

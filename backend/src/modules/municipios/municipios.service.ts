@@ -99,7 +99,7 @@ export class MunicipiosService {
       };
     }
 
-    const allowedSort = ['nome', 'regiao', 'bloco', 'tipo_cadastro', 'coordenacao', 'funcao', 'lideranca', 'projecao_votos', 'created_at', 'mesorregiao', 'microrregiao'];
+    const allowedSort = ['nome', 'regiao', 'bloco', 'tipo_cadastro', 'coordenacao', 'funcao', 'lideranca', 'dobrada', 'distrito', 'projecao_votos', 'created_at', 'mesorregiao', 'microrregiao'];
     const sortField = allowedSort.includes(orderBy) ? orderBy : 'nome';
 
     const [data, total] = await Promise.all([
