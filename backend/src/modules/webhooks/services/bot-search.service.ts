@@ -67,10 +67,14 @@ export class BotSearchService {
 
     const textoNorm = this.normalizarNome(texto);
 
-    // Check compound names first (e.g., "São Paulo", "São José dos Campos")
-    for (const [key, target] of Object.entries(this.COMPOUND_NAMES)) {
+    // Check compound names first (e.g., "São Paulo", "São José dos Campos").
+    // IMPORTANTE: testar da chave MAIS LONGA p/ a mais curta — senão "São José do
+    // Rio Preto" casa na chave genérica "SAO JOSE" (→ S.J. dos Campos) antes da
+    // chave específica e devolve a cidade errada.
+    const compoundKeys = Object.keys(this.COMPOUND_NAMES).sort((a, b) => b.length - a.length);
+    for (const key of compoundKeys) {
       if (textoNorm.includes(key)) {
-        const found = candidatos.find(m => this.normalizarNome(m.nome) === target);
+        const found = candidatos.find(m => this.normalizarNome(m.nome) === this.COMPOUND_NAMES[key]);
         if (found) return found;
       }
     }
@@ -105,6 +109,51 @@ export class BotSearchService {
     }
 
     return melhorScore >= 0.6 ? melhor : null;
+  }
+
+  // ── 1a. Sugestões de municípios (para ambiguidade — retorna top N) ────────
+
+  async buscarSugestoes(texto: string, limite = 5): Promise<MunicipioData[]> {
+    const candidatos: MunicipioData[] = await this.municipios().findMany({
+      where: { uf: 'SP' },
+      select: MUNICIPIO_SELECT,
+    });
+
+    const textoNorm = this.normalizarNome(texto);
+    const palavras = textoNorm.split(/\s+/).filter(p => p.length > 2 && !this.STOPWORDS.has(p));
+    if (palavras.length === 0) return [];
+
+    const scored: Array<{ m: MunicipioData; score: number }> = [];
+
+    for (const m of candidatos) {
+      const nomeNorm = this.normalizarNome(m.nome);
+
+      // Full-word score
+      let score = palavras.filter(p => nomeNorm.includes(p)).length;
+
+      // Prefix fuzzy (4-char prefix for broader matching in suggestions)
+      if (score === 0) {
+        const nomeWords = nomeNorm.split(/\s+/);
+        const prefixHit = palavras.some(p =>
+          p.length >= 4 && nomeWords.some(nw => nw.length >= 4 && p.slice(0, 4) === nw.slice(0, 4)),
+        );
+        if (prefixHit) score = 0.4;
+      }
+
+      if (score > 0) scored.push({ m, score });
+    }
+
+    // Deduplicate by city name (multiple leaders = same city)
+    const seen = new Set<string>();
+    return scored
+      .sort((a, b) => b.score - a.score)
+      .filter(({ m }) => {
+        if (seen.has(m.nome)) return false;
+        seen.add(m.nome);
+        return true;
+      })
+      .slice(0, limite)
+      .map(({ m }) => m);
   }
 
   // ── 1b. Busca todas as linhas de um município (múltiplas lideranças) ─────
@@ -344,6 +393,243 @@ export class BotSearchService {
     return resultado;
   }
 
+  // ── 5c. Bases de apoio: blocos & projeção por bloco/tipo ─────────────────
+
+  private normalizeTipo(tipo?: string | null): string {
+    return (tipo || '').trim().toUpperCase();
+  }
+
+  /** Distinct bloco values (optionally restricted to rows of a given tipo_cadastro). */
+  async listarBlocos(tipoCadastro?: string): Promise<string[]> {
+    const rows: Array<{ bloco: string | null; tipo_cadastro: string | null }> =
+      await this.municipios().findMany({
+        where: { uf: 'SP' },
+        select: { bloco: true, tipo_cadastro: true },
+      });
+    const tnorm = tipoCadastro ? this.normalizeTipo(tipoCadastro) : null;
+    const set = new Set<string>();
+    for (const r of rows) {
+      if (tnorm && this.normalizeTipo(r.tipo_cadastro) !== tnorm) continue;
+      const b = (r.bloco || '').trim();
+      if (b) set.add(b);
+    }
+    return [...set].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+  }
+
+  /** Projeção (projecao_votos) agregada por bloco para um tipo_cadastro, com total. */
+  async projecaoPorBlocoTipo(
+    tipoCadastro: string,
+  ): Promise<{ blocos: Array<{ bloco: string; projecao: number; municipios: number }>; total: number }> {
+    const rows: Array<{ bloco: string | null; tipo_cadastro: string | null; projecao_votos: number | null; nome: string }> =
+      await this.municipios().findMany({
+        where: { uf: 'SP' },
+        select: { bloco: true, tipo_cadastro: true, projecao_votos: true, nome: true },
+      });
+    const tnorm = this.normalizeTipo(tipoCadastro);
+    const map = new Map<string, { projecao: number; municipios: Set<string> }>();
+    let total = 0;
+    for (const r of rows) {
+      if (this.normalizeTipo(r.tipo_cadastro) !== tnorm) continue;
+      const proj = r.projecao_votos || 0;
+      const bloco = (r.bloco || '').trim() || 'SEM BLOCO';
+      if (!map.has(bloco)) map.set(bloco, { projecao: 0, municipios: new Set() });
+      const e = map.get(bloco)!;
+      e.projecao += proj;
+      e.municipios.add((r.nome || '').toUpperCase());
+      total += proj;
+    }
+    const blocos = [...map.entries()]
+      .map(([bloco, v]) => ({ bloco, projecao: v.projecao, municipios: v.municipios.size }))
+      .sort((a, b) => b.projecao - a.projecao);
+    return { blocos, total };
+  }
+
+  /** Registros individuais de um tipo_cadastro dentro de um bloco (match exato ou fuzzy do nome do bloco). */
+  async registrosPorBlocoTipo(bloco: string, tipoCadastro: string): Promise<MunicipioData[]> {
+    const rows: MunicipioData[] = await this.municipios().findMany({
+      where: { uf: 'SP' },
+      select: MUNICIPIO_SELECT,
+      orderBy: { projecao_votos: 'desc' },
+    });
+    const tnorm = this.normalizeTipo(tipoCadastro);
+    const bnorm = this.normalizarNome(bloco);
+    return rows.filter(
+      (m) =>
+        this.normalizeTipo(m.tipo_cadastro) === tnorm &&
+        this.normalizarNome(m.bloco || '') === bnorm,
+    );
+  }
+
+  // ── 5d. Projeção global por tipo de base (resposta determinística) ───────
+
+  /**
+   * Projeção total agregada por tipo_cadastro.
+   * Por município: projecao_votos + COALESCE(projecao_2,0) + COALESCE(projecao_apoio_iurd,0) + COALESCE(projecao_base,0).
+   * Retorna { instituicao, apoiadores, externo, total }.
+   */
+  async projecaoGlobalPorTipo(): Promise<{ instituicao: number; apoiadores: number; externo: number; total: number }> {
+    const rows: Array<{
+      tipo_cadastro: string | null;
+      projecao_votos: number | null;
+      projecao_2: number | null;
+      projecao_apoio_iurd: number | null;
+      projecao_base: number | null;
+    }> = await this.municipios().findMany({
+      where: { uf: 'SP' },
+      select: {
+        tipo_cadastro: true,
+        projecao_votos: true,
+        projecao_2: true,
+        projecao_apoio_iurd: true,
+        projecao_base: true,
+      },
+    });
+
+    let instituicao = 0;
+    let apoiadores = 0;
+    let externo = 0;
+
+    for (const r of rows) {
+      const proj =
+        (r.projecao_votos || 0) +
+        (r.projecao_2 || 0) +
+        (r.projecao_apoio_iurd || 0) +
+        (r.projecao_base || 0);
+      const t = this.normalizeTipo(r.tipo_cadastro);
+      if (t === 'BASE - INSTITUIÇÃO') instituicao += proj;
+      else if (t === 'BASE APOIADORES') apoiadores += proj;
+      else if (t === 'EXTERNO') externo += proj;
+    }
+
+    return { instituicao, apoiadores, externo, total: instituicao + apoiadores + externo };
+  }
+
+  // ── 5e. Coordenadores por tipo de base (resposta determinística) ─────────
+
+  /**
+   * Contagem de registros com cargo de coordenador, por tipo_cadastro.
+   * Conta se funcao_cargo / funcao_cargo_2 / candidato_cargo contém "coordenador" (case-insensitive).
+   * Retorna { instituicao, apoiadores, externo, total }.
+   */
+  async coordenadoresPorTipo(): Promise<{ instituicao: number; apoiadores: number; externo: number; total: number }> {
+    const rows: Array<{
+      tipo_cadastro: string | null;
+      funcao_cargo: string | null;
+      funcao_cargo_2: string | null;
+      candidato_cargo: string | null;
+    }> = await this.municipios().findMany({
+      where: { uf: 'SP' },
+      select: {
+        tipo_cadastro: true,
+        funcao_cargo: true,
+        funcao_cargo_2: true,
+        candidato_cargo: true,
+      },
+    });
+
+    const isCoord = (...campos: Array<string | null>): boolean =>
+      campos.some((c) => !!c && c.toLowerCase().includes('coordenador'));
+
+    let instituicao = 0;
+    let apoiadores = 0;
+    let externo = 0;
+
+    for (const r of rows) {
+      if (!isCoord(r.funcao_cargo, r.funcao_cargo_2, r.candidato_cargo)) continue;
+      const t = this.normalizeTipo(r.tipo_cadastro);
+      if (t === 'BASE - INSTITUIÇÃO') instituicao += 1;
+      else if (t === 'BASE APOIADORES') apoiadores += 1;
+      else if (t === 'EXTERNO') externo += 1;
+    }
+
+    return { instituicao, apoiadores, externo, total: instituicao + apoiadores + externo };
+  }
+
+  // ── 5f. Lideranças de um município (agrupadas por cargo) ─────────────────
+
+  /**
+   * Acha o município e extrai todas as lideranças (líder 1, coord/líder 2, candidato),
+   * agrupadas por cargo. Retorna null se o município não for encontrado.
+   */
+  async liderancasPorMunicipio(
+    nomeMunicipio: string,
+  ): Promise<{ municipio: string; grupos: Array<{ cargo: string; pessoas: Array<{ nome: string; projecao: number }> }> } | null> {
+    const mun = await this.buscarMunicipio(nomeMunicipio);
+    if (!mun) return null;
+
+    const linhas = await this.buscarTodasLinhasMunicipio(mun.nome);
+
+    const map = new Map<string, Array<{ nome: string; projecao: number }>>();
+    const add = (nome?: string | null, cargo?: string | null, projecao?: number | null) => {
+      const n = (nome || '').trim();
+      if (!n) return;
+      const c = (cargo || '').trim() || 'Liderança';
+      if (!map.has(c)) map.set(c, []);
+      const lista = map.get(c)!;
+      const nNorm = this.normalizarNome(n);
+      if (lista.some((p) => this.normalizarNome(p.nome) === nNorm)) return;
+      lista.push({ nome: n, projecao: projecao || 0 });
+    };
+
+    for (const m of linhas) {
+      const proj = m.projecao_votos || 0;
+      add(m.lideranca, m.funcao_cargo, proj);
+      add(m.coord_lideranca_2, m.funcao_cargo_2, proj);
+      add(m.candidato_nome, m.candidato_cargo, proj);
+    }
+
+    const grupos = [...map.entries()].map(([cargo, pessoas]) => ({ cargo, pessoas }));
+    return { municipio: mun.nome, grupos };
+  }
+
+  // ── 5g. Busca de liderança por nome (ficha) ──────────────────────────────
+
+  /**
+   * Procura lideranca / coord_lideranca_2 / candidato_nome contendo o nome (normalizado).
+   * Retorna a lista de ocorrências (município, cargo, tipo, projeção, coordenação).
+   */
+  async buscarLideranca(
+    nome: string,
+  ): Promise<Array<{ nome: string; cargo: string; municipio: string; tipo: string; projecao: number; coordenacao: string }>> {
+    const palavras = this.extrairNomesProprios(nome);
+    if (palavras.length === 0) return [];
+
+    const todos: MunicipioData[] = await this.municipios().findMany({
+      where: { uf: 'SP' },
+      select: MUNICIPIO_SELECT,
+      orderBy: { projecao_votos: 'desc' },
+    });
+
+    const resultados: Array<{ nome: string; cargo: string; municipio: string; tipo: string; projecao: number; coordenacao: string }> = [];
+    const seen = new Set<string>();
+
+    const tentar = (valor?: string | null, cargo?: string | null, m?: MunicipioData) => {
+      const v = (valor || '').trim();
+      if (!v || !m) return;
+      const vNorm = this.normalizarNome(v);
+      if (!palavras.some((p) => vNorm.includes(p))) return;
+      const key = `${vNorm}|${this.normalizarNome(m.nome)}`;
+      if (seen.has(key)) return;
+      seen.add(key);
+      resultados.push({
+        nome: v,
+        cargo: (cargo || '').trim() || 'Liderança',
+        municipio: m.nome,
+        tipo: m.tipo_cadastro || '',
+        projecao: m.projecao_votos || 0,
+        coordenacao: (m.coordenacao || '').trim(),
+      });
+    };
+
+    for (const m of todos) {
+      tentar(m.lideranca, m.funcao_cargo, m);
+      tentar(m.coord_lideranca_2, m.funcao_cargo_2, m);
+      tentar(m.candidato_nome, m.candidato_cargo, m);
+    }
+
+    return resultados.sort((a, b) => b.projecao - a.projecao);
+  }
+
   // ── 6. Ranking / strategy search ────────────────────────────────────────
 
   private isRankingQuery(textoNorm: string): boolean {
@@ -463,6 +749,15 @@ export class BotSearchService {
         if (cidades.length > 0) {
           return { type: 'regiao', cidades, regiaoNome: regiao.valor, termoBusca: texto };
         }
+      }
+    }
+
+    // If query explicitly mentions "liderança", prioritize leadership search before city
+    const isLiderancaQuery = /\bLIDERANCA\b|\bLIDERANCAS\b|\bLIDER\b/.test(textoNorm);
+    if (isLiderancaQuery) {
+      const porLider = await this.buscarPorLideranca(texto);
+      if (porLider.length > 0) {
+        return { type: 'lideranca', cidades: porLider, termoBusca: texto };
       }
     }
 
