@@ -1022,7 +1022,7 @@ export class RelatoriosService {
     const content: any[] = [];
 
     // Cabeçalho
-    content.push({ text: 'RAIO-X DA CAMPANHA', fontSize: 18, bold: true, color: COR.primary });
+    content.push({ text: 'DNA DA CAMPANHA', fontSize: 18, bold: true, color: COR.primary });
     content.push({ text: 'Cenário de projeção com o trabalho atual · Milton Vieira 2026', fontSize: 9, color: '#86868b', margin: [0, 1, 0, 10] as [number, number, number, number] });
 
     // Saúde
@@ -1069,7 +1069,7 @@ export class RelatoriosService {
     ]));
     content.push(cardRow([
       card('Municípios com liderança', num(k.municipios_com_lideranca)),
-      card('Lideranças · Coordenadores', `${num(k.lideres)} · ${num(k.coordenadores)}`),
+      card('Lideranças e Coordenadores', `${num(k.lideres)} · ${num(k.coordenadores)}`),
       card('Zonas brancas (sem cadastro)', num(k.zonas_brancas), COR.vermelho),
     ]));
 
@@ -1119,20 +1119,48 @@ export class RelatoriosService {
       card('Dependência maior coord.', pct(d.concentracao.dep_maior_coordenador), d.concentracao.dep_maior_coordenador > 0.25 ? COR.vermelho : undefined),
     ]));
 
-    // Território (por bloco)
+    // ── Espelho da tela: barras coloridas por categoria + legenda ──────────
+    const CAT_COR: Record<string, string> = { 'EXTERNO': '#5ac8fa', 'BASE - INSTITUIÇÃO': '#0066cc', 'BASE APOIADORES': '#34c759' };
+    const legenda = () => ({
+      columns: Object.entries(CAT_COR).map(([t, cor]) => ({
+        width: 'auto',
+        columns: [
+          { width: 9, canvas: [{ type: 'rect', x: 0, y: 1.5, w: 7, h: 7, r: 1.5, color: cor }] },
+          { width: 'auto', text: TIPO_LABEL[t] || t, fontSize: 7.5, color: '#555555', margin: [3, 0, 10, 0] as [number, number, number, number] },
+        ],
+        columnGap: 0,
+      })),
+      margin: [0, 0, 0, 6] as [number, number, number, number],
+    });
+    const barList = (items: any[], labelOf: (x: any) => string) => {
+      const max = Math.max(1, ...items.map((x: any) => x.projecao || 0));
+      return {
+        stack: items.map((it: any) => ({
+          margin: [0, 0, 0, 3] as [number, number, number, number],
+          columns: [
+            { width: 165, text: labelOf(it), fontSize: 7.5, color: '#1d1d1f' },
+            { width: 'auto', stack: [bar((it.projecao || 0) / max, CAT_COR[it.tipo] || COR.primary, 220)] },
+            { width: 'auto', text: num(it.projecao), fontSize: 7.5, bold: true, margin: [4, 0, 0, 0] as [number, number, number, number] },
+          ],
+          columnGap: 6,
+        })),
+        margin: [0, 0, 0, 8] as [number, number, number, number],
+      };
+    };
+
+    // PROJEÇÕES (espelho da tela + tabela com valores em texto)
     content.push({ text: 'PROJEÇÕES', style: 'sectionTitle' });
-    content.push(tabela(['Bloco', 'Municípios', 'Projeção'],
-      d.territorio.map((t: any) => [t.divisao, num(t.municipios), num(t.projecao)]), ['*', 'auto', 'auto']));
+    content.push(legenda());
+    content.push(barList(d.territorio, (t: any) => t.divisao));
+    content.push(tabela(['Divisão / Bloco', 'Categoria', 'Municípios', 'Projeção'],
+      d.territorio.map((t: any) => [t.divisao, TIPO_LABEL[t.tipo] || t.tipo, num(t.municipios), num(t.projecao)]), ['*', 'auto', 'auto', 'auto']));
 
-    // Oportunidades
-    content.push({ text: 'Maiores Oportunidades', style: 'sectionTitle' });
-    content.push(tabela(['Município', 'Eleitores', 'Votos 22', 'Projeção'],
-      d.oportunidades.map((o: any) => [o.nome, num(o.eleitores), num(o.votos22), num(o.projecao)]), ['*', 'auto', 'auto', 'auto']));
-
-    // Coordenadores
-    content.push({ text: 'Produtividade dos Coordenadores', style: 'sectionTitle' });
-    content.push(tabela(['Coordenador', 'Municípios', 'Projeção'],
-      d.coordenadores.map((c: any) => [c.nome, num(c.municipios), num(c.projecao)]), ['*', 'auto', 'auto']));
+    // Projeção por Coordenador (espelho da tela + tabela)
+    content.push({ text: 'Projeção por Coordenador', style: 'sectionTitle' });
+    content.push(legenda());
+    content.push(barList(d.coordenadores, (c: any) => c.nome));
+    content.push(tabela(['Coordenador', 'Categoria', 'Municípios', 'Projeção'],
+      d.coordenadores.map((c: any) => [c.nome, TIPO_LABEL[c.tipo] || c.tipo, num(c.municipios), num(c.projecao)]), ['*', 'auto', 'auto', 'auto']));
 
     return this.generatePdf({
       content, styles: this.getStyles(),
@@ -1189,11 +1217,30 @@ export class RelatoriosService {
         cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF0066CC' } };
       });
       row++;
+      const primeiraLinhaDados = row;
       for (const lin of tab.linhas) {
         const r = ws.getRow(row);
-        tab.colunas.forEach((c, i) => { r.getCell(i + 1).value = (lin[c.key] ?? '') as any; });
+        tab.colunas.forEach((c, i) => {
+          const cell = r.getCell(i + 1);
+          cell.value = (lin[c.key] ?? '') as any;
+          // espelho da tela: célula de categoria pintada com a cor do gráfico
+          if (c.corKey && lin[c.corKey]) {
+            cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: lin[c.corKey] } };
+            cell.font = { color: { argb: 'FFFFFFFF' }, bold: true };
+          }
+        });
         row++;
       }
+      // barra de dados (mini-gráfico) nas colunas numéricas marcadas com `barra`
+      tab.colunas.forEach((c, i) => {
+        if (c.barra && tab.linhas.length) {
+          const letra = ws.getColumn(i + 1).letter;
+          ws.addConditionalFormatting({
+            ref: `${letra}${primeiraLinhaDados}:${letra}${row - 1}`,
+            rules: [{ type: 'dataBar', cfvo: [{ type: 'min' }, { type: 'max' }], color: { argb: 'FF0066CC' }, gradient: true } as any],
+          });
+        }
+      });
       tab.colunas.forEach((c, i) => { ws.getColumn(i + 1).width = c.width || 18; });
     });
     const buf = await wb.xlsx.writeBuffer();
@@ -1395,25 +1442,44 @@ export class RelatoriosService {
     });
     tabelas.push({ nome: 'Funil de Cobertura', colunas: [{ header: 'Etapa', key: 'etapa' }, { header: 'Municípios', key: 'valor', numero: true }], linhas: d.funil });
     tabelas.push({ nome: 'Mix por Base', colunas: [{ header: 'Tipo de base', key: 'label' }, { header: 'Projeção', key: 'projecao', numero: true }, { header: '% do total', key: 'pctTxt' }], linhas: d.mix.map(m => ({ label: m.label, projecao: m.projecao, pctTxt: pctTxt(m.pct) })) });
-    tabelas.push({ nome: 'Território', colunas: [{ header: 'Divisão Regional', key: 'divisao' }, { header: 'Municípios', key: 'municipios', numero: true }, { header: 'Projeção', key: 'projecao', numero: true }], linhas: d.territorio });
+    // Espelho da tela: coluna Categoria com a cor do gráfico + barra de dados na Projeção
+    const CAT_COR_XLSX: Record<string, string> = { 'EXTERNO': 'FF5AC8FA', 'BASE - INSTITUIÇÃO': 'FF0066CC', 'BASE APOIADORES': 'FF34C759' };
+    tabelas.push({
+      nome: 'Projeções',
+      colunas: [
+        { header: 'Divisão / Bloco', key: 'divisao', width: 34 },
+        { header: 'Categoria', key: 'categoria', width: 18, corKey: 'cor' },
+        { header: 'Municípios', key: 'municipios', numero: true },
+        { header: 'Projeção', key: 'projecao', numero: true, barra: true },
+      ],
+      linhas: d.territorio.map(t => ({ divisao: t.divisao, categoria: TIPO_LABEL[t.tipo] || t.tipo, cor: CAT_COR_XLSX[t.tipo], municipios: t.municipios, projecao: t.projecao })),
+    });
     tabelas.push({ nome: 'Top Cidades', colunas: [{ header: 'Município', key: 'nome' }, { header: 'Votos 22', key: 'votos22', numero: true }, { header: 'Projeção', key: 'projecao', numero: true }], linhas: d.top_cidades });
-    tabelas.push({ nome: 'Oportunidades', colunas: [{ header: 'Município', key: 'nome' }, { header: 'Eleitores', key: 'eleitores', numero: true }, { header: 'Votos 22', key: 'votos22', numero: true }, { header: 'Projeção', key: 'projecao', numero: true }], linhas: d.oportunidades });
-    tabelas.push({ nome: 'Coordenadores', colunas: [{ header: 'Coordenador', key: 'nome' }, { header: 'Municípios', key: 'municipios', numero: true }, { header: 'Projeção', key: 'projecao', numero: true }], linhas: d.coordenadores });
+    tabelas.push({
+      nome: 'Projeção por Coordenador',
+      colunas: [
+        { header: 'Coordenador', key: 'nome', width: 28 },
+        { header: 'Categoria', key: 'categoria', width: 18, corKey: 'cor' },
+        { header: 'Municípios', key: 'municipios', numero: true },
+        { header: 'Projeção', key: 'projecao', numero: true, barra: true },
+      ],
+      linhas: d.coordenadores.map((c: any) => ({ nome: c.nome, categoria: TIPO_LABEL[c.tipo] || c.tipo, cor: CAT_COR_XLSX[c.tipo], municipios: c.municipios, projecao: c.projecao })),
+    });
     const swotTab = (nome: string, arr: string[]): ExportTabela => ({ nome, colunas: [{ header: nome, key: 'p' }], linhas: arr.map(p => ({ p: limpar(p) })) });
     tabelas.push(swotTab('Forças', d.swot.forcas));
     tabelas.push(swotTab('Fraquezas', d.swot.fraquezas));
     tabelas.push(swotTab('Oportunidades', d.swot.oportunidades));
     tabelas.push(swotTab('Ameaças', d.swot.ameacas));
 
-    const titulo = 'RAIO-X DA CAMPANHA — Milton Vieira 2026';
+    const titulo = 'DNA DA CAMPANHA — Milton Vieira 2026';
     if (formato === 'xlsx' || formato === 'excel') {
-      return { buffer: await this.toExcel(titulo, tabelas), arquivo: 'raio-x-campanha.xlsx', mime: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' };
+      return { buffer: await this.toExcel(titulo, tabelas), arquivo: 'dna-campanha.xlsx', mime: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' };
     }
     // PDF executivo com cards + semáforo + SWOT (espelha o layout da tela)
-    return { buffer: await this.raioXPdf(d), arquivo: 'raio-x-campanha.pdf', mime: 'application/pdf' };
+    return { buffer: await this.raioXPdf(d), arquivo: 'dna-campanha.pdf', mime: 'application/pdf' };
   }
 }
 
 // Representação neutra de tabela usada para Excel e PDF
-type ExportColuna = { header: string; key: string; width?: number; numero?: boolean };
+type ExportColuna = { header: string; key: string; width?: number; numero?: boolean; corKey?: string; barra?: boolean };
 type ExportTabela = { nome?: string; resumo?: Array<{ label: string; value: string | number }>; colunas: ExportColuna[]; linhas: any[] };
