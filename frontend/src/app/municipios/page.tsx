@@ -9,7 +9,7 @@ import { MUNICIPIOS_SP } from '@/lib/municipios-sp';
 const RM_RA_OPCOES = ['ARAÇATUBA','BAIXADA SANTISTA','BARRETOS','BAURU','CAMPINAS','CENTRAL','FRANCA','ITAPEVA','MARÍLIA','PRESIDENTE PRUDENTE','REGISTRO','RIBEIRÃO PRETO','SÃO JOSÉ DO RIO PRETO','SÃO PAULO','SOROCABA','VALE E LITORAL'];
 const MESORREGIAO_OPCOES = ['ARAÇATUBA','ARARAQUARA','ASSIS','BAURU','CAMPINAS','ITAPETININGA','LITORAL SUL','MACRO METROPOLITANA','MARILIA','METROPOLITANA SP','PIRACICABA','PRESIDENTE PRUDENTE','RIBEIRÃO PRETO','SÃO JOSÉ DO RIO PRETO','VALE DO PARAIBA'];
 const MICRORREGIAO_OPCOES = ['ADAMANTINA','AMPARO','ANDRADINA','ARAÇATUBA','ARARAQUARA','ASSIS','AURIFLAMA','AVARÉ','BANANAL','BARRETOS','BATATAIS','BAURU','BIRIGUI','BOTUCATU','BRAGANÇA PAULISTA','CAMPINAS','CAMPOS DO JORDÃO','CAPÃO BONITO','CARAGUATATUBA','CATANDUVA','DRACENA','FERNANDÓPOLIS','FRANCA','FRANCO DA ROCHA','GUARATINGUETA','GUARULHOS','ITANHAÉM','ITAPECERICA DA SERRA','ITAPETININGA','ITAPEVA','ITUVERAVA','JABOTICABAL','JALES','JAÚ','JUNDIAI','LIMEIRA','LINS','MARÍLIA','MOGI DAS CRUZES','MOGI MIRIM','NHANDEARA','NOVO HORIZONTE','OSASCO','OURINHOS','PARAIBUNA/PARAITINGA','PIEDADE','PIRACICABA','PIRASSUNUNGA','PRESIDENTE PRUDENTE','REGISTRO','RIBEIRÃO PRETO','RIO CLARO','SANTOS','SÃO CARLOS','SÃO JOÃO DA BOA VISTA','SÃO JOAQUIM DA BARRA','SÃO JOSÉ DO RIO PRETO','SÃO JOSÉ DOS CAMPOS','SÃO PAULO','SOROCABA','TATUÍ','TUPÃ','VOTUPORANGA'];
-const DIVISAO_REGIONAL_OPCOES = ['ALTO TIETE','BRAGANTINA','CAPITAL','LITORAL NORTE','SAO JOSE DOS CAMPOS','SERRA DA MANTIQUEIRA','TAUBATE','VALE DA FÉ','VALE HISTORICO','ZONA LESTE','ZONA NORTE','ZONA OESTE','ZONA SUL'];
+const DIVISAO_REGIONAL_OPCOES = ['ALTO TIETE','BRAGANTINA','CAPITAL - ZONA LESTE','CAPITAL - ZONA NORTE','CAPITAL - ZONA SUL','CAPITAL ZONA OESTE','LITORAL NORTE','SAO JOSE DOS CAMPOS','SERRA DA MANTIQUEIRA','TAUBATE','VALE DA FÉ','VALE HISTORICO'];
 
 interface Municipio {
   id: string; nome: string; uf: string; tipo_cadastro: string; funcao: string; distrito: string; bloco: string; regiao: string;
@@ -20,21 +20,21 @@ interface Municipio {
   votos_validos_22: number; percentual_mv: number; votos_22: number;
   percentual_perda: number; dobrada: string; observacoes: string;
 }
-interface Meta { total: number; page: number; limit: number; pages: number; }
-interface Opcoes { regioes: string[]; blocos: string[]; rm_ras: string[]; mesorregioes: string[]; microrregioes: string[]; }
+interface Meta { total: number; total_municipios: number; total_projecao: number; page: number; limit: number; pages: number; }
+interface Opcoes { regioes: string[]; blocos: string[]; rm_ras: string[]; mesorregioes: string[]; microrregioes: string[]; divisoes_regionais: string[]; }
 
 const TIPO_CADASTRO_OPCOES = ['EXTERNO', 'BASE - INSTITUIÇÃO', 'BASE APOIADORES'];
-const EMPTY_FILTERS = { nome: '', tipo_cadastro: '', regiao: '', bloco: '', rm_ra: '', mesorregiao: '', microrregiao: '', coordenacao: '', projecao_min: '', projecao_max: '' };
+const EMPTY_FILTERS = { nome: '', tipo_cadastro: '', regiao: '', bloco: '', rm_ra: '', mesorregiao: '', microrregiao: '', divisao_regional: '', coordenacao: '', projecao_min: '', projecao_max: '' };
 
 export default function MunicipiosPage() {
   const PAGE_SIZE = 25;
   const [municipios, setMunicipios] = useState<Municipio[]>([]);
-  const [meta, setMeta] = useState<Meta>({ total: 0, page: 1, limit: PAGE_SIZE, pages: 1 });
+  const [meta, setMeta] = useState<Meta>({ total: 0, total_municipios: 0, total_projecao: 0, page: 1, limit: PAGE_SIZE, pages: 1 });
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState(EMPTY_FILTERS);
   const [page, setPage] = useState(1);
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const [opcoes, setOpcoes] = useState<Opcoes>({ regioes: [], blocos: [], rm_ras: [], mesorregioes: [], microrregioes: [] });
+  const [opcoes, setOpcoes] = useState<Opcoes>({ regioes: [], blocos: [], rm_ras: [], mesorregioes: [], microrregioes: [], divisoes_regionais: [] });
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<Municipio | null>(null);
   const [orderBy, setOrderBy] = useState('nome');
@@ -50,6 +50,9 @@ export default function MunicipiosPage() {
   const nomeWatch = watch('nome');
   useEffect(() => {
     if (!showForm) return;
+    // Só auto-preenche geografia em NOVO cadastro. Ao editar, o município já tem
+    // seus próprios valores (rm_ra/meso/micro/divisao) — não sobrescrever/zerar.
+    if (editing) return;
     const currentNome = nomeWatch;
 
     if (prevNomeRef.current !== currentNome) {
@@ -76,7 +79,7 @@ export default function MunicipiosPage() {
           if (t.divisao_regional) setValue('divisao_regional', t.divisao_regional);
         }
       }).catch(() => {});
-  }, [nomeWatch, showForm]);
+  }, [nomeWatch, showForm, editing]);
   // Load filter options
   useEffect(() => {
     api.get('/filtros/opcoes').then(r => setOpcoes(r.data)).catch(() => {});
@@ -93,6 +96,7 @@ export default function MunicipiosPage() {
       if (f.rm_ra) params.rm_ra = f.rm_ra;
       if (f.mesorregiao) params.mesorregiao = f.mesorregiao;
       if (f.microrregiao) params.microrregiao = f.microrregiao;
+      if (f.divisao_regional) params.divisao_regional = f.divisao_regional;
       if (f.coordenacao) params.coordenacao = f.coordenacao;
       if (f.projecao_min) params.projecao_min = f.projecao_min;
       if (f.projecao_max) params.projecao_max = f.projecao_max;
@@ -192,10 +196,11 @@ export default function MunicipiosPage() {
         <div className="flex items-start justify-between gap-4">
           <div>
             <h1 className="text-[34px] font-semibold text-ink" style={{ letterSpacing: '-0.374px' }}>Municípios</h1>
-            <p className="text-[17px] text-ink-muted mt-1">
-              {loading ? '...' : `${meta.total.toLocaleString('pt-BR')} municípios`}
-              {activeFilters.length > 0 && ` · ${activeFilters.length} filtro${activeFilters.length > 1 ? 's' : ''} ativo${activeFilters.length > 1 ? 's' : ''}`}
-            </p>
+            {activeFilters.length > 0 && (
+              <p className="text-[17px] text-ink-muted mt-1">
+                {`${activeFilters.length} filtro${activeFilters.length > 1 ? 's' : ''} ativo${activeFilters.length > 1 ? 's' : ''}`}
+              </p>
+            )}
           </div>
           <button onClick={openNew} className="btn-primary flex-shrink-0">
             <Plus size={16} /> Novo
@@ -268,6 +273,13 @@ export default function MunicipiosPage() {
                 </select>
               </div>
               <div>
+                <label className="label text-[12px]">Divisão Regional</label>
+                <select className="input text-[14px]" value={filters.divisao_regional} onChange={e => setFilter('divisao_regional', e.target.value)}>
+                  <option value="">Todas</option>
+                  {opcoes.divisoes_regionais.map(d => <option key={d} value={d}>{d}</option>)}
+                </select>
+              </div>
+              <div>
                 <label className="label text-[12px]">Coordenador / Liderança</label>
                 <input
                   className="input text-[14px]"
@@ -301,6 +313,25 @@ export default function MunicipiosPage() {
               ))}
             </div>
           )}
+        </div>
+
+        {/* Stat Cards */}
+        <div className="grid grid-cols-3 gap-4">
+          <div className="stat-card">
+            <p className="text-[13px] text-ink-muted uppercase tracking-wide">Municípios</p>
+            <p className="text-[28px] font-bold text-ink mt-1">{loading ? '...' : (meta.total_municipios || 0).toLocaleString('pt-BR')}</p>
+            <p className="text-[11px] text-ink-muted mt-0.5">Cidades com cadastro ativo</p>
+          </div>
+          <div className="stat-card">
+            <p className="text-[13px] text-ink-muted uppercase tracking-wide">Registros</p>
+            <p className="text-[28px] font-bold text-ink mt-1">{loading ? '...' : meta.total.toLocaleString('pt-BR')}</p>
+            <p className="text-[11px] text-ink-muted mt-0.5">Cadastros no filtro</p>
+          </div>
+          <div className="stat-card">
+            <p className="text-[13px] text-ink-muted uppercase tracking-wide">Projeção de Votos</p>
+            <p className="text-[28px] font-bold text-primary mt-1">{loading ? '...' : meta.total_projecao.toLocaleString('pt-BR')}</p>
+            <p className="text-[11px] text-ink-muted mt-0.5">Soma das projeções</p>
+          </div>
         </div>
 
         {/* Table */}
