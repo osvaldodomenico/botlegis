@@ -9,6 +9,7 @@ export async function downloadExport(secao: ExportSecao, formato: 'xlsx' | 'pdf'
     Object.entries(params).forEach(([k, v]) => { if (v) qs.append(k, String(v)); });
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/relatorios/export?${qs.toString()}`, {
       headers: { Authorization: `Bearer ${token}` },
+      cache: 'no-store',
     });
     if (!res.ok) throw new Error('export falhou');
     const blob = await res.blob();
@@ -29,7 +30,8 @@ export async function downloadExport(secao: ExportSecao, formato: 'xlsx' | 'pdf'
 export async function downloadRelatorioUrl(path: string, fallbackName: string) {
   try {
     const token = typeof window !== 'undefined' ? localStorage.getItem('mv2026_token') : '';
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${path}`, { headers: { Authorization: `Bearer ${token}` } });
+    const sep = path.includes('?') ? '&' : '?';
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${path}${sep}_=${Date.now()}`, { headers: { Authorization: `Bearer ${token}` }, cache: 'no-store' });
     if (!res.ok) throw new Error('download falhou');
     const blob = await res.blob();
     const cd = res.headers.get('Content-Disposition') || '';
