@@ -712,19 +712,26 @@ export class RelatoriosService {
 
     // Rótulos SEM prefixo de categoria (a cor/legenda já indica o tipo). A `key`
     // mantém cada barra única mesmo quando dois nomes se repetem entre categorias.
+    // Alguns valores chegam do banco sem acento (divisao_regional/bloco) —
+    // corrigir a grafia só na exibição, sem tocar na chave de agrupamento.
+    const ACENTOS: Record<string, string> = {
+      'SAO JOSE DOS CAMPOS': 'SÃO JOSÉ DOS CAMPOS', 'TAUBATE': 'TAUBATÉ', 'JUNDIAI': 'JUNDIAÍ',
+      'ALTO TIETE': 'ALTO TIETÊ', 'SAO PAULO': 'SÃO PAULO', 'VALE DA FE': 'VALE DA FÉ',
+    };
+    const fixAcento = (s: string) => ACENTOS[s.toUpperCase()] || s;
     for (const m of cadastros) {
       const t = norm(m.tipo_cadastro);
       if (t === EXT) {
         const dv = (m.divisao_regional || '').trim();
         const nomeado = !!dv && topDivsExt.has(dv);
-        addTerr(nomeado ? `EXT:${dv}` : 'EXT:__demais', nomeado ? dv : 'DEMAIS CIDADES', EXT, 1, !nomeado, m);
+        addTerr(nomeado ? `EXT:${dv}` : 'EXT:__demais', nomeado ? fixAcento(dv) : 'DEMAIS CIDADES', EXT, 1, !nomeado, m);
       } else if (t === INST) {
         const b = (m.bloco || '').trim() || '(sem bloco)';
         const coord = coordDoBloco(b);
-        addTerr(`INST:${b}`, coord ? `${b} (${coord})` : b, INST, 2, false, m);
+        addTerr(`INST:${b}`, coord ? `${fixAcento(b)} (${coord})` : fixAcento(b), INST, 2, false, m);
       } else if (t === APO) {
         const b = (m.bloco || '').trim() || '(sem bloco)';
-        addTerr(`APO:${b}`, b, APO, 3, false, m);
+        addTerr(`APO:${b}`, fixAcento(b), APO, 3, false, m);
       }
     }
     const territorio = [...grupos.entries()]

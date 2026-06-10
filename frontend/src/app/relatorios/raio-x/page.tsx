@@ -7,7 +7,7 @@ import {
 } from 'recharts';
 import {
   Activity, TrendingUp, Vote, Map, Users, UserCheck, AlertTriangle, Target,
-  FileSpreadsheet, FileText, ArrowUpRight, ShieldAlert, Lightbulb, ThumbsUp,
+  FileSpreadsheet, FileText, ShieldAlert, Lightbulb, ThumbsUp,
 } from 'lucide-react';
 import { fmt, downloadRaioX } from '../_shared/exportUtils';
 
@@ -94,8 +94,8 @@ export default function RaioXPage() {
           <Kpi icon={Vote} label="Votos 2022 (referência)" value={fmt(k.votos_2022)} hint="Base histórica — não somada" />
           <Kpi icon={Map} label="Cobertura de Municípios" value={`${k.municipios_cadastro}/${k.total_sp}`} hint={pct(k.cobertura_pct)} />
           <Kpi icon={AlertTriangle} label="Municípios em Zona Branca" value={fmt(k.zonas_brancas)} color={COR.vermelho} hint="sem cadastro" />
-          <Kpi icon={UserCheck} label="Municípios c/ liderança" value={fmt(k.municipios_com_lideranca)} />
-          <Kpi icon={Users} label="Lideranças · Coord." value={`${fmt(k.lideres)} · ${fmt(k.coordenadores)}`} />
+          <Kpi icon={UserCheck} label="Municípios com liderança" value={fmt(k.municipios_com_lideranca)} />
+          <Kpi icon={Users} label="Lideranças e Coordenadores" value={`${fmt(k.lideres)} · ${fmt(k.coordenadores)}`} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -159,7 +159,7 @@ export default function RaioXPage() {
               <XAxis type="number" tickFormatter={(v) => fmt(v)} tick={{ fontSize: 11, fill: '#86868b' }} axisLine={false} tickLine={false} />
               <YAxis type="category" dataKey="key" tickFormatter={(v) => labelTerr[v] ?? v} tick={{ fontSize: 11, fill: '#1d1d1f' }} axisLine={false} tickLine={false} width={200} />
               <Tooltip formatter={(v: any) => fmt(v as number)} labelFormatter={(v: any) => labelTerr[v] ?? v} />
-              <Bar dataKey="projecao" radius={[0, 6, 6, 0]}>
+              <Bar dataKey="projecao" name="Projeção" radius={[0, 6, 6, 0]}>
                 {d.territorio.map((e: any, i: number) => <Cell key={i} fill={MIX_CORES[e.tipo] || COR.primary} />)}
                 <LabelList dataKey="projecao" position="right" formatter={(v: any) => fmt(v as number)} style={{ fontSize: 11, fill: '#1d1d1f', fontWeight: 600 }} />
               </Bar>
@@ -168,45 +168,18 @@ export default function RaioXPage() {
         </div>
 
         {/* Concentração / Risco */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           <RiscoCard label="Concentração Top 10 cidades" value={pct(d.concentracao.pareto_top10)} alerta={d.concentracao.pareto_top10 > 0.6} />
           <RiscoCard label="Concentração Top 20 cidades" value={pct(d.concentracao.pareto_top20)} alerta={d.concentracao.pareto_top20 > 0.8} />
-          <RiscoCard label="Cidades p/ 80% da meta" value={String(d.concentracao.cidades_80pct)} alerta={d.concentracao.cidades_80pct < 15} />
           <RiscoCard label="Dependência maior coord." value={pct(d.concentracao.dep_maior_coordenador)} alerta={d.concentracao.dep_maior_coordenador > 0.25} />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Oportunidades */}
-          <div className="card p-0 overflow-hidden">
-            <div className="px-5 py-4 border-b border-hairline flex items-center gap-2"><ArrowUpRight size={17} className="text-primary" /><h2 className="text-[17px] font-semibold text-ink">Maiores Oportunidades</h2></div>
-            <div className="overflow-x-auto max-h-[360px] overflow-y-auto">
-              <table className="w-full text-[13px]">
-                <thead className="sticky top-0 bg-parchment"><tr>
-                  <th className="text-left px-4 py-2.5 font-semibold text-ink-muted">Município</th>
-                  <th className="text-right px-4 py-2.5 font-semibold text-ink-muted">Eleitores</th>
-                  <th className="text-right px-4 py-2.5 font-semibold text-ink-muted">Votos 22</th>
-                  <th className="text-right px-4 py-2.5 font-semibold text-ink-muted">Projeção</th>
-                  <th className="text-right px-4 py-2.5 font-semibold text-ink-muted">Proj. região</th>
-                </tr></thead>
-                <tbody>
-                  {d.oportunidades.map((o: any, i: number) => (
-                    <tr key={i} className="border-t border-hairline">
-                      <td className="px-4 py-2.5 text-ink">{o.nome}</td>
-                      <td className="px-4 py-2.5 text-right text-ink-muted">{fmt(o.eleitores)}</td>
-                      <td className="px-4 py-2.5 text-right text-ink-muted">{fmt(o.votos22)}</td>
-                      <td className="px-4 py-2.5 text-right font-semibold text-primary">{fmt(o.projecao)}</td>
-                      <td className="px-4 py-2.5 text-right text-ink-muted">{fmt(o.projecaoRegiao)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+        <div className="grid grid-cols-1 gap-6">
 
           {/* Coordenadores */}
           <div className="card">
             <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
-              <h2 className="text-[17px] font-semibold text-ink">Produtividade dos Coordenadores</h2>
+              <h2 className="text-[17px] font-semibold text-ink">Projeção por Coordenador</h2>
               <div className="flex items-center gap-4 text-[12px] text-ink-muted">
                 {([['EXTERNO', 'Externo'], ['BASE - INSTITUIÇÃO', 'Base Instituição'], ['BASE APOIADORES', 'Base Apoiadores']] as const).map(([key, lbl]) => (
                   <span key={key} className="flex items-center gap-1.5">
@@ -220,7 +193,7 @@ export default function RaioXPage() {
                 <XAxis type="number" tickFormatter={(v) => fmt(v)} tick={{ fontSize: 11, fill: '#86868b' }} axisLine={false} tickLine={false} />
                 <YAxis type="category" dataKey="nome" tick={{ fontSize: 11, fill: '#1d1d1f' }} axisLine={false} tickLine={false} width={130} />
                 <Tooltip formatter={(v: any) => fmt(v as number)} />
-                <Bar dataKey="projecao" radius={[0, 6, 6, 0]}>
+                <Bar dataKey="projecao" name="Projeção" radius={[0, 6, 6, 0]}>
                   {d.coordenadores.map((e: any, i: number) => <Cell key={i} fill={MIX_CORES[e.tipo] || COR.primary} />)}
                   <LabelList dataKey="projecao" position="right" formatter={(v: any) => fmt(v as number)} style={{ fontSize: 11, fill: '#1d1d1f', fontWeight: 600 }} />
                 </Bar>
@@ -239,8 +212,6 @@ export default function RaioXPage() {
             <SwotCard titulo="Ameaças" icon={AlertTriangle} cor="#ff9f0a" itens={d.swot.ameacas} />
           </div>
         </div>
-
-        <p className="text-center text-[11px] text-ink-muted pt-2 pb-6">SHIFTWORKS TECNOLOGIA E MARKETING DO BRASIL · Relatório gerado em: {d.gerado_em}</p>
       </div>
     </Layout>
   );
