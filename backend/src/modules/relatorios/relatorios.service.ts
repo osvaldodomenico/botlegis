@@ -995,7 +995,9 @@ export class RelatoriosService {
       }]] },
       layout: 'noBorders',
     });
-    const cardRow = (cards: any[]) => ({ columns: cards, columnGap: 8, margin: [0, 0, 0, 8] as [number, number, number, number] });
+    // unbreakable: cards com altura fixa não podem quebrar entre páginas —
+    // o pdfmake repete o fill da linha cortada e "vaza" faixas na página seguinte
+    const cardRow = (cards: any[]) => ({ columns: cards, columnGap: 8, margin: [0, 0, 0, 8] as [number, number, number, number], unbreakable: true });
 
     // Barra horizontal (canvas)
     const bar = (frac: number, color: string, w = 150) => ({
@@ -1045,9 +1047,9 @@ export class RelatoriosService {
           stack: d.saude.componentes.map((c: any) => ({
             margin: [0, 0, 0, 4] as [number, number, number, number],
             columns: [
-              { width: 200, text: `${c.nome} (peso ${c.peso})`, fontSize: 8, color: '#1d1d1f' },
-              { width: 'auto', stack: [bar(c.valor / 100, COR.primary)] },
-              { width: 28, text: `${c.valor}%`, fontSize: 8, color: '#86868b', alignment: 'right' },
+              { width: 170, text: `${c.nome} (peso ${c.peso})`, fontSize: 8, color: '#1d1d1f' },
+              { width: 'auto', stack: [bar(c.valor / 100, COR.primary, 120)], margin: [0, 1, 0, 0] as [number, number, number, number] },
+              { width: 32, text: `${c.valor}%`, fontSize: 8, color: '#86868b', alignment: 'right' },
             ],
             columnGap: 6,
           })),
@@ -1057,7 +1059,7 @@ export class RelatoriosService {
     });
 
     content.push({
-      text: 'Como é calculado: média ponderada dos 5 fatores (pesos somam 100); cada fator (0–100%) × seu peso. Faixas: ≥70 saudável · 50–69 atenção · <50 crítico. Diversificação = 1 − concentração das 10 maiores cidades; Mix = 1 − % da base Externo; Crescimento = projeção vs 2022 (teto em +40%).',
+      text: 'Como é calculado: média ponderada dos 5 fatores (pesos somam 100); cada fator (0-100%) x seu peso. Faixas: 70 ou mais saudável · 50-69 atenção · abaixo de 50 crítico. Diversificação = 1 - concentração das 10 maiores cidades; Mix = 1 - % da base Externo; Crescimento = projeção vs 2022 (teto em +40%).',
       fontSize: 7, color: '#86868b', italics: true, margin: [0, 0, 0, 12] as [number, number, number, number],
     });
 
@@ -1111,13 +1113,18 @@ export class RelatoriosService {
     content.push(tabela(['Tipo de base', 'Projeção', '% do total'],
       d.mix.map((m: any) => [m.label, num(m.projecao), pct(m.pct)]), ['*', 'auto', 'auto']));
 
-    // Concentração (cards)
-    content.push({ text: 'Concentração / Risco', style: 'sectionTitle' });
-    content.push(cardRow([
-      card('Top 10 cidades', pct(d.concentracao.pareto_top10), d.concentracao.pareto_top10 > 0.6 ? COR.vermelho : undefined),
-      card('Top 20 cidades', pct(d.concentracao.pareto_top20)),
-      card('Dependência maior coord.', pct(d.concentracao.dep_maior_coordenador), d.concentracao.dep_maior_coordenador > 0.25 ? COR.vermelho : undefined),
-    ]));
+    // Concentração (cards) — título junto dos cards p/ não ficar órfão na quebra de página
+    content.push({
+      unbreakable: true,
+      stack: [
+        { text: 'Concentração / Risco', style: 'sectionTitle' },
+        cardRow([
+          card('Top 10 cidades', pct(d.concentracao.pareto_top10), d.concentracao.pareto_top10 > 0.6 ? COR.vermelho : undefined),
+          card('Top 20 cidades', pct(d.concentracao.pareto_top20)),
+          card('Dependência maior coord.', pct(d.concentracao.dep_maior_coordenador), d.concentracao.dep_maior_coordenador > 0.25 ? COR.vermelho : undefined),
+        ]),
+      ],
+    });
 
     // ── Espelho da tela: barras coloridas por categoria + legenda ──────────
     const CAT_COR: Record<string, string> = { 'EXTERNO': '#5ac8fa', 'BASE - INSTITUIÇÃO': '#0066cc', 'BASE APOIADORES': '#34c759' };
@@ -1140,7 +1147,8 @@ export class RelatoriosService {
           columns: [
             { width: 165, text: labelOf(it), fontSize: 7.5, color: '#1d1d1f' },
             { width: 'auto', stack: [bar((it.projecao || 0) / max, CAT_COR[it.tipo] || COR.primary, 220)] },
-            { width: 'auto', text: num(it.projecao), fontSize: 7.5, bold: true, margin: [4, 0, 0, 0] as [number, number, number, number] },
+            // largura fixa: com 'auto' o pdfmake desconta a margem por dentro e o último dígito quebra de linha
+            { width: 46, text: num(it.projecao), fontSize: 7.5, bold: true, margin: [4, 0, 0, 0] as [number, number, number, number], noWrap: true },
           ],
           columnGap: 6,
         })),
@@ -1148,17 +1156,14 @@ export class RelatoriosService {
       };
     };
 
-    // PROJEÇÕES (espelho da tela + tabela com valores em texto)
+    // PROJEÇÕES — espelho da tela (barras coloridas já trazem o valor em texto;
+    // sem tabela duplicada para não repetir o mesmo dado)
     content.push({ text: 'PROJEÇÕES', style: 'sectionTitle' });
     content.push(legenda());
     content.push(barList(d.territorio, (t: any) => t.divisao));
-    content.push(tabela(['Divisão / Bloco', 'Categoria', 'Municípios', 'Projeção'],
-      d.territorio.map((t: any) => [t.divisao, TIPO_LABEL[t.tipo] || t.tipo, num(t.municipios), num(t.projecao)]), ['*', 'auto', 'auto', 'auto']));
 
-    // Projeção por Coordenador (espelho da tela + tabela)
+    // Projeção por Coordenador — somente texto (tabela), p/ não repetir o padrão de barras
     content.push({ text: 'Projeção por Coordenador', style: 'sectionTitle' });
-    content.push(legenda());
-    content.push(barList(d.coordenadores, (c: any) => c.nome));
     content.push(tabela(['Coordenador', 'Categoria', 'Municípios', 'Projeção'],
       d.coordenadores.map((c: any) => [c.nome, TIPO_LABEL[c.tipo] || c.tipo, num(c.municipios), num(c.projecao)]), ['*', 'auto', 'auto', 'auto']));
 
