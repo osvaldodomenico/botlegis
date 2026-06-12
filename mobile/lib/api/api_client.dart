@@ -76,6 +76,11 @@ class ApiClient {
     if (res.statusCode >= 400) {
       throw ApiException('Erro ${res.statusCode}');
     }
-    return jsonDecode(utf8.decode(res.bodyBytes));
+    if (res.bodyBytes.isEmpty) return null;
+    try {
+      return jsonDecode(utf8.decode(res.bodyBytes));
+    } on FormatException {
+      throw ApiException('Resposta inválida do servidor');
+    }
   }
 }

@@ -36,4 +36,9 @@ void main() {
     final api = ApiClient(httpClient: mock, baseUrl: 'http://test', tokenProvider: () => null);
     expect(() => api.get('/dashboard'), throwsA(isA<NetworkException>()));
   });
+
+  test('corpo vazio em 200 retorna null sem lançar', () async {
+    final api = clientReturning(200, '');
+    expect(await api.get('/dashboard'), isNull);
+  });
 }
