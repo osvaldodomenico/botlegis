@@ -23,7 +23,9 @@ class AuthService extends ChangeNotifier {
 
   Future<void> login({required String email, required String senha, required bool lembrar}) async {
     final data = await api.post('/auth/login', {'email': email, 'senha': senha});
-    await _prefs.setString(_kToken, data['access_token'] as String);
+    final token = data is Map ? data['access_token'] as String? : null;
+    if (token == null) throw ApiException('Resposta de login inválida');
+    await _prefs.setString(_kToken, token);
     await _prefs.setString(_kUserNome, (data['user']?['nome'] ?? '').toString());
     if (lembrar) {
       await _prefs.setString(_kSavedEmail, email);

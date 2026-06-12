@@ -50,4 +50,17 @@ void main() {
     expect(auth.savedEmail, 'a@b.com');
     expect(auth.savedSenha, '123456');
   });
+
+  test('login com 401 lança e não persiste token', () async {
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    final mock = MockClient((req) async => http.Response('{}', 401));
+    final auth = AuthService(prefs,
+        apiClient: ApiClient(httpClient: mock, baseUrl: 'http://test', tokenProvider: () => null));
+    await expectLater(
+      auth.login(email: 'a@b.com', senha: 'errada', lembrar: false),
+      throwsA(isA<UnauthorizedException>()),
+    );
+    expect(auth.isLoggedIn, false);
+  });
 }
