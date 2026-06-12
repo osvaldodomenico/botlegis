@@ -67,8 +67,19 @@ Base URL embarcada no build: `https://automacoes-legisbot.sqcx8c.easypanel.host`
 
 ### Telas v1
 
+0. **Splash screen** — exibida durante o carregamento inicial do Flutter Web
+   (importante dado o payload de ~1,5 MB no primeiro acesso): logo "LegisBot
+   Campo" centralizado sobre fundo primary `#0066cc`, implementada no
+   `web/index.html` (HTML/CSS puro, aparece antes do engine Flutter carregar)
+   + `flutter_native_splash` para manter consistência quando compilar APK.
 1. **Login** — email + senha, persiste JWT em `localStorage` (web) /
    `shared_preferences`. Sem token → redireciona para login.
+   Checkbox **"Lembrar senha"**: quando marcado, salva email e senha localmente
+   no dispositivo (`shared_preferences`) e pré-preenche os campos no próximo
+   acesso; a sessão (JWT) também é persistida, então o usuário só refaz login
+   quando o token expira — e aí os campos já vêm preenchidos. Trade-off de
+   segurança aceito: credenciais ficam apenas no armazenamento local do
+   aparelho do usuário, nunca trafegam além do `POST /auth/login`.
 2. **Dashboard** — stat cards (total projeções, municípios, votos 2022 oficial
    98.557) + ranking top 10. Pull-to-refresh.
 3. **Busca** — campo de busca com debounce; resultados em cards; tap abre ficha.
