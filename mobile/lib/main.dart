@@ -1,10 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() => runApp(const _Placeholder());
+import 'app_router.dart';
+import 'auth/auth_service.dart';
+import 'theme/app_theme.dart';
 
-class _Placeholder extends StatelessWidget {
-  const _Placeholder();
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = await SharedPreferences.getInstance();
+  runApp(LegisBotCampoApp(auth: AuthService(prefs)));
+}
+
+class LegisBotCampoApp extends StatelessWidget {
+  final AuthService auth;
+  const LegisBotCampoApp({super.key, required this.auth});
+
   @override
-  Widget build(BuildContext context) =>
-      const MaterialApp(home: Scaffold(body: Center(child: Text('LegisBot Campo'))));
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider.value(
+      value: auth,
+      child: MaterialApp.router(
+        title: 'LegisBot Campo',
+        debugShowCheckedModeBanner: false,
+        theme: buildAppTheme(),
+        routerConfig: buildRouter(auth),
+      ),
+    );
+  }
 }
