@@ -18,21 +18,51 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="description" content="App de campo do LegisBot — consultas de municípios e territórios">
+  <meta name="theme-color" content="#0066cc">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="legisbot_campo">
+  <meta name="apple-mobile-web-app-title" content="LegisBot Campo">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>legisbot_campo</title>
+  <title>LegisBot Campo</title>
   <link rel="manifest" href="manifest.json">
+
+  <style>
+    #splash {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #0066cc;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      transition: opacity .3s ease-out;
+    }
+    #splash img { width: 96px; height: 96px; border-radius: 22px; }
+    #splash p { color: #fff; font-family: -apple-system, system-ui, sans-serif;
+                font-size: 17px; margin-top: 16px; font-weight: 600; }
+    #splash .bar { width: 120px; height: 3px; margin-top: 24px; border-radius: 3px;
+                   background: rgba(255,255,255,.25); overflow: hidden; }
+    #splash .bar::after { content: ''; display: block; width: 40%; height: 100%;
+                          background: #fff; border-radius: 3px;
+                          animation: slide 1.2s ease-in-out infinite; }
+    @keyframes slide { 0% {transform: translateX(-100%);} 100% {transform: translateX(350%);} }
+  </style>
 </head>
 <body>
+  <div id="splash">
+    <img src="icons/Icon-512.png" alt="LegisBot Campo">
+    <p>LegisBot Campo</p>
+    <div class="bar"></div>
+  </div>
+  <script>
+    window.addEventListener('flutter-first-frame', function () {
+      var s = document.getElementById('splash');
+      if (s) { s.style.opacity = '0'; setTimeout(function () { s.remove(); }, 300); }
+    });
+  </script>
   <!--
     You can customize the "flutter_bootstrap.js" script.
     This is useful to provide a custom configuration to the Flutter loader
