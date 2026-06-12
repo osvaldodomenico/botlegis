@@ -44,4 +44,10 @@ void main() {
     expect(auth.isLoggedIn, false);
     expect(auth.savedEmail, 'a@b.com');
   });
+
+  test('credenciais salvas ficam disponíveis para pré-preenchimento', () async {
+    final auth = await buildAuth(initial: {'savedEmail': 'a@b.com', 'savedSenha': '123456'});
+    expect(auth.savedEmail, 'a@b.com');
+    expect(auth.savedSenha, '123456');
+  });
 }

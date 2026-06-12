@@ -211,6 +211,16 @@ class RegiaoStats {
             .map((e) => MunicipioResumo.fromJson(e as Map<String, dynamic>))
             .toList(),
       );
+
+  /// Agrupa por divisão regional (vazia vira "SEM DIVISÃO").
+  Map<String, List<MunicipioResumo>> porDivisao() {
+    final out = <String, List<MunicipioResumo>>{};
+    for (final m in municipios) {
+      final key = m.divisaoRegional.isEmpty ? 'SEM DIVISÃO' : m.divisaoRegional;
+      out.putIfAbsent(key, () => []).add(m);
+    }
+    return out;
+  }
 }
 
 class FiltrosOpcoes {

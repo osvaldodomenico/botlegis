@@ -36,6 +36,8 @@ void main() {
     final m = MunicipioResumo.fromJson({'id': '1', 'nome': 'ADAMANTINA'});
     expect(m.nome, 'ADAMANTINA');
     expect(m.projecaoVotos, 0);
+    expect(m.regiao, '');
+    expect(m.divisaoRegional, '');
   });
 
   test('MunicipioFicha parseia /municipios/:id completo', () {
@@ -81,6 +83,22 @@ void main() {
     });
     expect(s.municipios.length, 1);
     expect(s.municipios.first.nome, 'GUARULHOS');
+  });
+
+  test('RegiaoStats agrupa municipios por divisão', () {
+    final s = RegiaoStats.fromJson({
+      'regiao': 'VALE DO PARAIBA',
+      'total_municipios': 2,
+      'total_projecao': 900,
+      'total_eleitores': 50000,
+      'municipios': [
+        {'id': '1', 'nome': 'TAUBATE', 'projecao_votos': 500, 'divisao_regional': 'VALE HISTORICO'},
+        {'id': '2', 'nome': 'JACAREI', 'projecao_votos': 400, 'divisao_regional': 'VALE NORTE'},
+      ],
+    });
+    final grupos = s.porDivisao();
+    expect(grupos.keys, containsAll(['VALE HISTORICO', 'VALE NORTE']));
+    expect(grupos['VALE HISTORICO']!.single.nome, 'TAUBATE');
   });
 
   test('FiltrosOpcoes parseia listas', () {
