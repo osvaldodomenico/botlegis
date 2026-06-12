@@ -53,10 +53,14 @@ endpoint novo; nenhuma migration.
 | Tela | Endpoint |
 |---|---|
 | Login | `POST /auth/login` com `{email, senha}` → JWT |
-| Dashboard | `GET /dashboard/stats`, `GET /dashboard/ranking` |
-| Busca | `GET /busca?q=...` e `GET /busca/filtros/opcoes` |
+| Dashboard | `GET /dashboard` (stats) e `GET /ranking` (top municípios) |
+| Busca | `GET /busca?q=...&limit=...` e `GET /filtros/opcoes` |
 | Ficha município | `GET /municipios/:id` |
-| Territórios | `GET /busca/stats` por região/bloco/coordenador |
+| Territórios (stats) | `GET /stats/regiao/:regiao`, `GET /stats/bloco/:bloco`, `GET /stats/coordenador/:nome` |
+| Territórios (drill-down divisão) | `GET /municipios?divisao_regional=...` (filtro existente no DTO) |
+
+Todas as rotas exceto `/auth/login` exigem JWT (`JwtAuthGuard`) — o cliente HTTP
+do app envia `Authorization: Bearer <token>` em todas as chamadas.
 
 Base URL embarcada no build: `https://automacoes-legisbot.sqcx8c.easypanel.host`
 (produção). Em dev: `http://localhost:8000` via `--dart-define=API_URL=...`.
@@ -95,11 +99,13 @@ cards `border-radius: 18px`, botões pill `9999px`. Fonte: system font stack.
   --release` → nginx alpine servindo `/build/web`.
 - Subdomínio: `app.legisbot.shiftworks.app.br` (router Traefik no EasyPanel).
 - Fluxo: rsync `mobile/` → build na VPS → `docker service update` (mesmo padrão
-  da skill `/deploy`; a skill será estendida com o alvo `mobile`).
+  da skill `/deploy`).
+- **Entregável adicional:** estender a skill `/deploy` com o alvo `mobile`.
 
 ## Tratamento de erros
 
 - 401 → limpa token e volta ao login.
+- 5xx → mensagem "Erro no servidor, tente novamente" + botão tentar de novo.
 - Falha de rede → banner "Sem conexão" + botão tentar de novo.
 - Timeout de 15s nas chamadas.
 
