@@ -17,7 +17,7 @@
 - `GET /busca?q=&limit=` → `{query, total, municipios: [{id, nome, regiao, bloco, projecao_votos, coordenacao, lideranca, eleitores_22, ...}]}`
 - `GET /filtros/opcoes` → `{regioes: [...], blocos: [...], divisoes_regionais: [...], ...}`
 - `GET /stats/regiao/:regiao` → `{regiao, total_municipios, total_projecao, total_eleitores, media_projecao, maior_projecao, top5: [...], municipios: [{id, nome, projecao_votos, coordenacao, lideranca, eleitores_22, divisao_regional}]}`
-- `GET /municipios/:id` → objeto completo (ver Task 5)
+- `GET /municipios/:id` → objeto completo (ver `MunicipioFicha` na Task 4)
 - **IDs chegam como string** (BigInt serializado). Todas as rotas exceto `/auth/login` exigem `Authorization: Bearer <token>`.
 
 ---
@@ -1343,7 +1343,7 @@ class LegisBotCampoApp extends StatelessWidget {
 }
 ```
 
-**Tratamento global de 401:** as telas capturam `UnauthorizedException` no FutureBuilder e chamam `auth.logout()` (ver helper `guardedFetch` na Task 10); como o router usa `refreshListenable: auth`, o redirect para `/login` é automático e os campos vêm pré-preenchidos se "lembrar senha" estiver ativo.
+**Tratamento global de 401:** as telas capturam `UnauthorizedException` no FutureBuilder e chamam `auth.logout()` (ver helper `guardedFetch` na Task 8, em `widgets/common.dart`); como o router usa `refreshListenable: auth`, o redirect para `/login` é automático e os campos vêm pré-preenchidos se "lembrar senha" estiver ativo.
 
 - [ ] **Step 3: Validar**
 
