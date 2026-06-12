@@ -72,12 +72,14 @@ Base URL embarcada no build: `https://automacoes-legisbot.sqcx8c.easypanel.host`
    Campo" centralizado sobre fundo primary `#0066cc`, implementada no
    `web/index.html` (HTML/CSS puro, aparece antes do engine Flutter carregar)
    + `flutter_native_splash` para manter consistência quando compilar APK.
-1. **Login** — email + senha, persiste JWT em `localStorage` (web) /
-   `shared_preferences`. Sem token → redireciona para login.
+   Logo: reusa o ícone PWA 512px (mesmo asset).
+1. **Login** — email + senha, persiste JWT via `shared_preferences` (backed
+   por `localStorage` no web). Sem token → redireciona para login.
    Checkbox **"Lembrar senha"**: quando marcado, salva email e senha localmente
    no dispositivo (`shared_preferences`) e pré-preenche os campos no próximo
    acesso; a sessão (JWT) também é persistida, então o usuário só refaz login
-   quando o token expira — e aí os campos já vêm preenchidos. Trade-off de
+   quando o token expira — e aí os campos já vêm preenchidos. Desmarcar o
+   checkbox em um login posterior remove as credenciais salvas. Trade-off de
    segurança aceito: credenciais ficam apenas no armazenamento local do
    aparelho do usuário, nunca trafegam além do `POST /auth/login`.
 2. **Dashboard** — stat cards (total projeções, municípios, votos 2022 oficial
@@ -122,7 +124,8 @@ cards `border-radius: 18px`, botões pill `9999px`. Fonte: system font stack.
 
 ## Testes
 
-- Unit: parsing dos modelos da API e lógica de auth (token expirado).
+- Unit: parsing dos modelos da API, lógica de auth (token expirado) e
+  pré-preenchimento/limpeza de credenciais (Lembrar senha).
 - Widget: telas de login e busca com API mockada.
 - Verificação manual: build web local (`flutter run -d chrome`) contra o
   backend de produção antes do deploy.
